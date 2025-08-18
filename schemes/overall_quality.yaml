@@ -1,0 +1,50 @@
+id: overall_quality
+name: Gesamtqualität (Gewichtete Kombination)
+description: Gewichtete Kombination aller Qualitätsdimensionen normalisiert auf 0-5 Skala
+dimension: overall_quality
+type: derived
+version: "2.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+dependencies:
+  - neutralitaet_old
+  - aktualitaet_old
+  - sachrichtigkeit_old
+  - sprachliche_angemessenheit_old
+  - didaktik_methodik_old
+  - medial_passend_old
+
+rules:
+  - conditions:
+      - dimension: neutrality
+        operator: ">="
+        value: 0
+    value: "weighted_average"
+    label: "Gewichtete Gesamtbewertung"
+    reasoning: "Berechnung basierend auf gewichteten Einzeldimensionen"
+    confidence: 0.9
+    weights:
+      neutrality: 2.0          # Neutralität (wichtig für Bildungsinhalte)
+      timeliness: 1.5          # Aktualität
+      factuality: 2.5          # Sachrichtigkeit (sehr wichtig)
+      language_appropriateness: 1.5  # Sprachliche Angemessenheit
+      pedagogy: 2.0            # Didaktik/Methodik (wichtig für Lernerfolg)
+      media_appropriateness: 1.0     # Mediale Passung
+
+default:
+  value: 0.0
+  label: "Unbewertet"
+  reasoning: "Keine ausreichenden Daten für Gesamtbewertung verfügbar"
+  confidence: 0.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

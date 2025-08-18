@@ -1,0 +1,75 @@
+id: sachrichtigkeit_old
+name: Sachrichtigkeit (Ordinal-Skala)
+description: Bewertung der sachlichen Korrektheit und wissenschaftlichen Genauigkeit von Bildungsinhalten mit ordinaler 0-5 Skala
+dimension: factuality
+type: ordinal_rubric
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+selection_strategy: first_match
+
+anchors:
+  - value: 0
+    label: "Sachlich falsch"
+    description: |
+      Der Inhalt enthält grundlegende sachliche Fehler und falsche Informationen. 
+      Die dargestellten Fakten, Daten oder Theorien sind inkorrekt und entsprechen 
+      nicht dem wissenschaftlichen Erkenntnisstand. Die Verwendung kann zu 
+      Fehlinformationen und falschen Schlussfolgerungen führen.
+    
+  - value: 1
+    label: "Enthält Unkorrektheiten"
+    description: |
+      Der Inhalt weist mehrere sachliche Unkorrektheiten und Fehler auf. 
+      Wichtige Informationen sind ungenau oder falsch dargestellt. Die 
+      Grundaussagen können teilweise korrekt sein, aber es gibt erkennbare 
+      Mängel in der sachlichen Richtigkeit, die das Verständnis beeinträchtigen.
+    
+  - value: 2
+    label: "Sehr stark vereinfacht"
+    description: |
+      Der Inhalt ist sachlich grundsätzlich korrekt, aber so stark vereinfacht, 
+      dass wichtige Aspekte und Nuancen verloren gehen. Die Darstellung ist 
+      oberflächlich und kann zu einem unvollständigen oder verzerrten 
+      Verständnis komplexer Sachverhalte führen.
+    
+  - value: 3
+    label: "Stark vereinfacht"
+    description: |
+      Der Inhalt ist sachlich korrekt, aber vereinfacht dargestellt. 
+      Grundlegende Konzepte werden richtig vermittelt, aber Details und 
+      komplexere Zusammenhänge werden reduziert oder weggelassen. 
+      Für eine Einführung geeignet, aber nicht für vertieftes Verständnis.
+    
+  - value: 4
+    label: "Sachlich richtig, keine/wenige Belege angeführt"
+    description: |
+      Der Inhalt ist sachlich korrekt und angemessen detailliert dargestellt. 
+      Die Informationen entsprechen dem aktuellen Wissensstand, aber es fehlen 
+      wissenschaftliche Belege, Quellenangaben oder Referenzen zur Untermauerung 
+      der Aussagen. Die Inhalte sind vertrauenswürdig, aber nicht nachprüfbar.
+    
+  - value: 5
+    label: "Wissenschaftlich belegt"
+    description: |
+      Der Inhalt ist vollständig sachlich korrekt und durch wissenschaftliche 
+      Belege, Studien und vertrauenswürdige Quellen untermauert. Alle Aussagen 
+      sind nachprüfbar und entsprechen höchsten wissenschaftlichen Standards. 
+      Die Darstellung ist präzise, vollständig und methodisch einwandfrei.
+
+aggregator:
+  strategy: single_value
+  params:
+    missing: zero
+
+labels:
+  "0.0": "Sachlich falsch"
+  "1.0": "Enthält Unkorrektheiten"
+  "2.0": "Sehr stark vereinfacht"
+  "3.0": "Stark vereinfacht"
+  "4.0": "Sachlich richtig, keine/wenige Belege angeführt"
+  "5.0": "Wissenschaftlich belegt"

@@ -1,0 +1,126 @@
+id: medial_passend_new
+name: Mediale Passung (Checklist-Bewertung)
+description: Bewertung der medialen Angemessenheit und technischen Umsetzung von Bildungsinhalten mittels gewichteter Checkliste
+dimension: media_appropriateness
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: technische_qualitaet
+    prompt: "Ist die technische Qualität der verwendeten Medien hochwertig und störungsfrei?"
+    weight: 2.5
+    values:
+      1: {score: 0.25, description: "Erhebliche technische Probleme, schlechte Qualität"}
+      2: {score: 0.5, description: "Einige technische Mängel, mittelmäßige Qualität"}
+      3: {score: 0.75, description: "Gute technische Qualität, wenige Probleme"}
+      4: {score: 1.0, description: "Hervorragende technische Qualität, störungsfrei"}
+      na: null
+
+  - id: medienformat_angemessenheit
+    prompt: "Sind die gewählten Medienformate für Inhalt und Zielgruppe angemessen?"
+    weight: 2.5
+    values:
+      1: {score: 0.25, description: "Völlig ungeeignete Medienformate für Zielgruppe"}
+      2: {score: 0.5, description: "Teilweise unpassende Medienformate"}
+      3: {score: 0.75, description: "Meist angemessene Medienformate"}
+      4: {score: 1.0, description: "Perfekt auf Zielgruppe abgestimmte Medienformate"}
+      na: null
+
+  - id: lernunterstuetzung
+    prompt: "Unterstützen die Medien effektiv das Lernen und Verstehen der Inhalte?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Medien behindern oder lenken vom Lernen ab"}
+      2: {score: 0.5, description: "Medien bieten wenig Lernunterstützung"}
+      3: {score: 0.75, description: "Medien unterstützen das Lernen gut"}
+      4: {score: 1.0, description: "Medien maximieren die Lernwirkung optimal"}
+      na: null
+
+  - id: gestaltung_ansprechend
+    prompt: "Ist die mediale Gestaltung ansprechend und motivierend für die Lernenden?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Unattraktive, demotivierende Gestaltung"}
+      2: {score: 0.5, description: "Durchschnittliche, wenig ansprechende Gestaltung"}
+      3: {score: 0.75, description: "Ansprechende und motivierende Gestaltung"}
+      4: {score: 1.0, description: "Herausragend ansprechende und inspirierende Gestaltung"}
+      na: null
+
+  - id: medienvielfalt
+    prompt: "Werden verschiedene Medienarten sinnvoll und abwechslungsreich eingesetzt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Einseitige Mediennutzung, keine Vielfalt"}
+      2: {score: 0.5, description: "Begrenzte Medienvielfalt, wenig Abwechslung"}
+      3: {score: 0.75, description: "Gute Medienvielfalt mit sinnvollem Einsatz"}
+      4: {score: 1.0, description: "Optimale Medienvielfalt, perfekt abgestimmt"}
+      na: null
+
+  - id: zugaenglichkeit
+    prompt: "Sind die Medien für alle Lernenden gut zugänglich und nutzbar?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Schlechte Zugänglichkeit, viele Barrieren"}
+      2: {score: 0.5, description: "Eingeschränkte Zugänglichkeit, einige Barrieren"}
+      3: {score: 0.75, description: "Gute Zugänglichkeit, wenige Barrieren"}
+      4: {score: 1.0, description: "Vollständig barrierefrei und optimal zugänglich"}
+      na: null
+
+  - id: interaktivitaet
+    prompt: "Fördern die Medien Interaktivität und aktive Auseinandersetzung mit den Inhalten?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine Interaktivität, rein passive Medien"}
+      2: {score: 0.5, description: "Geringe Interaktivität, wenig Engagement"}
+      3: {score: 0.75, description: "Gute Interaktivität und Engagement"}
+      4: {score: 1.0, description: "Hervorragende Interaktivität, maximales Engagement"}
+      na: null
+
+  - id: aktualitaet_technik
+    prompt: "Entsprechen die verwendeten Medientechnologien aktuellen Standards?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Veraltete Technologien, nicht mehr zeitgemäß"}
+      2: {score: 0.5, description: "Teilweise veraltete Technologien"}
+      3: {score: 0.75, description: "Moderne, aktuelle Technologien"}
+      4: {score: 1.0, description: "Neueste, innovative Technologien optimal eingesetzt"}
+      na: null
+
+  - id: ladezeiten_performance
+    prompt: "Sind Ladezeiten und Performance der Medien für eine gute Nutzererfahrung optimiert?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Sehr lange Ladezeiten, schlechte Performance"}
+      2: {score: 0.5, description: "Mittelmäßige Ladezeiten und Performance"}
+      3: {score: 0.75, description: "Gute Ladezeiten und Performance"}
+      4: {score: 1.0, description: "Optimale Ladezeiten und hervorragende Performance"}
+      na: null
+
+  - id: inhaltliche_integration
+    prompt: "Sind die Medien sinnvoll in den Lerninhalt integriert und nicht nur schmückendes Beiwerk?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Medien sind rein dekorativ, keine inhaltliche Integration"}
+      2: {score: 0.5, description: "Oberflächliche Integration, wenig Mehrwert"}
+      3: {score: 0.75, description: "Gute inhaltliche Integration mit Mehrwert"}
+      4: {score: 1.0, description: "Perfekte inhaltliche Integration, unverzichtbar für Verständnis"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0  # Skaliert von 0-1 auf 0-5
+
+labels:
+  "0.0": "Medial unpassend"
+  "1.0": "Medial schwierig"
+  "2.0": "Medial ausreichend"
+  "3.0": "Medial passend"
+  "4.0": "Medial gut"
+  "5.0": "Medial hervorragend"

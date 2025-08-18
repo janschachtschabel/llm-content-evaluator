@@ -1,0 +1,230 @@
+id: jugendschutz_gate
+name: Jugendschutz & Rechtliche Unbedenklichkeit Gate
+description: Binary gate for youth protection and legal compliance according to German law
+dimension: youth_protection_legal
+type: binary_gate
+version: "1.0"
+
+output_range:
+  values: [true, false]
+  type: boolean
+
+criteria: |
+  Prüfung auf Jugendschutz- und Rechtsverstöße nach deutschem Recht:
+  
+  STRAFGESETZBUCH (StGB) VERSTÖSSE:
+  - § 86/86a StGB: Verfassungswidrige Symbole (Hakenkreuz, SS-Runen, NS-Propaganda)
+  - § 89a StGB: Terrorismus-Vorbereitung (Bombenanleitungen, Anschlagspläne)
+  - § 91 StGB: Anleitungen zu Straftaten (Waffenbau, Sprengstoff-Herstellung)
+  - § 111 StGB: Aufforderung zu Straftaten (Gewaltaufrufe, Vandalismus)
+  - § 126 StGB: Störung öffentlicher Frieden (Bombendrohungen, Amokankündigungen)
+  - § 129-129b StGB: Kriminelle/terroristische Vereinigungen
+  - § 130 StGB: Volksverhetzung (Hassrede, Holocaustleugnung, Rassismus)
+  - § 131 StGB: Gewaltverherrlichung (brutale Videos, Gewaltdarstellungen)
+  - § 140 StGB: Billigung von Straftaten (Terrorismus-Lob, Gewalt-Verherrlichung)
+  - § 166 StGB: Religionsbeschimpfung (Hasspostings gegen Glaubensgruppen)
+  - § 184b StGB: Kinderpornografie (jede Form von CSAM)
+  - § 185-187 StGB: Beleidigung, Verleumdung, üble Nachrede
+  - § 189 StGB: Verunglimpfung Verstorbener
+  - § 201a StGB: Bildaufnahmen Intimbereich (Upskirting, heimliche Aufnahmen)
+  - § 223/230 StGB: Gesundheitsgefährdung durch Falschinformationen
+  - § 241 StGB: Bedrohung (Online-Drohungen gegen Personen)
+  - § 263 StGB: Betrug (Fake-Heilmittel, betrügerische Angebote)
+  - § 269 StGB: Datenfälschung (manipulierte Screenshots, gefälschte Beweise)
+  
+  JUGENDSCHUTZ SPEZIFISCH:
+  - Pornografische Inhalte ohne Altersverifikation
+  - Extreme Gewaltdarstellungen
+  - Drogenverherrlichung oder -anleitungen
+  - Glücksspiel-Werbung an Minderjährige
+  - Alkohol-/Tabak-Werbung an Jugendliche
+  - Entwicklungsbeeinträchtigende Inhalte
+  - Selbstverletzungs-/Suizid-Anleitungen
+  
+  URHEBERRECHT & DATENSCHUTZ:
+  - Urheberrechtsverletzungen (illegale Kopien, Plagiate)
+  - DSGVO-Verstöße bei Datenverarbeitung
+  - Verwendung geschützter Marken/Logos ohne Berechtigung
+
+gate_rules:
+  - condition: "verfassungswidrige_symbole"
+    action: reject
+    reason: "Enthält verfassungswidrige Symbole (§ 86a StGB)"
+    severity: critical
+  
+  - condition: "terrorismus_anleitung"
+    action: reject
+    reason: "Enthält Terrorismus-Anleitungen oder -Vorbereitung (§ 89a, 91 StGB)"
+    severity: critical
+  
+  - condition: "volksverhetzung"
+    action: reject
+    reason: "Enthält Volksverhetzung oder Hassrede (§ 130 StGB)"
+    severity: critical
+  
+  - condition: "gewaltverherrlichung"
+    action: reject
+    reason: "Enthält Gewaltverherrlichung oder brutale Darstellungen (§ 131 StGB)"
+    severity: critical
+  
+  - condition: "kinderpornografie"
+    action: reject
+    reason: "Enthält kinderpornografische Inhalte (§ 184b StGB)"
+    severity: critical
+  
+  - condition: "gewaltaufruf"
+    action: reject
+    reason: "Enthält Aufrufe zu Gewalt oder Straftaten (§ 111 StGB)"
+    severity: critical
+  
+  - condition: "bedrohung"
+    action: reject
+    reason: "Enthält Bedrohungen gegen Personen (§ 241 StGB)"
+    severity: high
+  
+  - condition: "beleidigung_verleumdung"
+    action: reject
+    reason: "Enthält Beleidigungen oder Verleumdungen (§ 185-187 StGB)"
+    severity: high
+  
+  - condition: "religionsbeschimpfung"
+    action: reject
+    reason: "Enthält Beschimpfung von Religionsgemeinschaften (§ 166 StGB)"
+    severity: high
+  
+  - condition: "jugendgefaehrdend_pornografie"
+    action: reject
+    reason: "Pornografische Inhalte ohne Altersverifikation (JuSchG)"
+    severity: high
+  
+  - condition: "jugendgefaehrdend_gewalt"
+    action: reject
+    reason: "Extreme Gewaltdarstellungen jugendgefährdend (JuSchG)"
+    severity: high
+  
+  - condition: "drogenverherrlichung"
+    action: reject
+    reason: "Verherrlichung oder Anleitungen zu Drogenmissbrauch"
+    severity: high
+  
+  - condition: "selbstverletzung_suizid"
+    action: reject
+    reason: "Anleitungen zu Selbstverletzung oder Suizid"
+    severity: high
+  
+  - condition: "gesundheitsgefaehrdung"
+    action: reject
+    reason: "Gesundheitsgefährdende Falschinformationen (§ 223/230 StGB)"
+    severity: medium
+  
+  - condition: "urheberrechtsverletzung"
+    action: reject
+    reason: "Urheberrechtsverletzung oder Plagiat"
+    severity: medium
+  
+  - condition: "betrug_fake_angebote"
+    action: reject
+    reason: "Betrügerische Angebote oder Fake-Heilmittel (§ 263 StGB)"
+    severity: medium
+  
+  - condition: "datenschutz_verstoss"
+    action: reject
+    reason: "DSGVO-Verstoß bei Datenverarbeitung"
+    severity: medium
+  
+  - condition: "datenfaelschung"
+    action: reject
+    reason: "Gefälschte Daten oder manipulierte Beweise (§ 269 StGB)"
+    severity: medium
+  
+  - condition: "gluecksspiel_werbung_minderjaehrige"
+    action: reject
+    reason: "Glücksspiel-Werbung an Minderjährige (JuSchG)"
+    severity: medium
+  
+  - condition: "alkohol_tabak_werbung_jugend"
+    action: reject
+    reason: "Alkohol-/Tabak-Werbung an Jugendliche (JuSchG)"
+    severity: medium
+
+default_action: pass
+
+detection_keywords:
+  verfassungswidrige_symbole:
+    - "hakenkreuz"
+    - "ss-runen"
+    - "hitlergruß"
+    - "ns-propaganda"
+    - "reichskriegsflagge"
+  
+  terrorismus_anleitung:
+    - "bomben bauen"
+    - "sprengstoff herstellen"
+    - "anschlag planen"
+    - "terroranschlag"
+    - "ammoniumnitrat"
+  
+  volksverhetzung:
+    - "holocaustleugnung"
+    - "rassenhass"
+    - "judenhass"
+    - "ausländer raus"
+    - "vernichtung"
+  
+  gewaltverherrlichung:
+    - "folter"
+    - "hinrichtung"
+    - "verstümmelung"
+    - "sadismus"
+    - "gewalt verherrlichen"
+  
+  gewaltaufruf:
+    - "töten"
+    - "ermorden"
+    - "vernichten"
+    - "angreifen"
+    - "gewalt anwenden"
+  
+  bedrohung:
+    - "ich bringe dich um"
+    - "du bist tot"
+    - "ich finde dich"
+    - "warte nur ab"
+  
+  jugendgefaehrdend:
+    - "pornografie"
+    - "hardcore"
+    - "brutal"
+    - "extrem gewalt"
+    - "snuff"
+  
+  drogenverherrlichung:
+    - "drogen nehmen"
+    - "crystal meth"
+    - "heroin"
+    - "kokain"
+    - "drogen verkaufen"
+  
+  selbstverletzung:
+    - "selbstmord anleitung"
+    - "suizid methoden"
+    - "sich umbringen"
+    - "ritzen"
+    - "selbstverletzung"
+
+age_restrictions:
+  ab_0: "Für alle Altersgruppen geeignet"
+  ab_6: "Geeignet ab 6 Jahren"
+  ab_12: "Geeignet ab 12 Jahren" 
+  ab_16: "Geeignet ab 16 Jahren"
+  ab_18: "Nur für Erwachsene (Altersverifikation erforderlich)"
+  jugendgefaehrdend: "Jugendgefährdend - gesperrt"
+
+compliance_references:
+  - "Strafgesetzbuch (StGB)"
+  - "Jugendschutzgesetz (JuSchG)"
+  - "Jugendmedienschutz-Staatsvertrag (JMStV)"
+  - "Netzwerkdurchsetzungsgesetz (NetzDG)"
+  - "Digital Services Act (DSA)"
+  - "DSGVO"
+  - "Urheberrechtsgesetz (UrhG)"

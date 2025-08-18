@@ -1,0 +1,126 @@
+id: sachrichtigkeit_new
+name: Sachrichtigkeit (Neue Version)
+description: Umfassende Bewertung der sachlichen Korrektheit, wissenschaftlichen Genauigkeit und methodischen Qualität von Bildungsinhalten
+dimension: factuality
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: faktische_richtigkeit
+    prompt: "Sind alle Fakten, Daten und Zahlen korrekt und durch verlässliche Quellen belegt?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Viele faktische Fehler, Daten größtenteils falsch"}
+      2: {score: 0.5, description: "Mehrere faktische Fehler, wichtige Daten ungenau"}
+      3: {score: 0.75, description: "Weitgehend faktisch korrekt, nur vereinzelte Ungenauigkeiten"}
+      4: {score: 1.0, description: "Alle Fakten, Daten und Zahlen korrekt und belegt"}
+      na: null
+  
+  - id: quellenqualitaet
+    prompt: "Werden ausschließlich wissenschaftlich anerkannte und vertrauenswürdige Quellen verwendet?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Unzuverlässige oder fragwürdige Quellen"}
+      2: {score: 0.5, description: "Überwiegend schwache Quellen, wenige wissenschaftliche Referenzen"}
+      3: {score: 0.75, description: "Überwiegend hochwertige, wissenschaftlich anerkannte Quellen"}
+      4: {score: 1.0, description: "Ausschließlich wissenschaftlich anerkannte und vertrauenswürdige Quellen"}
+      na: null
+  
+  - id: wissenschaftliche_genauigkeit
+    prompt: "Werden wissenschaftliche Begriffe, Theorien und Konzepte vollständig korrekt verwendet und erklärt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Begriffe werden falsch verwendet oder erklärt"}
+      2: {score: 0.5, description: "Häufige Ungenauigkeiten bei wissenschaftlichen Begriffen"}
+      3: {score: 0.75, description: "Weitgehend präzise Verwendung wissenschaftlicher Terminologie"}
+      4: {score: 1.0, description: "Vollständig korrekte Verwendung und Erklärung"}
+      na: null
+  
+  - id: vollstaendigkeit_information
+    prompt: "Werden alle wichtigen Aspekte des Themas vollständig und umfassend dargestellt?"
+    weight: 1.0
+    values:
+      1: {score: 0.25, description: "Wichtige Aspekte fehlen vollständig"}
+      2: {score: 0.5, description: "Erhebliche Lücken, viele relevante Aspekte nicht behandelt"}
+      3: {score: 0.75, description: "Umfassende Darstellung mit nur geringfügigen Auslassungen"}
+      4: {score: 1.0, description: "Vollständige Darstellung aller wichtigen Aspekte"}
+      na: null
+  
+  - id: objektivitaet_darstellung
+    prompt: "Ist die Darstellung vollständig neutral und objektiv ohne einseitige Verzerrung?"
+    weight: 1.0
+    values:
+      1: {score: 0.25, description: "Stark einseitige oder verzerrte Darstellung"}
+      2: {score: 0.5, description: "Erkennbare Verzerrungen und subjektive Färbung"}
+      3: {score: 0.75, description: "Weitgehend objektive und neutrale Darstellung"}
+      4: {score: 1.0, description: "Vollständig neutrale und objektive Präsentation"}
+      na: null
+  
+  - id: transparenz_herkunft
+    prompt: "Sind alle verwendeten Quellen klar dokumentiert und vollständig nachvollziehbar zitiert?"
+    weight: 1.0
+    values:
+      1: {score: 0.25, description: "Quellen nicht dokumentiert oder nicht nachvollziehbar"}
+      2: {score: 0.5, description: "Unvollständige oder unklare Quellenangaben"}
+      3: {score: 0.75, description: "Weitgehend vollständige und klare Quellenangaben"}
+      4: {score: 1.0, description: "Alle Quellen klar dokumentiert und vollständig nachvollziehbar"}
+      na: null
+  
+  - id: widerspruchsfreiheit
+    prompt: "Sind alle Aussagen vollständig widerspruchsfrei und logisch konsistent?"
+    weight: 1.0
+    values:
+      1: {score: 0.25, description: "Mehrere logische Widersprüche zwischen Aussagen"}
+      2: {score: 0.5, description: "Einige erkennbare Widersprüche oder Inkonsistenzen"}
+      3: {score: 0.75, description: "Weitgehend widerspruchsfrei und logisch konsistent"}
+      4: {score: 1.0, description: "Vollständig widerspruchsfrei, alle Aussagen logisch konsistent"}
+      na: null
+  
+  - id: evidenzbasierung
+    prompt: "Sind alle Behauptungen durch ausreichende und qualitativ hochwertige Belege gestützt?"
+    weight: 1.0
+    values:
+      1: {score: 0.25, description: "Behauptungen nicht durch Belege gestützt oder unzureichend"}
+      2: {score: 0.5, description: "Schwache oder unvollständige Belegführung für wichtige Aussagen"}
+      3: {score: 0.75, description: "Weitgehend gut belegte Aussagen mit hochwertiger Evidenz"}
+      4: {score: 1.0, description: "Alle Behauptungen durch ausreichende und hochwertige Belege gestützt"}
+      na: null
+  
+  - id: methodische_korrektheit
+    prompt: "Werden wissenschaftliche Methoden und Verfahren vollständig richtig dargestellt und angewandt?"
+    weight: 1.0
+    values:
+      1: {score: 0.25, description: "Methoden werden falsch dargestellt oder angewandt"}
+      2: {score: 0.5, description: "Erhebliche methodische Fehler oder Ungenauigkeiten"}
+      3: {score: 0.75, description: "Weitgehend korrekte Darstellung wissenschaftlicher Methoden"}
+      4: {score: 1.0, description: "Vollständig richtige Darstellung und Anwendung"}
+      na: null
+  
+  - id: vermeidung_fehlinformationen
+    prompt: "Ist der Inhalt vollständig frei von bekannten Mythen, Falschinformationen oder überholten Theorien?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Enthält bekannte Mythen, Falschinformationen oder überholte Theorien"}
+      2: {score: 0.5, description: "Mehrere problematische Inhalte oder veraltete Informationen"}
+      3: {score: 0.75, description: "Weitgehend frei von Fehlinformationen und Mythen"}
+      4: {score: 1.0, description: "Vollständig frei von Mythen, Falschinformationen oder überholten Theorien"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0  # Skaliert von 0-1 auf 0-5
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

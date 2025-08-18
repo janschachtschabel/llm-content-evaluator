@@ -1,0 +1,75 @@
+id: aktualitaet_old
+name: Aktualität (Ordinal-Skala)
+description: Bewertung der zeitlichen Relevanz und des aktuellen Stands von Bildungsinhalten mit ordinaler 0-5 Skala
+dimension: timeliness
+type: ordinal_rubric
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+selection_strategy: first_match
+
+anchors:
+  - value: 0
+    label: "Veralteter Inhalt"
+    description: |
+      Der Inhalt ist vollständig veraltet und entspricht nicht mehr dem aktuellen Wissensstand. 
+      Die dargestellten Informationen, Methoden oder Theorien sind überholt und können irreführend 
+      oder sogar schädlich sein. Es gibt keine Relevanz für aktuelle Lernziele oder Anwendungen.
+      Eine Verwendung ist nicht empfehlenswert.
+    
+  - value: 1
+    label: "Veraltet, aber teils noch relevant"
+    description: |
+      Der Inhalt ist größtenteils veraltet, enthält aber noch einige relevante Aspekte oder 
+      historische Perspektiven, die für das Verständnis wichtig sein können. Die meisten 
+      Informationen entsprechen nicht mehr dem aktuellen Stand, aber grundlegende Konzepte 
+      oder Hintergrundinformationen haben noch einen gewissen Wert.
+    
+  - value: 2
+    label: "Veraltete Darstellung, inhaltlich noch aktuell"
+    description: |
+      Die Inhalte sind sachlich noch korrekt und relevant, aber die Art der Darstellung, 
+      Beispiele oder verwendeten Methoden sind veraltet. Die Kernaussagen stimmen mit dem 
+      aktuellen Wissensstand überein, aber die Präsentation oder Kontextualisierung 
+      entspricht nicht mehr zeitgemäßen Standards.
+    
+  - value: 3
+    label: "Zeitlos aktuell"
+    description: |
+      Der Inhalt behandelt grundlegende, zeitlose Prinzipien oder Konzepte, die unabhängig 
+      von aktuellen Entwicklungen gültig bleiben. Die dargestellten Informationen sind 
+      dauerhaft relevant und bedürfen keiner regelmäßigen Aktualisierung. Grundlagenwissen 
+      wird angemessen und zeitlos vermittelt.
+    
+  - value: 4
+    label: "Aktueller Wissensstand"
+    description: |
+      Der Inhalt entspricht dem aktuellen Wissensstand und berücksichtigt neuere Entwicklungen 
+      und Erkenntnisse. Die Informationen sind auf dem neuesten Stand der Wissenschaft und 
+      Praxis. Aktuelle Forschungsergebnisse und zeitgemäße Ansätze werden angemessen 
+      berücksichtigt und dargestellt.
+    
+  - value: 5
+    label: "Hochaktuell/neuester Wissensstand"
+    description: |
+      Der Inhalt ist hochaktuell und spiegelt den allerneuesten Wissensstand wider. 
+      Neueste Forschungsergebnisse, aktuelle Entwicklungen und modernste Ansätze werden 
+      umfassend berücksichtigt. Der Inhalt ist auf dem absolut neuesten Stand und 
+      berücksichtigt auch jüngste Trends und Innovationen im Fachbereich.
+
+aggregator:
+  strategy: single_value
+  params:
+    missing: zero
+
+labels:
+  "0.0": "Veralteter Inhalt"
+  "1.0": "Veraltet, aber teils noch relevant"
+  "2.0": "Veraltete Darstellung, inhaltlich noch aktuell"
+  "3.0": "Zeitlos aktuell"
+  "4.0": "Aktueller Wissensstand"
+  "5.0": "Hochaktuell/neuester Wissensstand"

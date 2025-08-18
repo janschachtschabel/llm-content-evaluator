@@ -1,0 +1,126 @@
+id: neutralitaet_new
+name: Neutralität (Neue Version)
+description: Bewertung der neutralen und objektiven Darstellung von Bildungsinhalten
+dimension: neutrality
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: perspektivenvielfalt
+    prompt: "Werden verschiedene Perspektiven auf das Thema umfassend und gleichwertig präsentiert?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Nur eine Perspektive wird dargestellt"}
+      2: {score: 0.5, description: "Wenige Perspektiven, unausgewogen"}
+      3: {score: 0.75, description: "Mehrere Perspektiven, meist ausgewogen"}
+      4: {score: 1.0, description: "Umfassende und gleichwertige Darstellung verschiedener Perspektiven"}
+      na: null
+  
+  - id: neutrale_beschreibung
+    prompt: "Werden die unterschiedlichen Perspektiven neutral und ohne Vorurteile beschrieben?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Deutliche Vorurteile und Wertungen erkennbar"}
+      2: {score: 0.5, description: "Einige vorurteilsbehaftete Formulierungen"}
+      3: {score: 0.75, description: "Überwiegend neutral, wenige Wertungen"}
+      4: {score: 1.0, description: "Vollständig neutral und vorurteilsfrei"}
+      na: null
+  
+  - id: meinungsbildung
+    prompt: "Bietet das Material den Lernenden die Möglichkeit, eine eigene Meinung zu bilden, ohne sie zu beeinflussen?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Starke Beeinflussung, keine Wahlmöglichkeit"}
+      2: {score: 0.5, description: "Deutliche Lenkung der Meinungsbildung"}
+      3: {score: 0.75, description: "Geringe Beeinflussung, meist offen"}
+      4: {score: 1.0, description: "Vollständig offen für eigene Meinungsbildung"}
+      na: null
+  
+  - id: sprachliche_neutralitaet
+    prompt: "Wird auf manipulative Sprache und emotionale Beeinflussung konsequent verzichtet?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Stark manipulative und emotionale Sprache"}
+      2: {score: 0.5, description: "Einige manipulative Elemente vorhanden"}
+      3: {score: 0.75, description: "Überwiegend sachlich, wenige emotionale Elemente"}
+      4: {score: 1.0, description: "Vollständig sachlich und neutral"}
+      na: null
+  
+  - id: politische_ausgewogenheit
+    prompt: "Werden politische Positionen ausgewogen und ohne Präferenz präsentiert?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Starke politische Voreingenommenheit"}
+      2: {score: 0.5, description: "Erkennbare politische Präferenz"}
+      3: {score: 0.75, description: "Überwiegend ausgewogen"}
+      4: {score: 1.0, description: "Vollständig ausgewogen ohne Präferenz"}
+      na: null
+  
+  - id: ideologische_neutralitaet
+    prompt: "Vermeidet das Material bewusst die Bevorzugung bestimmter politischer Parteien oder Ideologien?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Deutliche ideologische Bevorzugung"}
+      2: {score: 0.5, description: "Erkennbare ideologische Tendenz"}
+      3: {score: 0.75, description: "Überwiegend neutral"}
+      4: {score: 1.0, description: "Vollständig frei von ideologischer Bevorzugung"}
+      na: null
+  
+  - id: quellenglaubwuerdigkeit
+    prompt: "Sind alle Informationen durch glaubwürdige und verlässliche Quellen belegt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine oder unglaubwürdige Quellen"}
+      2: {score: 0.5, description: "Wenige oder teilweise fragwürdige Quellen"}
+      3: {score: 0.75, description: "Überwiegend glaubwürdige Quellen"}
+      4: {score: 1.0, description: "Alle Quellen sind glaubwürdig und verlässlich"}
+      na: null
+  
+  - id: wissenschaftliche_fairness
+    prompt: "Werden alternative wissenschaftliche Theorien fair und nachvollziehbar dargestellt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Einseitige oder unfaire Darstellung"}
+      2: {score: 0.5, description: "Unausgewogene Behandlung alternativer Theorien"}
+      3: {score: 0.75, description: "Überwiegend faire Darstellung"}
+      4: {score: 1.0, description: "Vollständig faire und nachvollziehbare Darstellung"}
+      na: null
+  
+  - id: kritisches_denken
+    prompt: "Regt das Material die Lernenden dazu an, kritisch zu hinterfragen und eigenständig zu analysieren?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine Anregung zum kritischen Denken"}
+      2: {score: 0.5, description: "Wenig Anregung zur kritischen Analyse"}
+      3: {score: 0.75, description: "Gute Anregung zum Hinterfragen"}
+      4: {score: 1.0, description: "Starke Förderung kritischen und eigenständigen Denkens"}
+      na: null
+  
+  - id: weltanschauliche_offenheit
+    prompt: "Wird bewusst darauf verzichtet, eine bestimmte Weltanschauung als einzig gültig darzustellen?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Eine Weltanschauung als einzig gültig dargestellt"}
+      2: {score: 0.5, description: "Bevorzugung einer Weltanschauung erkennbar"}
+      3: {score: 0.75, description: "Überwiegend offen für verschiedene Weltanschauungen"}
+      4: {score: 1.0, description: "Vollständig offen, keine Weltanschauung als einzig gültig"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0  # Skaliert von 0-1 auf 0-5
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

@@ -1,0 +1,75 @@
+id: didaktik_methodik_old
+name: Didaktik und Methodik (Ordinal-Skala)
+description: Bewertung der didaktischen Qualität und methodischen Vielfalt von Bildungsinhalten mit ordinaler 0-5 Skala
+dimension: pedagogy
+type: ordinal_rubric
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+selection_strategy: first_match
+
+anchors:
+  - value: 0
+    label: "Methodik unangemessen"
+    description: |
+      Die verwendete Methodik ist völlig ungeeignet für die Zielgruppe oder das Lernziel. 
+      Es fehlen didaktische Strukturen, die Inhalte sind zusammenhanglos präsentiert und 
+      berücksichtigen keine lernpsychologischen Erkenntnisse. Die Methodik behindert 
+      den Lernprozess oder macht ihn unmöglich.
+    
+  - value: 1
+    label: "Methodik ausreichend"
+    description: |
+      Die Methodik ist grundlegend vorhanden, aber wenig durchdacht oder veraltet. 
+      Einfache didaktische Ansätze werden verwendet, aber ohne erkennbares Konzept. 
+      Der Lernprozess wird unterstützt, aber nicht optimal gefördert. Verbesserungen 
+      sind dringend notwendig.
+    
+  - value: 2
+    label: "Angemessene Methodik"
+    description: |
+      Die verwendete Methodik ist angemessen und funktional. Grundlegende didaktische 
+      Prinzipien werden beachtet, die Inhalte sind strukturiert aufgebaut. Die Methodik 
+      unterstützt das Lernen, ist aber nicht besonders innovativ oder zielgruppenspezifisch 
+      optimiert.
+    
+  - value: 3
+    label: "Gute Methodik"
+    description: |
+      Die Methodik ist gut durchdacht und zielgruppengerecht. Verschiedene didaktische 
+      Ansätze werden sinnvoll kombiniert, die Lernenden werden aktiv einbezogen. 
+      Die methodische Vielfalt fördert unterschiedliche Lerntypen und macht das 
+      Lernen effektiv und ansprechend.
+    
+  - value: 4
+    label: "Moderne, gute Methodik"
+    description: |
+      Die Methodik ist modern, vielfältig und pädagogisch fundiert. Aktuelle 
+      lernpsychologische Erkenntnisse werden berücksichtigt, digitale und analoge 
+      Methoden werden sinnvoll kombiniert. Die Lernenden werden zu aktivem, 
+      selbstständigem Lernen angeregt.
+    
+  - value: 5
+    label: "Moderne, sehr gute Methodik"
+    description: |
+      Die Methodik entspricht höchsten didaktischen Standards und ist innovativ. 
+      Neueste pädagogische Erkenntnisse werden optimal umgesetzt, die Methoden sind 
+      perfekt auf die Zielgruppe abgestimmt. Interaktivität, Differenzierung und 
+      individuelle Förderung werden exemplarisch realisiert.
+
+aggregator:
+  strategy: single_value
+  params:
+    missing: zero
+
+labels:
+  "0.0": "Methodik unangemessen"
+  "1.0": "Methodik ausreichend"
+  "2.0": "Angemessene Methodik"
+  "3.0": "Gute Methodik"
+  "4.0": "Moderne, gute Methodik"
+  "5.0": "Moderne, sehr gute Methodik"

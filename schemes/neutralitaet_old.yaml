@@ -1,0 +1,75 @@
+id: neutralitaet_old
+name: Neutralität (Ordinal-Skala)
+description: Bewertung der neutralen und objektiven Darstellung von Bildungsinhalten mit ordinaler 0-5 Skala
+dimension: neutrality
+type: ordinal_rubric
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+selection_strategy: first_match
+
+anchors:
+  - value: 0
+    label: "Manipulativ"
+    description: |
+      Der Inhalt ist stark manipulativ und verzerrt dargestellt. Es werden bewusst einseitige, 
+      irreführende oder falsche Informationen präsentiert, um die Meinung der Lernenden in eine 
+      bestimmte Richtung zu lenken. Emotionale Manipulation und Propaganda-Techniken sind erkennbar.
+      Die Darstellung ist hochgradig voreingenommen und wissenschaftlich nicht vertretbar.
+    
+  - value: 1
+    label: "Unneutral"
+    description: |
+      Der Inhalt zeigt deutliche Voreingenommenheit und mangelnde Neutralität. Eine bestimmte 
+      Position wird stark bevorzugt, während alternative Sichtweisen ignoriert oder unfair 
+      dargestellt werden. Die Sprache ist wertend und subjektiv. Es fehlt an ausgewogener 
+      Betrachtung der verschiedenen Perspektiven zu einem Thema.
+    
+  - value: 2
+    label: "Ideologisch eingefärbt, aber korrekter Inhalt"
+    description: |
+      Der Inhalt ist sachlich korrekt, aber ideologisch eingefärbt. Eine bestimmte weltanschauliche 
+      oder politische Richtung ist erkennbar, die Fakten werden jedoch nicht verfälscht. Die 
+      Auswahl und Gewichtung der Inhalte spiegelt eine bestimmte Perspektive wider, ohne dass 
+      dies explizit transparent gemacht wird.
+    
+  - value: 3
+    label: "Ideologisch eingefärbt, aber transparent"
+    description: |
+      Der Inhalt zeigt eine erkennbare ideologische Färbung, macht diese aber transparent. 
+      Die eigene Position oder Perspektive wird offengelegt. Alternative Sichtweisen werden 
+      erwähnt, auch wenn sie nicht gleichwertig behandelt werden. Es gibt eine gewisse 
+      Selbstreflexion bezüglich der eigenen Standpunkte.
+    
+  - value: 4
+    label: "Neutrale Formulierung"
+    description: |
+      Der Inhalt ist neutral und ausgewogen formuliert. Verschiedene Perspektiven werden 
+      gleichwertig dargestellt. Die Sprache ist sachlich und objektiv. Wertungen werden 
+      vermieden oder klar als solche gekennzeichnet. Die Darstellung ermöglicht es den 
+      Lernenden, sich eine eigene Meinung zu bilden.
+    
+  - value: 5
+    label: "Neutrale Formulierung, unabhängiger Ersteller"
+    description: |
+      Der Inhalt ist vollständig neutral und objektiv dargestellt. Der Ersteller ist 
+      erkennbar unabhängig und frei von externen Einflüssen oder Interessenskonflikten. 
+      Alle relevanten Perspektiven werden fair und ausgewogen präsentiert. Die Darstellung 
+      entspricht höchsten wissenschaftlichen Standards der Objektivität und Neutralität.
+
+aggregator:
+  strategy: single_value
+  params:
+    missing: zero
+
+labels:
+  "0.0": "Manipulativ"
+  "1.0": "Unneutral"
+  "2.0": "Ideologisch eingefärbt, korrekter Inhalt"
+  "3.0": "Ideologisch eingefärbt, transparent"
+  "4.0": "Neutrale Formulierung"
+  "5.0": "Neutrale Formulierung, unabhängiger Ersteller"

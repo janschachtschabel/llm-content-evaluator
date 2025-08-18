@@ -1,0 +1,126 @@
+id: didaktik_methodik_new
+name: Didaktik und Methodik (Neue Version)
+description: Bewertung der didaktischen Qualität und methodischen Vielfalt von Bildungsinhalten
+dimension: pedagogy
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: lernzielklarheit
+    prompt: "Sind die Lernziele klar, präzise und verständlich formuliert?"
+    weight: 2.5
+    values:
+      1: {score: 0.25, description: "Keine oder sehr unklare Lernziele"}
+      2: {score: 0.5, description: "Lernziele vorhanden, aber schwer verständlich"}
+      3: {score: 0.75, description: "Lernziele überwiegend klar und verständlich"}
+      4: {score: 1.0, description: "Vollständig klare und präzise Lernziele"}
+      na: null
+  
+  - id: didaktisches_konzept
+    prompt: "Gibt es ein vollständig durchdachtes und konsequent umgesetztes didaktisches Gesamtkonzept?"
+    weight: 2.5
+    values:
+      1: {score: 0.25, description: "Kein erkennbares didaktisches Konzept"}
+      2: {score: 0.5, description: "Ansätze eines Konzepts, aber unvollständig"}
+      3: {score: 0.75, description: "Klares Konzept, überwiegend umgesetzt"}
+      4: {score: 1.0, description: "Vollständig durchdachtes und umgesetztes Konzept"}
+      na: null
+  
+  - id: struktureller_aufbau
+    prompt: "Ist der Aufbau des Materials vollständig logisch, klar strukturiert und nachvollziehbar?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Unlogischer oder chaotischer Aufbau"}
+      2: {score: 0.5, description: "Teilweise logisch, aber Sprünge erkennbar"}
+      3: {score: 0.75, description: "Überwiegend logisch strukturiert"}
+      4: {score: 1.0, description: "Vollständig logisch und nachvollziehbar"}
+      na: null
+  
+  - id: methodische_vielfalt
+    prompt: "Werden verschiedene methodische Zugänge für unterschiedliche Lerntypen angeboten?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Nur eine Methode, keine Lerntypenberücksichtigung"}
+      2: {score: 0.5, description: "Wenige methodische Ansätze"}
+      3: {score: 0.75, description: "Einige verschiedene Methoden, teilweise lerntypengerecht"}
+      4: {score: 1.0, description: "Vielfältige Methoden für alle Lerntypen"}
+      na: null
+  
+  - id: interaktivitaet
+    prompt: "Werden die Lernenden aktiv in den Lernprozess einbezogen und zur Interaktion angeregt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine Interaktivität, rein passives Lernen"}
+      2: {score: 0.5, description: "Wenige interaktive Elemente"}
+      3: {score: 0.75, description: "Gute Balance zwischen passiven und aktiven Elementen"}
+      4: {score: 1.0, description: "Hohe Interaktivität und aktive Einbindung"}
+      na: null
+  
+  - id: lernfortschrittskontrolle
+    prompt: "Gibt es Möglichkeiten zur Überprüfung und Reflexion des Lernfortschritts?"
+    weight: 1.0
+    values:
+      1: {score: 0.25, description: "Keine Lernfortschrittskontrolle"}
+      2: {score: 0.5, description: "Wenige oder unklare Kontrollmöglichkeiten"}
+      3: {score: 0.75, description: "Gute Möglichkeiten zur Lernfortschrittskontrolle"}
+      4: {score: 1.0, description: "Umfassende und vielfältige Kontrollmöglichkeiten"}
+      na: null
+  
+  - id: zielgruppenanpassung
+    prompt: "Werden die Inhalte an Vorwissen und Lebenswelt der Zielgruppe angepasst?"
+    weight: 2.5
+    values:
+      1: {score: 0.25, description: "Keine Anpassung an Zielgruppe erkennbar"}
+      2: {score: 0.5, description: "Geringe Berücksichtigung der Zielgruppe"}
+      3: {score: 0.75, description: "Gute Anpassung an Vorwissen und Lebenswelt"}
+      4: {score: 1.0, description: "Vollständig zielgruppengerecht angepasst"}
+      na: null
+  
+  - id: differenzierung
+    prompt: "Ist eine Differenzierung nach Leistungsniveaus oder Interessen vorgesehen?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Keine Differenzierungsmöglichkeiten"}
+      2: {score: 0.5, description: "Vereinzelte, unstrukturierte Differenzierungsansätze"}
+      3: {score: 0.75, description: "Gute Differenzierung nach Leistung und Interessen"}
+      4: {score: 1.0, description: "Umfassende und systematische Differenzierungsmöglichkeiten"}
+      na: null
+  
+  - id: eigenstaendiges_lernen
+    prompt: "Fördert das Material eigenständiges und problemlösendes Lernen?"
+    weight: 2.5
+    values:
+      1: {score: 0.25, description: "Keine Förderung eigenständigen Lernens"}
+      2: {score: 0.5, description: "Geringe Anregung zu eigenständigem Lernen"}
+      3: {score: 0.75, description: "Gute Förderung von Eigenständigkeit und Problemlösung"}
+      4: {score: 1.0, description: "Umfassende Förderung eigenständigen und problemlösenden Lernens"}
+      na: null
+  
+  - id: sprachliche_angemessenheit
+    prompt: "Ist die Sprache adressatengerecht und verständlich?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Sprache nicht adressatengerecht, schwer verständlich"}
+      2: {score: 0.5, description: "Teilweise angemessen, aber oft zu komplex oder zu einfach"}
+      3: {score: 0.75, description: "Überwiegend adressatengerecht und verständlich"}
+      4: {score: 1.0, description: "Vollständig adressatengerecht, klar und verständlich"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0  # Skaliert von 0-1 auf 0-5
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

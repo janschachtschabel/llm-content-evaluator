@@ -1,0 +1,126 @@
+id: sprachliche_angemessenheit_new
+name: Sprachliche Angemessenheit (Neue Version)
+description: Umfassende Bewertung der sprachlichen Qualität, Verständlichkeit und Zielgruppenanpassung von Bildungsinhalten
+dimension: language_appropriateness
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: zielgruppenanpassung
+    prompt: "Ist die Sprache perfekt an das Alter, Vorwissen und den Entwicklungsstand der Zielgruppe angepasst?"
+    weight: 2.5
+    values:
+      1: {score: 0.25, description: "Völlig unangemessen für die Zielgruppe, zu schwer oder zu einfach"}
+      2: {score: 0.5, description: "Teilweise angepasst, aber deutliche Diskrepanzen zur Zielgruppe"}
+      3: {score: 0.75, description: "Überwiegend zielgruppengerecht, nur wenige Anpassungen nötig"}
+      4: {score: 1.0, description: "Perfekt an Alter, Vorwissen und Entwicklungsstand angepasst"}
+      na: null
+  
+  - id: verstaendlichkeit
+    prompt: "Sind alle Inhalte klar, verständlich und ohne unnötige Komplexität formuliert?"
+    weight: 2.5
+    values:
+      1: {score: 0.25, description: "Schwer verständlich, komplexe Strukturen ohne Erklärung"}
+      2: {score: 0.5, description: "Teilweise verständlich, aber oft zu komplex formuliert"}
+      3: {score: 0.75, description: "Überwiegend klar und verständlich, wenige komplexe Stellen"}
+      4: {score: 1.0, description: "Vollständig klar und verständlich, optimal strukturiert"}
+      na: null
+  
+  - id: fachbegriffe_erklaerung
+    prompt: "Werden alle Fachbegriffe angemessen eingeführt und verständlich erklärt?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Fachbegriffe ohne Erklärung oder unverständlich erklärt"}
+      2: {score: 0.5, description: "Einige Fachbegriffe erklärt, aber oft unzureichend"}
+      3: {score: 0.75, description: "Die meisten Fachbegriffe gut erklärt und eingeführt"}
+      4: {score: 1.0, description: "Alle Fachbegriffe angemessen eingeführt und verständlich erklärt"}
+      na: null
+  
+  - id: grammatische_korrektheit
+    prompt: "Ist der Text grammatikalisch korrekt und sprachlich fehlerfrei?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Viele grammatische Fehler und sprachliche Mängel"}
+      2: {score: 0.5, description: "Einige grammatische Fehler, die das Verständnis beeinträchtigen"}
+      3: {score: 0.75, description: "Überwiegend korrekt, nur wenige grammatische Fehler"}
+      4: {score: 1.0, description: "Vollständig grammatikalisch korrekt und sprachlich fehlerfrei"}
+      na: null
+  
+  - id: satzstruktur
+    prompt: "Sind die Satzstrukturen klar, abwechslungsreich und der Zielgruppe angemessen?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Unklare, zu komplexe oder monotone Satzstrukturen"}
+      2: {score: 0.5, description: "Teilweise angemessen, aber oft zu komplex oder eintönig"}
+      3: {score: 0.75, description: "Überwiegend klare und abwechslungsreiche Satzstrukturen"}
+      4: {score: 1.0, description: "Perfekt angepasste, klare und abwechslungsreiche Satzstrukturen"}
+      na: null
+  
+  - id: wortwahl
+    prompt: "Ist die Wortwahl präzise, angemessen und für die Zielgruppe verständlich?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Unpassende, zu schwere oder unpräzise Wortwahl"}
+      2: {score: 0.5, description: "Teilweise angemessen, aber oft zu komplex oder ungenau"}
+      3: {score: 0.75, description: "Überwiegend präzise und angemessene Wortwahl"}
+      4: {score: 1.0, description: "Perfekt präzise, angemessene und verständliche Wortwahl"}
+      na: null
+  
+  - id: sprachstil
+    prompt: "Ist der Sprachstil konsistent, ansprechend und dem Kontext angemessen?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Unpassender oder inkonsistenter Sprachstil"}
+      2: {score: 0.5, description: "Teilweise angemessen, aber stilistische Schwächen"}
+      3: {score: 0.75, description: "Überwiegend konsistenter und ansprechender Stil"}
+      4: {score: 1.0, description: "Perfekt konsistenter, ansprechender und kontextgerechter Stil"}
+      na: null
+  
+  - id: lesbarkeit
+    prompt: "Ist der Text flüssig lesbar und ermöglicht müheloses Verständnis?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Schwer lesbar, stockender Lesefluss"}
+      2: {score: 0.5, description: "Teilweise flüssig, aber oft holprig oder zäh"}
+      3: {score: 0.75, description: "Überwiegend flüssig und gut lesbar"}
+      4: {score: 1.0, description: "Perfekt flüssig lesbar, müheloses Verständnis"}
+      na: null
+  
+  - id: motivierende_sprache
+    prompt: "Ist die Sprache motivierend, einladend und fördert das Interesse am Lernen?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Demotivierend, trocken oder abschreckend formuliert"}
+      2: {score: 0.5, description: "Neutral, aber wenig motivierend oder einladend"}
+      3: {score: 0.75, description: "Überwiegend motivierend und lernfördernd"}
+      4: {score: 1.0, description: "Hochmotivierend, einladend und optimal lernfördernd"}
+      na: null
+  
+  - id: beispiele_veranschaulichung
+    prompt: "Werden komplexe Sachverhalte durch angemessene Beispiele und Veranschaulichungen unterstützt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine oder unpassende Beispiele und Veranschaulichungen"}
+      2: {score: 0.5, description: "Wenige oder teilweise ungeeignete Beispiele"}
+      3: {score: 0.75, description: "Gute Beispiele und Veranschaulichungen zur Unterstützung"}
+      4: {score: 1.0, description: "Perfekte Beispiele und Veranschaulichungen für optimales Verständnis"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0  # Skaliert von 0-1 auf 0-5
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

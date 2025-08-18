@@ -1,0 +1,52 @@
+id: rechtliche_compliance
+name: Rechtliche Compliance (Kombinierte Prüfung)
+description: Kombinierte Prüfung aller rechtlichen Gate-Kriterien für vollständige Compliance
+dimension: legal_compliance
+type: derived
+version: "1.0"
+
+output_range:
+  min: 0
+  max: 1
+  type: int
+
+dependencies:
+  - jugendschutz_gate
+  - persoenlichkeitsrechte_gate
+  - strafrecht_gate
+
+rules:
+  - conditions:
+      - dimension: youth_protection_legal
+        operator: "=="
+        value: 1
+      - dimension: personality_rights
+        operator: "=="
+        value: 1
+      - dimension: legal_compliance
+        operator: "=="
+        value: 1
+    value: 1
+    label: "COMPLIANCE"
+    reasoning: "Alle rechtlichen Prüfungen bestanden - Material ist rechtlich unbedenklich"
+    confidence: 0.95
+
+default:
+  value: 0
+  label: "NON_COMPLIANCE"
+  reasoning: "Eine oder mehrere rechtliche Prüfungen nicht bestanden - Material ist rechtlich bedenklich"
+  confidence: 0.95
+
+labels:
+  "0": "NON_COMPLIANCE"
+  "1": "COMPLIANCE"
+
+description_text: |
+  Diese abgeleitete Bewertung kombiniert alle rechtlichen Gate-Prüfungen:
+  
+  - Jugendschutz (JuSchG, JMStV)
+  - Persönlichkeitsrechte (DSGVO, KUG)
+  - Strafrecht (StGB, NetzDG, DSA)
+  
+  Nur wenn ALLE Gates bestanden werden, gilt das Material als rechtlich compliant.
+  Bei einem einzigen Verstoß wird das gesamte Material als non-compliant eingestuft.

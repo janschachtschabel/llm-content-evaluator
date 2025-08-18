@@ -1,0 +1,75 @@
+id: sprachliche_angemessenheit_old
+name: Sprachliche Angemessenheit (Ordinal-Skala)
+description: Bewertung der sprachlichen Angemessenheit und Verständlichkeit von Bildungsinhalten mit ordinaler 0-5 Skala
+dimension: language_appropriateness
+type: ordinal_rubric
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+selection_strategy: first_match
+
+anchors:
+  - value: 0
+    label: "Unangemessen"
+    description: |
+      Die Sprache ist völlig unangemessen für die Zielgruppe. Der Text enthält 
+      unverständliche Fachbegriffe ohne Erklärung, ist grammatikalisch fehlerhaft 
+      oder verwendet einen völlig unpassenden Sprachstil. Die Verständlichkeit 
+      ist stark beeinträchtigt und das Lernziel kann nicht erreicht werden.
+    
+  - value: 1
+    label: "Schwierige Sprache"
+    description: |
+      Die Sprache ist zu schwierig für die Zielgruppe. Komplexe Satzstrukturen, 
+      viele unbekannte Fachbegriffe und ein zu hoher Abstraktionsgrad erschweren 
+      das Verständnis erheblich. Die meisten Lernenden werden Schwierigkeiten 
+      haben, den Inhalt zu erfassen.
+    
+  - value: 2
+    label: "Ausreichend verständlich"
+    description: |
+      Die Sprache ist grundsätzlich verständlich, aber nicht optimal angepasst. 
+      Einige Begriffe oder Formulierungen könnten einfacher sein. Der Text ist 
+      lesbar, aber erfordert teilweise zusätzliche Anstrengung zum Verständnis. 
+      Die Zielgruppe kann dem Inhalt folgen, aber nicht mühelos.
+    
+  - value: 3
+    label: "Angemessen"
+    description: |
+      Die Sprache ist der Zielgruppe angemessen und gut verständlich. 
+      Fachbegriffe werden erklärt, Satzstrukturen sind klar und der 
+      Sprachstil passt zum Kontext. Die meisten Lernenden können den 
+      Inhalt ohne größere Schwierigkeiten verstehen.
+    
+  - value: 4
+    label: "Leicht verständlich, sprachlich korrekt"
+    description: |
+      Die Sprache ist leicht verständlich und sprachlich korrekt. 
+      Komplexe Sachverhalte werden in einfacher, klarer Sprache erklärt. 
+      Die Grammatik ist fehlerfrei, der Stil ist ansprechend und die 
+      Zielgruppe kann den Inhalt mühelos erfassen.
+    
+  - value: 5
+    label: "Zielgruppengerechte Sprache"
+    description: |
+      Die Sprache ist perfekt an die Zielgruppe angepasst. Sprachniveau, 
+      Wortwahl, Beispiele und Stil entsprechen exakt den Bedürfnissen und 
+      dem Entwicklungsstand der Lernenden. Der Text ist motivierend, 
+      einladend und ermöglicht optimales Lernen.
+
+aggregator:
+  strategy: single_value
+  params:
+    missing: zero
+
+labels:
+  "0.0": "Unangemessen"
+  "1.0": "Schwierige Sprache"
+  "2.0": "Ausreichend verständlich"
+  "3.0": "Angemessen"
+  "4.0": "Leicht verständlich, sprachlich korrekt"
+  "5.0": "Zielgruppengerechte Sprache"

@@ -1,0 +1,75 @@
+id: medial_passend_old
+name: Mediale Passung (Ordinal-Skala)
+description: Bewertung der medialen Angemessenheit und technischen Umsetzung von Bildungsinhalten mit ordinaler 0-5 Skala
+dimension: media_appropriateness
+type: ordinal_rubric
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+selection_strategy: first_match
+
+anchors:
+  - value: 0
+    label: "Medial unpassend"
+    description: |
+      Die mediale Umsetzung ist völlig ungeeignet für Inhalt und Zielgruppe. 
+      Technische Probleme, unpassende Medienformate oder schlechte Qualität 
+      behindern das Lernen erheblich. Die Medien lenken vom Lerninhalt ab 
+      oder machen ihn unzugänglich.
+    
+  - value: 1
+    label: "Medial schwierig"
+    description: |
+      Die mediale Umsetzung weist erhebliche Mängel auf. Technische Probleme, 
+      ungeeignete Formate oder schlechte Qualität erschweren die Nutzung. 
+      Die Medien unterstützen das Lernen nur unzureichend und können 
+      frustrierend wirken.
+    
+  - value: 2
+    label: "Medial ausreichend, aber suboptimal"
+    description: |
+      Die mediale Umsetzung ist grundsätzlich funktional, aber nicht optimal. 
+      Die gewählten Medien erfüllen ihren Zweck, sind aber nicht besonders 
+      ansprechend oder effektiv. Es gibt Verbesserungspotential in Qualität 
+      oder Angemessenheit der medialen Gestaltung.
+    
+  - value: 3
+    label: "Medial passend"
+    description: |
+      Die mediale Umsetzung ist angemessen und zweckmäßig. Die gewählten 
+      Medien unterstützen den Lerninhalt gut und sind für die Zielgruppe 
+      geeignet. Qualität und Format entsprechen den Anforderungen und 
+      fördern das Verständnis.
+    
+  - value: 4
+    label: "Medial gut"
+    description: |
+      Die mediale Umsetzung ist gut durchdacht und hochwertig. Verschiedene 
+      Medienformate werden sinnvoll eingesetzt, die Qualität ist hoch und 
+      die Gestaltung ansprechend. Die Medien verstärken die Lernwirkung 
+      und motivieren die Lernenden.
+    
+  - value: 5
+    label: "Medial hervorragend"
+    description: |
+      Die mediale Umsetzung ist exzellent und innovativ. Modernste Medien 
+      werden optimal eingesetzt, die Qualität ist herausragend und die 
+      Gestaltung professionell. Die mediale Präsentation maximiert die 
+      Lernwirkung und bietet ein beeindruckendes Lernerlebnis.
+
+aggregator:
+  strategy: single_value
+  params:
+    missing: zero
+
+labels:
+  "0.0": "Medial unpassend"
+  "1.0": "Medial schwierig"
+  "2.0": "Medial ausreichend, aber suboptimal"
+  "3.0": "Medial passend"
+  "4.0": "Medial gut"
+  "5.0": "Medial hervorragend"
