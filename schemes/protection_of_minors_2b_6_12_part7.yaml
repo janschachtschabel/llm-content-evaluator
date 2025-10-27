@@ -1,0 +1,51 @@
+id: protection_of_minors_2b_6_12_part7
+name: 'Jugendschutz 2B-6-12 - Teil 7: Interaktion & Nutzung'
+description: Prüfung von Interaktions- und Nutzungsschutzmaßnahmen für Kinder 6-12
+  Jahre
+dimension: protection_of_minors_2b_6_12_interaction
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 6-12
+age_label: Nicht geeignet für Kinder unter 12 Jahren
+gate_rules:
+- id: 2B-6-30
+  description: Kommunikations-/Kontaktfunktionen ohne Vorsorgemaßnahmen (offene Chats/DMs;
+    fehlende Kontaktlimits U12)
+  legal_basis: JuSchG §10b Abs.3
+  action: Kinderschutzmaßnahmen implementieren (Chats moderieren/sperren)
+  scope: platform
+- id: 2B-6-31
+  description: Kauffunktionen/In-App-Käufe ohne Schutz (Sperren/Limits/Elternkontrolle)
+    in U12-zugänglichen Angeboten
+  legal_basis: JuSchG §10b Abs.3
+  action: Kaufschutz implementieren (PIN, Elternkontrolle, Limits)
+  scope: platform
+- id: 2B-6-32
+  description: Glücksspielähnliche Mechanismen (Lootboxen/Gacha) ohne wirksame Vorsorge
+    in U12-zugänglichen Angeboten
+  legal_basis: JuSchG §10b Abs.3
+  action: Schutzmaßnahmen implementieren (Transparenz, Limits, Elternkontrolle)
+  scope: platform
+- id: 2B-6-33
+  description: Mechaniken fördern exzessive Nutzung (Autoplay/Endlos-Feed/Streaks)
+    ohne Schutzmaßnahmen (6–12)
+  legal_basis: JuSchG §10b Abs.3
+  action: Nutzungsschutz implementieren (Zeitlimits, Pausen, Deaktivierung)
+  scope: platform
+- id: 2B-6-34
+  description: Werbung nicht klar als solche erkennbar in U12-zugänglichen Angeboten
+  legal_basis: JMStV §6 Abs.1
+  action: Werbung kindgerecht gestalten (eindeutig kennzeichnen, kein Druck)
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 6-12 geeignet
+  '1': PASS - Geeignet für 6-12

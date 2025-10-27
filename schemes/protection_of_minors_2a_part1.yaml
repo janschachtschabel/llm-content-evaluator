@@ -1,0 +1,46 @@
+id: protection_of_minors_2a_part1
+name: 'Jugendschutz 2A - Teil 1: Pornografie & StGB'
+description: Prüfung auf pornografische Inhalte nach JMStV und StGB
+dimension: protection_of_minors_2a_pornography
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_restriction: 18+ / AVS erforderlich
+gate_rules:
+- id: 2A-01
+  description: Inhalt ist in sonstiger Weise pornografisch (einfache Pornografie)
+  legal_basis: JMStV §4 Abs.2 S.1 Nr.1
+  action: Altersverifikation sicherstellen (AVS implementieren)
+  scope: content
+- id: 2A-02
+  description: Sexuelle Vorgänge werden grob aufdringlich in den Vordergrund gerückt
+  legal_basis: JMStV §4 Abs.2 S.1 Nr.1
+  action: Altersverifikation sicherstellen (AVS implementieren)
+  scope: both
+- id: 2A-03
+  description: Gesamttendenz ausschließlich/überwiegend auf sexuelle Stimulation ausgerichtet
+  legal_basis: JMStV §4 Abs.2 S.1 Nr.1
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 2A-04
+  description: Pornografische Inhalte Minderjährigen zugänglich gemacht
+  legal_basis: StGB §184 Abs.1
+  action: Altersverifikation sicherstellen (AVS implementieren)
+  scope: content
+- id: 2A-05
+  description: Telemedienanbieter verhindert Zugang Minderjähriger zu Pornografie
+    nicht
+  legal_basis: StGB §184 Abs.2
+  action: AVS-System implementieren
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: critical
+compliance_type: youth_endangering_content
+labels:
+  '0': FAIL - Pornografie ohne AVS / StGB-Verstoß
+  '1': PASS - Keine Pornografie oder AVS vorhanden

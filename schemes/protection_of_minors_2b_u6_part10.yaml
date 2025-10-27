@@ -1,0 +1,45 @@
+id: protection_of_minors_2b_u6_part10
+name: 'Jugendschutz 2B-U6 - Teil 10: Bedrohungsszenarien'
+description: Prüfung auf bedrohliche Szenarien für Kinder unter 6 Jahren
+dimension: protection_of_minors_2b_u6_threats
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 0-6
+age_label: Nicht geeignet für Kinder unter 6 Jahren
+gate_rules:
+- id: 2B-0-40
+  description: Thematisierung von Tod/Trauer/Trennung ohne kindgerechte Auflösung/Entlastung
+    (U6)
+  legal_basis: JuSchG §10b Abs.1
+  action: Altersgerechte Einordnung ergänzen oder Zugangsbeschränkung U6
+  scope: content
+- id: 2B-0-41
+  description: Realistische Bedrohungsszenarien (Entführung/Verlust der Bezugsperson)
+    ohne beruhigende Auflösung (U6)
+  legal_basis: JMStV §5 Abs.1
+  action: Kindgerechte Auflösung/Entlastung ergänzen oder Zugangsbeschränkung U6
+  scope: content
+- id: 2B-0-42
+  description: Übermäßige Lautstärke/Schreie/Alarmtöne als Schockmittel in Kinderinhalten
+    (U6)
+  legal_basis: JMStV §5 Abs.1
+  action: Audio/Bildsprache anpassen oder Zugangsbeschränkung U6 implementieren
+  scope: content
+- id: 2B-0-43
+  description: Surreale/Verzerrte Bildsprache, die Verunsicherung/Albträume auslösen
+    kann (U6)
+  legal_basis: JMStV §5 Abs.1
+  action: Sprache anpassen oder Zugangsbeschränkung U6 implementieren
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für U6 geeignet
+  '1': PASS - Geeignet für U6

@@ -1,0 +1,67 @@
+id: protection_of_minors_2b_12_16_part8
+name: 'Jugendschutz 2B-12-16 - Teil 8: Jugendschutzprogramme & DSA'
+description: Prüfung von Jugendschutzprogrammen und DSA-Vorgaben für Jugendliche 12-16
+  Jahre
+dimension: protection_of_minors_2b_12_16_programs_dsa
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 12-16
+age_label: Nicht geeignet für Jugendliche unter 16 Jahren
+gate_rules:
+- id: 2B-12-36
+  description: Unbedenkliche Bereiche nicht für anerkannte Jugendschutzprogramme programmiert
+    (Whitelist/Label fehlen) (U16)
+  legal_basis: JMStV §11 Abs.5
+  action: Jugendschutzprogramm-Signalisierung implementieren (age-de.xml, Whitelisting)
+  scope: platform
+- id: 2B-12-37
+  description: Fehlende geeignete/verhältnismäßige Minderjährigenschutz-Voreinstellungen
+    (Default-Sichtbarkeit/Autoplay/DMs) für 12–16
+  legal_basis: DSA Art.28 Abs.1
+  action: Kinderschutzmaßnahmen implementieren (Chats moderieren/sperren)
+  scope: platform
+  trigger_keywords:
+    - voreinstellung
+    - default
+    - autoplay
+    - sichtbarkeit
+    - standardmäßig aktiviert
+  not_trigger_keywords:
+    - gewalt
+    - kampf
+    - brutal
+    - kriegsbild
+    - katastrophe
+  evaluation_hint: Dieser Indikator prüft TECHNISCHE EINSTELLUNGEN der Plattform,
+    nicht den Inhalt selbst. Trigger nur wenn Autoplay, Default-Sichtbarkeit oder
+    DM-Einstellungen problematisch sind.
+- id: 2B-12-38
+  description: Keine elterlichen Kontroll-/Beschränkungsfunktionen trotz minderjähriger
+    Zielgruppe (12–16)
+  legal_basis: DSA Art.28 Abs.1
+  action: Elternkontrollfunktionen implementieren
+  scope: platform
+- id: 2B-12-39
+  description: Unzureichende Maßnahmen zum Schutz Minderjähriger in audiovisuellen
+    Diensten (12–16)
+  legal_basis: AVMD-RL Art.6a Abs.1
+  action: Meldesystem und Elternkontrollen implementieren
+  scope: platform
+- id: 2B-12-40
+  description: VSP ohne altersgerechte Meldesysteme/Elternkontrollen/Tools für Jugendprofile
+    (12–16)
+  legal_basis: AVMD-RL Art.28b Abs.3
+  action: Inhaltstrennung implementieren (Jugend-/Erwachsenenbereich)
+  scope: platform
+default_action:
+  value: 1
+  label: PASS
+severity: medium
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 12-16 geeignet
+  '1': PASS - Geeignet für 12-16

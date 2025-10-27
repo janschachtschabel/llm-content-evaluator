@@ -1,0 +1,241 @@
+id: protection_of_minors_gate
+name: "Jugendschutz MASTER-GATE - Alle Jugendschutzprüfungen"
+description: "Kombinierte Prüfung aller Jugendschutzanforderungen (2A: Jugendgefährdend + 2B: Entwicklungsbeeinträchtigend)"
+dimension: protection_of_minors_compliance
+type: derived
+version: "1.0"
+
+output_range:
+  min: 0
+  max: 18
+  type: int
+  values: [0, 6, 12, 16, 18, 100]
+
+# Dependencies: 2A (Jugendgefährdend) und 2B (Entwicklungsbeeinträchtigend)
+dependencies:
+  - protection_of_minors_2a_gate  # Jugendgefährdend (18+ mit AVS)
+  - protection_of_minors_2b_gate  # Entwicklungsbeeinträchtigend (altersgestuft)
+
+# Bewertungslogik: 2A hat Vorrang, dann 2B
+rules:
+  # JUGENDGEFÄHRDEND: 2A failed → AVS erforderlich, kein Mindestalter ausreichend
+  - conditions:
+      - dimension: protection_of_minors_2a_compliance
+        operator: "=="
+        value: 0
+    value: 100
+    label: "JUGENDGEFÄHRDEND - AVS erforderlich"
+    reasoning: "Inhalt ist jugendgefährdend nach JMStV §4 Abs.2 - Altersverifikationssystem (AVS) zwingend erforderlich"
+    confidence: 0.92
+
+  # 2A bestanden, 2B bestimmt Altersfreigabe
+  # FSK 0
+  - conditions:
+      - dimension: protection_of_minors_2a_compliance
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_compliance
+        operator: "=="
+        value: 0
+    value: 0
+    label: "FSK 0 - Freigegeben ohne Altersbeschränkung"
+    reasoning: "Nicht jugendgefährdend und für alle Altersgruppen geeignet"
+    confidence: 0.90
+
+  # FSK 6
+  - conditions:
+      - dimension: protection_of_minors_2a_compliance
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_compliance
+        operator: "=="
+        value: 6
+    value: 6
+    label: "FSK 6 - Freigegeben ab 6 Jahren"
+    reasoning: "Nicht jugendgefährdend, aber entwicklungsbeeinträchtigend für Kinder unter 6 Jahren"
+    confidence: 0.88
+
+  # FSK 12
+  - conditions:
+      - dimension: protection_of_minors_2a_compliance
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_compliance
+        operator: "=="
+        value: 12
+    value: 12
+    label: "FSK 12 - Freigegeben ab 12 Jahren"
+    reasoning: "Nicht jugendgefährdend, aber entwicklungsbeeinträchtigend für Kinder unter 12 Jahren"
+    confidence: 0.86
+
+  # FSK 16
+  - conditions:
+      - dimension: protection_of_minors_2a_compliance
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_compliance
+        operator: "=="
+        value: 16
+    value: 16
+    label: "FSK 16 - Freigegeben ab 16 Jahren"
+    reasoning: "Nicht jugendgefährdend, aber entwicklungsbeeinträchtigend für Jugendliche unter 16 Jahren"
+    confidence: 0.84
+
+  # Keine Jugendfreigabe (aber nicht jugendgefährdend)
+  - conditions:
+      - dimension: protection_of_minors_2a_compliance
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_compliance
+        operator: "=="
+        value: 18
+    value: 18
+    label: "Keine Jugendfreigabe - Nur für Erwachsene"
+    reasoning: "Nicht jugendgefährdend, aber entwicklungsbeeinträchtigend für alle Minderjährigen"
+    confidence: 0.82
+
+# Fallback: Jugendgefährdend
+default:
+  value: 100
+  label: "JUGENDGEFÄHRDEND - AVS erforderlich"
+  reasoning: "Inhalt ist jugendgefährdend - Altersverifikationssystem (AVS) zwingend erforderlich"
+  confidence: 0.92
+
+labels:
+  "0": "FSK 0 - Freigegeben ohne Altersbeschränkung"
+  "6": "FSK 6 - Freigegeben ab 6 Jahren"
+  "12": "FSK 12 - Freigegeben ab 12 Jahren"
+  "16": "FSK 16 - Freigegeben ab 16 Jahren"
+  "18": "Keine Jugendfreigabe - Nur für Erwachsene (18+)"
+  "100": "JUGENDGEFÄHRDEND - Altersverifikationssystem (AVS) erforderlich"
+
+metadata:
+  legal_framework: "JMStV §§4-5, JuSchG §§10b, 14, 14a, DSA Art.28, AVMD-RL Art.6a"
+  gate_type: "Master - Jugendschutz (2A + 2B)"
+  action_required:
+    jugendgefährdend: "AVS-Pflicht (Altersverifikation) + Zeitsteuerung 23:00-06:00"
+    altersgestuft: "Alterskennzeichnung + Technische Schutzmaßnahmen + Zeitsteuerung"
+    fsk_0: "Keine Aktion erforderlich"
+  total_indicators_2a: 37
+  total_indicators_2b: 241
+  total_indicators: 278
+
+description_text: |
+  Das Jugendschutz MASTER-GATE prüft umfassend auf alle Jugendschutzanforderungen.
+  
+  **Funktion:** Vollständige Jugendschutz-Compliance-Prüfung
+  **Output:** Altersfreigabe (0, 6, 12, 16, 18) oder AVS-Pflicht (100)
+  
+  **Struktur (278 Indikatoren gesamt):**
+  
+  **2A - Jugendgefährdend (18+ mit AVS) - 37 Indikatoren:**
+  - Pornografie (§4 Abs.2 Satz 1 Nr.1 JMStV)
+  - Kriegsverherrlichung/Gewaltverherrlichung (§4 Abs.2 Satz 1 Nr.2 JMStV)
+  - Menschenverachtende Inhalte (§4 Abs.2 Satz 1 Nr.3 JMStV)
+  - Entwicklungsgefährdende Medien (§4 Abs.2 Satz 1 Nr.4 JMStV)
+  - Schwer jugendgefährdende Medien (§4 Abs.2 Satz 1 Nr.5 JMStV)
+  - Offensichtlich schwer jugendgefährdend (§4 Abs.2 Satz 2 JMStV)
+  - FSK 18 ohne AVS (§5 Abs.3 JMStV)
+  
+  **2B - Entwicklungsbeeinträchtigend (altersgestuft) - 241 Indikatoren:**
+  
+  **2B-U6 (0-6 Jahre) - 47 Indikatoren:**
+  - Übermäßig ängstigende Inhalte
+  - Gewalt ohne Distanzierung
+  - Bedrohliche Figuren/Jumpscares
+  - Sexualisierung/obszöne Sprache
+  - Gefährliche nachahmbare Handlungen
+  - Ungeeignete Werbung
+  - Fehlende Kinderschutzmaßnahmen
+  
+  **2B-6-12 (6-12 Jahre) - 47 Indikatoren:**
+  - Intensive Bedrohung/Horror
+  - Comic-/Fantasy-Gewalt
+  - Derbe Sprache
+  - Riskante Challenges
+  - Drogen-/Alkoholverharmlosung
+  - Suizid/Selbstverletzung
+  - Zeitsteuerung 20:00-06:00
+  
+  **2B-12-16 (12-16 Jahre) - 67 Indikatoren:**
+  - Intensive Gewalt mit suggestiver Wirkung
+  - Sexualthemen mit Erwachsenenperspektive
+  - Diskriminierung
+  - Glücksspielähnliche Mechaniken
+  - Exzessives Nutzungsdesign
+  - Essstörungen/Körperbild-Druck
+  - Zeitsteuerung 20:00-06:00 (ab 12) / 22:00-06:00 (ab 16)
+  
+  **2B-16-18 (16-18 Jahre) - 80 Indikatoren:**
+  - Realistische harte Gewalt
+  - Psychologischer Horror
+  - Sexualität als Erzählmotiv
+  - Drogen detailliert
+  - Kriegs-/Katastrophen-Dokus
+  - Finanz-/Krypto-Bildung
+  - Zeitsteuerung 22:00-06:00
+  
+  **Bewertungslogik (Hierarchisch):**
+  
+  **Stufe 1: Jugendgefährdung prüfen (2A)**
+  - Wenn 2A = FAIL → Output: 100 (JUGENDGEFÄHRDEND)
+  - Wenn 2A = PASS → Weiter zu Stufe 2
+  
+  **Stufe 2: Entwicklungsbeeinträchtigung prüfen (2B)**
+  - 2B = 0 → Output: 0 (FSK 0)
+  - 2B = 6 → Output: 6 (FSK 6)
+  - 2B = 12 → Output: 12 (FSK 12)
+  - 2B = 16 → Output: 16 (FSK 16)
+  - 2B = 18 → Output: 18 (Keine Jugendfreigabe)
+  
+  **Aktionen je Kategorie:**
+  
+  **JUGENDGEFÄHRDEND (100):**
+  - Altersverifikationssystem (AVS) zwingend erforderlich
+  - Zeitsteuerung 23:00-06:00 Uhr
+  - Keine einfache Alterskennzeichnung ausreichend
+  - Technische Zugangsbeschränkung
+  - Meldung an KJM bei Verstoß
+  
+  **Keine Jugendfreigabe (18):**
+  - Alterskennzeichnung "ab 18"
+  - Technische Schutzmaßnahmen (PIN, Adult-Mode)
+  - Zeitsteuerung 22:00-06:00 Uhr (optional)
+  - Jugendschutzprogramm-Signalisierung
+  - Inhaltstrennung (Erwachsenenbereich)
+  
+  **FSK 16:**
+  - Alterskennzeichnung "ab 16"
+  - Zeitsteuerung 22:00-06:00 Uhr
+  - Jugendschutzprogramm-Signalisierung (ab 16)
+  - Teens-Profile mit Altersprüfung
+  - Deskriptoren (Gewalt, Sprache, etc.)
+  
+  **FSK 12:**
+  - Alterskennzeichnung "ab 12"
+  - Zeitsteuerung 20:00-06:00 Uhr (optional)
+  - Jugendschutzprogramm-Signalisierung (ab 12)
+  - Profiltrennung (Kids/Teens)
+  - Deskriptoren
+  
+  **FSK 6:**
+  - Alterskennzeichnung "ab 6"
+  - Jugendschutzprogramm-Signalisierung (ab 6)
+  - Inhaltstrennung von U6-Bereichen
+  - Optional: Kids-Mode
+  
+  **FSK 0:**
+  - Keine Beschränkungen
+  - Optional: Whitelist für Jugendschutzprogramme
+  - Kindgerechte Gestaltung
+  
+  **Performance:**
+  Beide Gates (2A + 2B) werden parallel evaluiert.
+  - 2A: 6 Teilschemas parallel
+  - 2B: 4 Altersgruppen-Gates parallel, jedes mit 10-16 Teilschemas
+  - Gesamtlaufzeit: ~Max(2A-Zeit, 2B-Zeit) ≈ 15-20 Sekunden
+  
+  **Besonderheit:**
+  Output-Wert 100 (JUGENDGEFÄHRDEND) liegt außerhalb des regulären
+  Altersbereichs 0-18, um klar zu signalisieren, dass hier nicht nur
+  eine Altersfreigabe, sondern ein AVS erforderlich ist.

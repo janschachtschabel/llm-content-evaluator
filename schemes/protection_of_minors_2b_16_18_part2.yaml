@@ -1,0 +1,47 @@
+id: protection_of_minors_2b_16_18_part2
+name: 'Jugendschutz 2B-16-18 - Teil 2: Technische Schutzmaßnahmen'
+description: Prüfung technischer Jugendschutzmaßnahmen für Jugendliche 16-18 Jahre
+dimension: protection_of_minors_2b_16_18_technical
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 16-18
+age_label: Nicht geeignet für Jugendliche unter 18 Jahren
+gate_rules:
+- id: 2B-16-06
+  description: Eingesetztes Jugendschutzprogramm nicht als geeignet anerkannt (U18)
+  legal_basis: JMStV §11 Abs.1
+  action: Jugendschutzprogramm-Signalisierung implementieren (age-de.xml, Whitelisting)
+  scope: platform
+- id: 2B-16-07
+  description: Keine maschinenlesbare Alterskennzeichnung für Jugendschutzprogramme
+  legal_basis: JMStV §5 Abs.3 S.1 Nr.1 i.V.m. §11
+  action: Jugendschutzprogramm-Signalisierung implementieren (age-de.xml, Whitelisting)
+  scope: platform
+- id: 2B-16-08
+  description: Inhalte 'ab 16' außerhalb 22:00–06:00 zugänglich (Rundfunk/Streaming-Äquivalent)
+  legal_basis: JMStV §5 Abs.4
+  action: Zeitsteuerung implementieren (22:00-06:00) oder Zugangsbeschränkung
+  scope: platform
+- id: 2B-16-09
+  description: EB-Bereiche nicht getrennt von jugendgeeigneten Bereichen (fehlende
+    Teens/Kids-Profile)
+  legal_basis: JMStV §5 Abs.5
+  action: Inhaltstrennung implementieren (Jugend-/Erwachsenenbereich)
+  scope: platform
+- id: 2B-16-10
+  description: Angebot entwicklungsbeeinträchtigend für Altersstufe 16–18
+  legal_basis: JuSchG §14 Abs.1
+  action: Prüfen und bei Verstoß entfernen
+  scope: content
+default_action:
+  value: 1
+  label: PASS
+severity: medium
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 16-18 geeignet
+  '1': PASS - Geeignet für 16-18

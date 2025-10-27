@@ -1,0 +1,63 @@
+id: protection_of_minors_2b_6_12_part9
+name: 'Jugendschutz 2B-6-12 - Teil 9: EU & Medien'
+description: Prüfung EU-rechtlicher Vorgaben und Medieninhalte für Kinder 6-12 Jahre
+dimension: protection_of_minors_2b_6_12_eu_media
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 6-12
+age_label: Nicht geeignet für Kinder unter 12 Jahren
+gate_rules:
+- id: 2B-6-40
+  description: Unzureichende Maßnahmen zum Schutz Minderjähriger in audiovisuellen
+    Diensten (6–12)
+  legal_basis: AVMD-RL Art.6a Abs.1
+  action: Meldesystem und Elternkontrollen implementieren
+  scope: platform
+- id: 2B-6-41
+  description: VSP ohne altersgerechte Meldesysteme/Elternkontrollen/Tools für Kinderbereiche
+    (6–12)
+  legal_basis: AVMD-RL Art.28b Abs.3
+  action: Sprache anpassen oder Zugangsbeschränkung U12 implementieren
+  scope: platform
+- id: 2B-6-42
+  description: Belastende Nachrichten/Dokus ohne altersangemessene Einordnung/Didaktik
+    in U12-Umfeldern
+  legal_basis: MStV §19 i.V.m. JMStV §5
+  action: Warnhinweis ergänzen, Einordnung sicherstellen oder Zugangsbeschränkung
+    U12
+  scope: both
+  trigger_keywords:
+    - gewalt
+    - kampf
+    - brutal
+    - krieg
+    - katastrophe
+    - belastend
+    - nachricht
+    - doku
+  not_trigger_keywords:
+    - autoplay
+    - voreinstellung
+    - default
+    - sichtbarkeit
+  evaluation_hint: Dieser Indikator prüft INHALTLICHE BELASTUNG (Gewalt, Krieg,
+    Katastrophen etc.) ohne Einordnung. Trigger wenn der INHALT selbst belastend ist,
+    nicht wenn Platform-Einstellungen fehlen.
+- id: 2B-6-43
+  description: Horror/Angst mit Jumpscares/Grusel ohne blutige Detailauskostung -
+    Dunkle Stimmung, Schockmomente (6–12)
+  legal_basis: JMStV §5, JuSchG §10b
+  action: Korrekte Altersfreigabe einholen (FSK/USK)
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: medium
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 6-12 geeignet
+  '1': PASS - Geeignet für 6-12

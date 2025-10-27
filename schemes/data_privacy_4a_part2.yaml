@@ -1,0 +1,46 @@
+id: data_privacy_4a_part2
+name: 'Datenschutz 4A - Teil 2: Zweckbindung & Datenminimierung'
+description: Prüfung auf Zweckbindung, Datenminimierung und Speicherbegrenzung nach
+  DSGVO Art. 5
+dimension: data_privacy_4a_purpose_minimization
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 4A-06
+  description: Zweckbindung verletzt
+  legal_basis: DSGVO Art. 5 Abs. 1 lit. b
+  action: Zweckbindung prüfen, Daten nur für geprüfte Zwecke nutzen oder löschen
+  scope: both
+- id: 4A-07
+  description: Zweckänderung zu Werbung/Profiling ohne Prüfung
+  legal_basis: DSGVO Art. 6 Abs. 4
+  action: Kompatibilitätsprüfung durchführen oder neue Einwilligung einholen
+  scope: platform
+- id: 4A-08
+  description: Datenminimierung verletzt
+  legal_basis: DSGVO Art. 5 Abs. 1 lit. c
+  action: Datenerhebung reduzieren, Pflichtfelder prüfen, unnötige Daten löschen
+  scope: both
+- id: 4A-09
+  description: Überlange Speicherung ohne Löschkonzept
+  legal_basis: DSGVO Art. 5 Abs. 1 lit. e
+  action: Löschfristen festlegen, Datenbereinigung umsetzen, Löschkonzept dokumentieren
+  scope: both
+- id: 4A-10
+  description: Transparenz unzureichend/unkindgerecht
+  legal_basis: DSGVO Art. 12–14
+  action: Datenschutzhinweise aktualisieren (klar, vollständig, kindgerecht), Bereitstellung
+    nachweisen
+  scope: platform
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: data_protection
+labels:
+  '0': FAIL - Zweckbindung/Datenminimierung verletzt
+  '1': PASS - Zweckbindung/Datenminimierung eingehalten

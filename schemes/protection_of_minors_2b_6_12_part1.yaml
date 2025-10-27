@@ -1,0 +1,50 @@
+id: protection_of_minors_2b_6_12_part1
+name: 'Jugendschutz 2B-6-12 - Teil 1: Grundlagen'
+description: Grundlegende Entwicklungsbeeinträchtigungs-Prüfungen für Kinder 6-12
+  Jahre
+dimension: protection_of_minors_2b_6_12_basics
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 6-12
+age_label: Nicht geeignet für Kinder unter 12 Jahren
+gate_rules:
+- id: 2B-6-01
+  description: Angebot geeignet die Entwicklung von Kindern 6–12 zu beeinträchtigen
+  legal_basis: JMStV §5 Abs.1
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 2B-6-02
+  description: Anbieter stellt nicht sicher dass Kinder 6–12 das Angebot üblicherweise
+    nicht wahrnehmen
+  legal_basis: JMStV §5 Abs.1
+  action: Technische Schutzmaßnahmen implementieren (Alterslabel, Kids-Mode, PIN)
+  scope: both
+- id: 2B-6-03
+  description: Keine Altersfreigabe nach JuSchG vorhanden – Beeinträchtigung wird
+    vermutet (6–12)
+  legal_basis: JMStV §5 Abs.2
+  action: Korrekte Altersfreigabe einholen (FSK/USK)
+  scope: platform
+- id: 2B-6-04
+  description: Angebot ist im Wesentlichen inhaltsgleich mit nicht freigegebenem/beeinträchtigendem
+    Angebot (6–12)
+  legal_basis: JMStV §5 Abs.2
+  action: Prüfen und bei Verstoß entfernen
+  scope: content
+- id: 2B-6-05
+  description: Fehlen technischer/sonstiger Zugangsbeschränkungen für U12 (Alterslabel/Jugendschutzschalter/Kids-Mode/PIN)
+  legal_basis: JMStV §5 Abs.3 S.1 Nr.1
+  action: Technische Schutzmaßnahmen implementieren (Alterslabel, Kids-Mode, PIN)
+  scope: platform
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 6-12 geeignet
+  '1': PASS - Geeignet für 6-12

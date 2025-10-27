@@ -1,0 +1,290 @@
+id: data_privacy_gate
+name: "Datenschutz MASTER-GATE - Alle Datenschutzprüfungen"
+description: "Kombinierte Prüfung aller Datenschutzanforderungen (4A: Profiling & Einwilligung + 4B: Transparenz & KI-Kennzeichnung)"
+dimension: data_privacy_compliance
+type: derived
+version: "1.0"
+
+output_range:
+  min: 0
+  max: 3
+  type: int
+  values: [0, 1, 2, 3]
+
+# Dependencies: 4A (Profiling & Einwilligung) und 4B (Transparenz & KI)
+dependencies:
+  - data_privacy_4a_gate  # Profiling & Einwilligungspflichten
+  - data_privacy_4b_gate  # Transparenz (KI/Bot-Kennzeichnung, Empfehlungssysteme)
+
+# Bewertungslogik: Beide Dimensionen unabhängig bewerten
+rules:
+  # VOLLSTÄNDIG COMPLIANT: Beide Gates bestanden
+  - conditions:
+      - dimension: data_privacy_4a_compliance
+        operator: "=="
+        value: 1
+      - dimension: data_privacy_4b_compliance
+        operator: "=="
+        value: 1
+    value: 3
+    label: "COMPLIANT - Datenschutz-konform"
+    reasoning: "Sowohl Profiling/Einwilligungspflichten als auch Transparenzpflichten erfüllt"
+    confidence: 0.89
+
+  # NUR TRANSPARENZ: 4A failed, 4B bestanden
+  - conditions:
+      - dimension: data_privacy_4a_compliance
+        operator: "=="
+        value: 0
+      - dimension: data_privacy_4b_compliance
+        operator: "=="
+        value: 1
+    value: 2
+    label: "DSGVO-VERSTOSS - Transparenz OK"
+    reasoning: "Verstöße gegen DSGVO-Grundsätze (Rechtsgrundlage, Einwilligung, Betroffenenrechte), aber Transparenzpflichten erfüllt"
+    confidence: 0.88
+
+  # NUR PROFILING: 4A bestanden, 4B failed
+  - conditions:
+      - dimension: data_privacy_4a_compliance
+        operator: "=="
+        value: 1
+      - dimension: data_privacy_4b_compliance
+        operator: "=="
+        value: 0
+    value: 1
+    label: "TRANSPARENZ UNZUREICHEND - DSGVO OK"
+    reasoning: "DSGVO-Grundsätze eingehalten, aber Transparenzpflichten (KI-Kennzeichnung, Recommender) unzureichend"
+    confidence: 0.86
+
+# Fallback: BEIDE failed
+default:
+  value: 0
+  label: "KRITISCH - Beides non-compliant"
+  reasoning: "Sowohl DSGVO-Grundsätze als auch Transparenzpflichten verletzt - kritischer Datenschutzverstoß"
+  confidence: 0.90
+
+labels:
+  "0": "KRITISCH - DSGVO-Verstoß UND Transparenz unzureichend"
+  "1": "TRANSPARENZ UNZUREICHEND - KI-Kennzeichnung erforderlich"
+  "2": "DSGVO-VERSTOSS - Einwilligung/Rechtsgrundlage erforderlich"
+  "3": "COMPLIANT - Datenschutz-konform"
+
+metadata:
+  legal_framework: "DSGVO; TDDDG; BDSG; MStV §8, §18, §19, §70, §74; DSA Art. 14-17, 20-21, 23-27, 28, 30, 34-35, 38, 40, 42; AVMD-RL Art. 28b; EU-KI-VO Art. 52; JuSchG §10b, §24a; VN-KRK Art. 12, 17"
+  gate_type: "Master - Datenschutz (4A + 4B)"
+  action_required:
+    critical: "DSGVO-Compliance + KI-Kennzeichnung + Einwilligung + Transparenz"
+    transparency_only: "KI-Kennzeichnung + Recommender-Offenlegung + Altersgerechte Info"
+    dsgvo_only: "Einwilligung + Rechtsgrundlage + Betroffenenrechte + Privacy by Design"
+    compliant: "Keine Aktion erforderlich"
+  total_indicators_4a: 50
+  total_indicators_4b: 37
+  total_indicators: 87
+
+description_text: |
+  Das Datenschutz MASTER-GATE prüft umfassend auf DSGVO-Compliance 
+  und Transparenzpflichten bei algorithmischen Systemen.
+  
+  **Funktion:** Vollständige Datenschutz-Compliance-Prüfung
+  **Output:** 4-stufige Bewertung (KRITISCH / TRANSPARENZ / DSGVO / COMPLIANT)
+  
+  **Struktur (87 Indikatoren gesamt):**
+  
+  **4A - Profiling & Einwilligungspflichten - 50 Indikatoren:**
+  
+  **Rechtsgrundlagen & Einwilligung (DSGVO Art. 6, 7, 8):**
+  - Verarbeitung nur mit Rechtsgrundlage
+  - Freiwillige, informierte, spezifische Einwilligung
+  - Widerrufbarkeit/Nachweisbarkeit der Einwilligung
+  - Besondere Einwilligung für Kinder unter 16 (elterlich)
+  - Keine Kopplungsverbote (echte Freiwilligkeit)
+  
+  **Zweckbindung & Datenminimierung (DSGVO Art. 5):**
+  - Zweckbindung und Speicherbegrenzung
+  - Datenminimierung (nur erforderliche Daten)
+  - Richtigkeit der Daten
+  - Privacy by Design und Default (Art. 25)
+  
+  **Betroffenenrechte (DSGVO Art. 12-22):**
+  - Auskunftsrecht (Art. 15)
+  - Berichtigungsrecht (Art. 16)
+  - Löschungsrecht (Art. 17, "Recht auf Vergessen")
+  - Einschränkung der Verarbeitung (Art. 18)
+  - Datenübertragbarkeit (Art. 20)
+  - Widerspruchsrecht (Art. 21)
+  - Widerspruch gegen Profiling/ADM (Art. 22)
+  
+  **Sicherheit & Rechenschaftspflicht (DSGVO Art. 5, 32-36):**
+  - Technische und organisatorische Maßnahmen (TOMs)
+  - Datensicherheit (Verschlüsselung, Pseudonymisierung)
+  - Meldepflicht bei Datenschutzverletzungen (Art. 33-34)
+  - Datenschutz-Folgenabschätzung (Art. 35)
+  - Dokumentations- und Nachweispflichten
+  
+  **Verträge & Drittlandtransfers (DSGVO Art. 28, 44-50):**
+  - Auftragsverarbeitungsverträge (AVV)
+  - Drittlandtransfer nur mit Garantien (SCC, BCR, Angemessenheitsbeschluss)
+  - Privacy Shield ungültig (Schrems II)
+  
+  **Tracking & Consent (TDDDG, ePrivacy):**
+  - Cookie-Consent (Opt-in, kein Nudging)
+  - Tracking/Fingerprinting nur mit Einwilligung
+  - Do-Not-Track-Respektierung
+  
+  **Minderjährigenschutz (JuSchG §24a, DSA Art. 28):**
+  - Profiling-basierte Werbung an Minderjährige verboten
+  - Kindgerechte Datenschutzinfos
+  - Elterliche Einwilligung bei U16
+  - Privacy by Default für Minderjährige
+  
+  **4B - Transparenz (KI/Bot-Kennzeichnung, Empfehlungssysteme) - 37 Indikatoren:**
+  
+  **KI/Bot-Kennzeichnung (MStV §18, EU-KI-VO Art. 52):**
+  - Automatisierte Inhalte/Bot-Accounts kennzeichnen
+  - Kennzeichnung altersgerecht für Minderjährige
+  - Chatbots: KI-Interaktionshinweise
+  - Deepfakes/Synthetische Medien kennzeichnen
+  - Offenlegung bei KI-generiertem Content
+  
+  **Empfehlungssysteme (MStV §70, §74, DSA Art. 27):**
+  - Hauptparameter offenlegen (User-freundlich)
+  - Nutzer-Optionen zur Modifikation/Deaktivierung
+  - Mindestens eine nicht-personalisierte Option
+  - Transparenz über Ranking-/Auswahlkriterien
+  - Empfehlungsalgorithmen-Audit (VLOPs)
+  
+  **Moderation & Beschwerde (DSA Art. 16-17, 20-21):**
+  - Begründungspflicht bei Content-Entfernung
+  - Internes Beschwerdesystem
+  - Außergerichtliche Streitbeilegung
+  - Transparenz über Moderationsentscheidungen
+  - Automatisierte vs. menschliche Moderation transparent
+  
+  **VLOPs (DSA Art. 34-35, 37-42):**
+  - Systemische Risikoanalyse
+  - Risikominderungsmaßnahmen
+  - Unabhängige Audits
+  - Transparenzberichte
+  - Zugang zu Daten für Forscher
+  
+  **AVMD & KI-Verordnung:**
+  - Transparenz über algorithmisches Ranking (AVMD-RL Art. 28b)
+  - Hochrisiko-KI-Systeme: Transparenzpflichten (EU-KI-VO)
+  - Kennzeichnung emotionserkennender Systeme
+  
+  **Vielfalt & Kinderschutz:**
+  - Medienvielfalt in Empfehlungen (MStV §8 Abs. 6)
+  - Vielfalt-Kontrollen gegen Filterblasen
+  - Kinderrechte auf Information (VN-KRK Art. 12, 17)
+  - Altersgerechte Informationen (JuSchG §24a Abs. 2 Nr. 8)
+  
+  **Barrierefreiheit & Defaults:**
+  - Barrierefreie Zugänglichkeit (BFSG)
+  - Privacy by Default Audit
+  - Sichere Voreinstellungen dokumentiert
+  
+  **Bewertungslogik (2x2 Matrix):**
+  
+  ```
+                      4B PASS           4B FAIL
+  4A PASS    │ COMPLIANT (3)    │ TRANSPARENZ (1) │
+  4A FAIL    │ DSGVO (2)        │ KRITISCH (0)    │
+  ```
+  
+  **Aktionen je Kategorie:**
+  
+  **KRITISCH (0) - Beides non-compliant:**
+  - Sofortige DSGVO-Compliance herstellen
+  - Einwilligungen einholen/dokumentieren
+  - Betroffenenrechte ermöglichen
+  - Privacy by Design implementieren
+  - KI-Kennzeichnung hinzufügen
+  - Recommender-Transparenz herstellen
+  - Beschwerdesystem etablieren
+  - Mögliche Bußgelder bis zu 20 Mio. € oder 4% Jahresumsatz
+  - Enforcement-Actions durch Aufsichtsbehörden
+  
+  **TRANSPARENZ UNZUREICHEND (1) - KI-Kennzeichnung fehlt:**
+  - KI-generierte Inhalte kennzeichnen
+  - Deepfakes/Synthetische Medien labeln
+  - Bot-Accounts transparent machen
+  - Empfehlungssystem-Parameter offenlegen
+  - Nutzer-Optionen zur Modifikation bereitstellen
+  - Altersgerechte Infos ergänzen (Minderjährige)
+  - Audit für Empfehlungsalgorithmen (VLOPs)
+  - DSGVO-Grundsätze bereits erfüllt ✓
+  
+  **DSGVO-VERSTOSS (2) - Einwilligung/Rechtsgrundlage fehlt:**
+  - Rechtsgrundlage für Verarbeitung sicherstellen
+  - Einwilligungen nachholen/dokumentieren
+  - Betroffenenrechte implementieren (Auskunft, Löschung, etc.)
+  - Privacy by Design/Default aktivieren
+  - Datenschutz-Folgenabschätzung durchführen
+  - TOMs (Technische/Organisatorische Maßnahmen) implementieren
+  - AVV mit Dienstleistern abschließen
+  - Drittlandtransfer absichern (SCC)
+  - Transparenzpflichten bereits erfüllt ✓
+  
+  **COMPLIANT (3) - Keine Verstöße:**
+  - Keine Aktion erforderlich
+  - DSGVO-konform ✓
+  - Transparenzpflichten erfüllt ✓
+  - Best-Practice-Beispiel
+  - Kontinuierliche Überwachung empfohlen
+  
+  **Unterschied zwischen 4A und 4B:**
+  
+  **4A (Profiling & Einwilligung):**
+  - Kern-DSGVO-Compliance (Art. 5-22, 25, 28, 32-36)
+  - Rechtsgrundlagen, Einwilligung, Betroffenenrechte
+  - Privacy by Design, Datensicherheit
+  - Betrifft: Alle personenbezogenen Datenverarbeitungen
+  - Sanktion: Bis zu 20 Mio. € oder 4% Jahresumsatz
+  
+  **4B (Transparenz & KI):**
+  - Moderne Transparenzpflichten (DSA, MStV, EU-KI-VO)
+  - KI-Kennzeichnung, Recommender, Moderation
+  - Betrifft: Algorithmische Systeme, KI, Empfehlungsalgorithmen
+  - Sanktion: DSA-Bußgelder, MStV-Enforcement
+  
+  **Wichtiger Hinweis:**
+  4A ist "klassischer" Datenschutz (seit DSGVO 2018).
+  4B sind neuere Transparenzpflichten (DSA 2024, EU-KI-VO 2024/25).
+  Beide sind unabhängig voneinander zu erfüllen.
+  
+  **Besondere Risiken:**
+  
+  **VLOP-Status (Very Large Online Platforms):**
+  - Ab 45 Mio. Nutzer/Monat in EU
+  - Verschärfte Pflichten (Art. 34-42 DSA)
+  - Systemische Risikoanalyse
+  - Unabhängige Audits
+  - Erhöhte Bußgelder
+  
+  **Kinder/Jugendliche:**
+  - Profiling-basierte Werbung verboten (DSA Art. 28 Abs. 2)
+  - Elterliche Einwilligung bei U16 (DSGVO Art. 8)
+  - Privacy by Default für Minderjährige
+  - Kindgerechte Datenschutzinfos
+  
+  **Performance:**
+  Beide Gates (4A + 4B) werden parallel evaluiert.
+  - 4A: 10 Teilschemas parallel
+  - 4B: 7 Teilschemas parallel
+  - Gesamtlaufzeit: ~Max(4A-Zeit, 4B-Zeit) ≈ 12-18 Sekunden
+  
+  **Enforcement:**
+  - DSGVO: Aufsichtsbehörden (z.B. BfDI, LfDI)
+  - DSA: EU-Kommission + Digital Services Coordinators
+  - MStV: Landesmedienanstalten (z.B. KJM)
+  - EU-KI-VO: Nationale KI-Behörden (ab 2025/26)
+  
+  **Best Practice:**
+  - Regelmäßige DSGVO-Audits
+  - Datenschutz-Folgenabschätzung bei neuen Features
+  - Privacy by Design bereits in der Entwicklung
+  - Transparenz-Dashboard für Nutzer
+  - Altersgerechte Datenschutzinfos (für Kinder/Jugendliche)
+  - KI-Kennzeichnung automatisiert
+  - Recommender-Transparenz standardmäßig aktiviert

@@ -1,0 +1,48 @@
+id: protection_of_minors_2b_u6_part5
+name: 'Jugendschutz 2B-U6 - Teil 5: Gewalt & Sexualisierung'
+description: Prüfung auf Gewalt und sexualisierte Inhalte für Kinder unter 6 Jahren
+dimension: protection_of_minors_2b_u6_violence_sexual
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 0-6
+age_label: Nicht geeignet für Kinder unter 6 Jahren
+gate_rules:
+- id: 2B-0-19
+  description: Bedrohliche Figuren/Monster realistisch inszeniert (U6)
+  legal_basis: JMStV §5 Abs.1
+  action: Inhalt anpassen oder Zugangsbeschränkung U6 implementieren
+  scope: content
+- id: 2B-0-20
+  description: Darstellung von Verletzungen/Blutspuren (auch kurz) ohne Einordnung
+    (U6)
+  legal_basis: JMStV §5 Abs.1
+  action: Inhalt anpassen oder Zugangsbeschränkung U6 implementieren
+  scope: content
+- id: 2B-0-21
+  description: Konfliktlösungen ausschließlich durch Gewalt (U6)
+  legal_basis: JMStV §5 Abs.1
+  action: Inhalt anpassen (Distanzierung/alternative Lösungen) oder Zugangsbeschränkung
+    U6
+  scope: content
+- id: 2B-0-22
+  description: Sexualisierte Darstellungen/Nacktheit über beiläufiges Maß hinaus (U6)
+  legal_basis: JMStV §5 Abs.1
+  action: Inhalt anpassen oder Zugangsbeschränkung U6 implementieren
+  scope: content
+- id: 2B-0-23
+  description: Derbe/obszöne Sprache in kindzentrierten Inhalten (U6)
+  legal_basis: JMStV §5 Abs.1
+  action: Sprache anpassen oder Zugangsbeschränkung U6 implementieren
+  scope: content
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für U6 geeignet
+  '1': PASS - Geeignet für U6

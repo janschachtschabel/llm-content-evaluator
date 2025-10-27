@@ -1,0 +1,106 @@
+id: protection_of_minors_2b_16_18_gate
+name: "Jugendschutz 2B - 16 bis 18 Jahre Gate"
+description: "Prüfung auf entwicklungsbeeinträchtigende Inhalte für Jugendliche von 16 bis 18 Jahren"
+dimension: protection_of_minors_2b_16_18
+type: derived
+version: "1.0"
+
+output_range:
+  min: 0
+  max: 1
+  type: int
+
+age_group: "16-18"
+age_restriction: "Nicht für Jugendliche unter 18 Jahren geeignet"
+
+# 16 Teilschemas (80 Indikatoren, max. 5 pro Teil)
+dependencies:
+  - protection_of_minors_2b_16_18_part1     # Grundlagen (2B-16-01 bis 05)
+  - protection_of_minors_2b_16_18_part2     # Technische Schutzmaßnahmen (2B-16-06 bis 10)
+  - protection_of_minors_2b_16_18_part3     # Altersfreigaben (2B-16-11 bis 15)
+  - protection_of_minors_2b_16_18_part4     # Gewalt & Desorientierung (2B-16-16 bis 20)
+  - protection_of_minors_2b_16_18_part5     # Rollenbilder & FSF (2B-16-21 bis 25)
+  - protection_of_minors_2b_16_18_part6     # Werbung (2B-16-26 bis 30)
+  - protection_of_minors_2b_16_18_part7     # Interaktion & Nutzung (2B-16-31 bis 35)
+  - protection_of_minors_2b_16_18_part8     # Elternkontrollen & EU (2B-16-36 bis 40)
+  - protection_of_minors_2b_16_18_part9     # Gewalt & Sexualität (2B-16-41 bis 45)
+  - protection_of_minors_2b_16_18_part10    # Sprache & Diskriminierung (2B-16-46 bis 50)
+  - protection_of_minors_2b_16_18_part11    # Zeitsteuerung & DSA (2B-16-51 bis 55)
+  - protection_of_minors_2b_16_18_part12    # JuSchG & Phänomene (2B-16-56 bis 60)
+  - protection_of_minors_2b_16_18_part13    # Phänomene (2B-16-61 bis 65)
+  - protection_of_minors_2b_16_18_part14    # Phänomene & Waffen (2B-16-66 bis 70)
+  - protection_of_minors_2b_16_18_part15    # Aufklärung & Dokus (2B-16-71 bis 75)
+  - protection_of_minors_2b_16_18_part16    # Finanz & Desinformation (2B-16-76 bis 80)
+
+# UND-Verknüpfung: ALLE Teilprüfungen müssen bestanden werden
+rules:
+  - conditions:
+      - dimension: protection_of_minors_2b_16_18_basics
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_16_18_technical
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_16_18_ratings
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_16_18_violence_disorientation
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_16_18_roles_fsf
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_16_18_advertising
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_16_18_interaction_usage
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_16_18_parental_eu
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_16_18_violence_sexuality
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_16_18_language_discrimination
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_16_18_timing_dsa
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_16_18_juschg_phenomena
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_16_18_phenomena
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_16_18_phenomena_weapons
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_16_18_education_docs
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_16_18_finance_disinfo
+        operator: "=="
+        value: 1
+    value: 1
+    label: "GEEIGNET für 16-18"
+    reasoning: "Alle Prüfungen für Jugendliche 16-18 Jahre bestanden - keine Entwicklungsbeeinträchtigung festgestellt"
+    confidence: 0.84
+
+default:
+  value: 0
+  label: "NICHT GEEIGNET für 16-18"
+  reasoning: "Mindestens eine Prüfung für Jugendliche 16-18 Jahre nicht bestanden - Inhalt entwicklungsbeeinträchtigend"
+  confidence: 0.84
+
+labels:
+  "0": "NICHT GEEIGNET - Entwicklungsbeeinträchtigung für 16-18"
+  "1": "GEEIGNET - Keine Beeinträchtigung für 16-18"
+
+metadata:
+  legal_framework: "JMStV §5, JuSchG §10b, §14, §24a, DSA Art.27, Art.28, AVMD-RL Art.6a, FSF-Richtlinien"
+  age_group: "16-18 Jahre"
+  total_indicators: 80
+  parts_count: 16
+  action_required: "Zugangsbeschränkung U18 / Zeitsteuerung 22:00-06:00 / Alterskennzeichnung FSK 18"

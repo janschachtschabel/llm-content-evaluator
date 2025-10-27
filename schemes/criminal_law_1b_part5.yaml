@@ -1,0 +1,32 @@
+id: criminal_law_1b_part5
+name: 'Strafrecht 1B - Teil 5: Billigung & Religionsbeschimpfung'
+description: Prüfung auf Billigung von Straftaten und Religionsbeschimpfung nach StGB
+  §§140, 166
+dimension: criminal_law_1b_glorification
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 1B-21
+  description: Lob/Belohnung begangener Straftaten
+  legal_basis: StGB §140
+  definition: Glorifizierung von Tätern, Sieges-Emojis im Straftat-Kontext
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1B-22
+  description: Beschimpfung von Religion/Weltanschauung
+  legal_basis: StGB §166
+  definition: Beschimpfung mit Friedensgefährdung (Aufreizparolen)
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: criminal_law_contextual
+labels:
+  '0': FAIL
+  '1': PASS

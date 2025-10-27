@@ -1,0 +1,127 @@
+id: criminal_law_1b_gate
+name: "Strafrecht GATE 1B - Kontextabhängig strafbar"
+description: "Kombinierte Prüfung kontextabhängiger Straftatbestände nach deutschem Recht (StGB, UrhG, BDSG, DSA)"
+dimension: criminal_law_1b_compliance
+type: derived
+version: "1.0"
+
+output_range:
+  min: 0
+  max: 1
+  type: int
+  values: [0, 1]
+
+# Alle 11 Teilschemas als Dependencies
+dependencies:
+  - criminal_law_1b_part1    # Beleidigung & Ehrverletzung
+  - criminal_law_1b_part2    # Verleumdung & Politische Angriffe
+  - criminal_law_1b_part3    # Falsche Verdächtigung
+  - criminal_law_1b_part4    # Nötigung & Drohungen
+  - criminal_law_1b_part5    # Billigung & Religionsbeschimpfung
+  - criminal_law_1b_part6    # Verletzung der Vertraulichkeit
+  - criminal_law_1b_part7    # Cybercrime & Doxing
+  - criminal_law_1b_part8    # Urkundenfälschung & Betrug
+  - criminal_law_1b_part9    # Wahlmanipulation & Stalking
+  - criminal_law_1b_part10   # Urheberrecht & Datenschutz
+  - criminal_law_1b_part11   # DSA-Pflichten & Phänomene
+
+# UND-Verknüpfung: ALLE Teilprüfungen müssen bestanden werden
+rules:
+  - conditions:
+      - dimension: criminal_law_1b_defamation
+        operator: "=="
+        value: 1
+      - dimension: criminal_law_1b_slander
+        operator: "=="
+        value: 1
+      - dimension: criminal_law_1b_false_accusation
+        operator: "=="
+        value: 1
+      - dimension: criminal_law_1b_threats
+        operator: "=="
+        value: 1
+      - dimension: criminal_law_1b_glorification
+        operator: "=="
+        value: 1
+      - dimension: criminal_law_1b_privacy
+        operator: "=="
+        value: 1
+      - dimension: criminal_law_1b_cybercrime
+        operator: "=="
+        value: 1
+      - dimension: criminal_law_1b_fraud
+        operator: "=="
+        value: 1
+      - dimension: criminal_law_1b_election_stalking
+        operator: "=="
+        value: 1
+      - dimension: criminal_law_1b_ip_privacy
+        operator: "=="
+        value: 1
+      - dimension: criminal_law_1b_dsa_phenomena
+        operator: "=="
+        value: 1
+    value: 1
+    label: "LEGAL"
+    reasoning: "Alle kontextabhängigen strafrechtlichen Prüfungen bestanden - Inhalt ist rechtlich zulässig"
+    confidence: 0.90
+
+# Fallback: Bei einem einzigen Verstoß gilt CONTEXTUAL_ILLEGAL
+default:
+  value: 0
+  label: "CONTEXTUAL_ILLEGAL"
+  reasoning: "Mindestens eine kontextabhängige Prüfung nicht bestanden - Inhalt kann je nach Kontext strafbar sein"
+  confidence: 0.90
+
+labels:
+  "0": "CONTEXTUAL_ILLEGAL - Kontextabhängiger Strafrechtsverstoß"
+  "1": "LEGAL - Kein kontextabhängiger Verstoß"
+
+# Metadaten
+metadata:
+  legal_framework: "StGB §§185-241a, UrhG, BDSG §42, DSA Art. 16-18"
+  gate_type: "1B - Kontextabhängig strafbar"
+  action_required: "Juristisches Review; ggf. Entfernung/Sperrung + Anzeige"
+  report_authority: "Strafverfolgungsbehörden (bei konkreten Drohungen/Doxing)"
+  legal_basis_key:
+    - "StGB - Beleidigung, Verleumdung, Bedrohung, Nötigung"
+    - "StGB - Cybercrime, Stalking, Betrug, Urkundenfälschung"
+    - "UrhG - Urheberrechtsverstöße"
+    - "BDSG §42 - Datenschutzverstöße"
+    - "DSA Art. 16-18 - Meldepflichten und Transparenz"
+  
+description_text: |
+  GATE 1B prüft auf kontextabhängig strafbare Inhalte nach deutschem Recht.
+  
+  **Funktion:** Aussortierung kontextabhängiger Straftaten
+  **Aktion:** Juristisches Review; bei Verstoß Entfernung/Sperrung + Anzeige
+  
+  **Geprüfte Bereiche (51 Indikatoren):**
+  1. Beleidigung & Ehrverletzung (§§185-189 StGB)
+  2. Verleumdung & Politische Angriffe (§§187-189 StGB)
+  3. Falsche Verdächtigung (§§164, 241a StGB)
+  4. Nötigung & Drohungen (§§111, 126, 240, 241 StGB)
+  5. Billigung von Straftaten & Religionsbeschimpfung (§§140, 166 StGB)
+  6. Verletzung der Vertraulichkeit (§§201, 201a StGB)
+  7. Cybercrime & Doxing (§§126a, 202a-c StGB)
+  8. Urkundenfälschung & Betrug (§§263, 263a, 269, 270 StGB)
+  9. Wahlmanipulation & Stalking (§§108a, 238 StGB)
+  10. Urheberrecht & Datenschutz (UrhG §§106, 108a-b, BDSG §42)
+  11. DSA-Pflichten & Grenzphänomene (DSA Art. 16-18)
+  
+  **Abgrenzung zu Gate 1A:**
+  Gate 1B erfasst Straftaten, die eine Kontextprüfung erfordern:
+  - Beleidigung vs. zulässige Meinungsäußerung
+  - Drohung vs. Hyperbel/Satire
+  - Urheberrechtsverletzung vs. Fair Use
+  - Hate Speech unterhalb §130-Schwelle
+  
+  **Folge bei Verstoß:**
+  - Juristisches Review erforderlich
+  - Bei bestätigtem Verstoß: Entfernung/Sperrung
+  - Bei konkreter Gefahr: Meldung an Strafverfolgung
+  - DSA-konforme Begründung gegenüber Betroffenen
+  
+  **Performance:**
+  Alle 11 Teilprüfungen werden **parallel** ausgeführt für maximale Geschwindigkeit.
+  Jede Teilprüfung evaluiert 2-8 Indikatoren gleichzeitig.

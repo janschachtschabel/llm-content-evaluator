@@ -1,0 +1,170 @@
+id: data_privacy_4a_gate
+name: "GATE 4A - Profiling & Einwilligungspflichten"
+description: "Prüfung auf Datenschutz-Compliance bei Profiling und personenbezogener Datenverarbeitung nach DSGVO"
+dimension: data_privacy_4a_compliance
+type: derived
+version: "1.0"
+
+output_range:
+  min: 0
+  max: 1
+  type: int
+
+# 10 Teilschemas als Dependencies
+dependencies:
+  - data_privacy_4a_part1     # Rechtsgrundlagen & Einwilligung (4A-01 bis 05)
+  - data_privacy_4a_part2     # Zweckbindung & Datenminimierung (4A-06 bis 10)
+  - data_privacy_4a_part3     # Betroffenenrechte (4A-11 bis 15)
+  - data_privacy_4a_part4     # Sicherheit & Rechenschaft (4A-16 bis 20)
+  - data_privacy_4a_part5     # Verträge & Transfers (4A-21 bis 25)
+  - data_privacy_4a_part6     # Tracking & Consent (4A-26 bis 30)
+  - data_privacy_4a_part7     # DSA & JuSchG (4A-31 bis 35)
+  - data_privacy_4a_part8     # Minderjährigenschutz (4A-36 bis 40)
+  - data_privacy_4a_part9     # Transparenz & Defaults (4A-41 bis 45)
+  - data_privacy_4a_part10    # Sonderfälle (4A-46 bis 50)
+
+# UND-Verknüpfung: ALLE Teilprüfungen müssen bestanden werden
+rules:
+  - conditions:
+      - dimension: data_privacy_4a_legal_basis_consent
+        operator: "=="
+        value: 1
+      - dimension: data_privacy_4a_purpose_minimization
+        operator: "=="
+        value: 1
+      - dimension: data_privacy_4a_data_subject_rights
+        operator: "=="
+        value: 1
+      - dimension: data_privacy_4a_security_accountability
+        operator: "=="
+        value: 1
+      - dimension: data_privacy_4a_contracts_transfers
+        operator: "=="
+        value: 1
+      - dimension: data_privacy_4a_tracking_consent
+        operator: "=="
+        value: 1
+      - dimension: data_privacy_4a_dsa_juschg
+        operator: "=="
+        value: 1
+      - dimension: data_privacy_4a_minor_protection
+        operator: "=="
+        value: 1
+      - dimension: data_privacy_4a_transparency_defaults
+        operator: "=="
+        value: 1
+      - dimension: data_privacy_4a_special_cases
+        operator: "=="
+        value: 1
+    value: 1
+    label: "PASS - Datenschutz-konform"
+    reasoning: "Alle Prüfungen bestanden - datenschutzkonforme Verarbeitung personenbezogener Daten"
+    confidence: 0.90
+
+default:
+  value: 0
+  label: "FAIL - Datenschutzverstoß"
+  reasoning: "Mindestens eine Prüfung nicht bestanden - Verstöße gegen DSGVO/TDDDG festgestellt"
+  confidence: 0.90
+
+labels:
+  "0": "FAIL - Datenschutzverstoß / DSGVO-non-compliant"
+  "1": "PASS - Datenschutz-konform"
+
+metadata:
+  legal_framework: "DSGVO; TDDDG; BDSG; DSA Art. 28, 34-35; AVMD-RL Art. 28b; JuSchG §10b, §24a"
+  gate_type: "4A - Profiling & Einwilligungspflichten"
+  action_required: "Einwilligung / Rechtsgrundlage / Privacy by Design / Transparenz"
+  total_indicators: 50
+  severity: "CRITICAL"
+  
+description_text: |
+  GATE 4A prüft auf Datenschutz-Compliance bei Profiling und personenbezogener Datenverarbeitung.
+  
+  **Funktion:** DSGVO-Konformität sicherstellen
+  **Aktion:** Einwilligung / Rechtsgrundlage / Datenminimierung / Privacy by Design
+  
+  **Prüfkategorien (50 Indikatoren):**
+  
+  **1. Rechtsgrundlagen & Einwilligung (DSGVO Art. 6-8):**
+  - Rechtsgrundlage für jede Verarbeitung
+  - Wirksame Einwilligung (keine Dark Patterns, Widerrufspfad)
+  - Minderjährige: Elterliche Zustimmung & Altersabsicherung
+  - Robuste Alters-/Eltern-Verifikation
+  
+  **2. Grundprinzipien (DSGVO Art. 5):**
+  - Zweckbindung
+  - Datenminimierung
+  - Speicherbegrenzung (Löschkonzept)
+  - Richtigkeit der Daten
+  - Rechenschaftspflicht
+  
+  **3. Betroffenenrechte (DSGVO Art. 12-22):**
+  - Transparenz (klar, vollständig, kindgerecht)
+  - Auskunft, Berichtigung, Löschung (fristgerecht)
+  - Widerspruch gegen Direktwerbung
+  - Datenportabilität
+  
+  **4. Privacy by Design/Default (DSGVO Art. 25):**
+  - Datenschutzfreundliche Standard-Einstellungen
+  - Technische und organisatorische Maßnahmen (TOMs)
+  - Besonderer Schutzbedarf von Kinder-Daten
+  
+  **5. Sicherheit & Rechenschaft (DSGVO Art. 24, 30, 32-35):**
+  - Angemessene TOMs (Verschlüsselung, Zugriffskontrolle)
+  - Meldung von Datenschutzvorfällen (72h)
+  - Datenschutz-Folgenabschätzung (DSFA) bei hohem Risiko
+  - Verzeichnis von Verarbeitungstätigkeiten (VVT)
+  
+  **6. Verträge & Transfers (DSGVO Art. 26, 28, 44-49):**
+  - Auftragsverarbeitungsverträge (AVV/DPA)
+  - Joint-Controller-Vereinbarungen
+  - Drittlandtransfer nur mit Garantien (SCC, TIA)
+  - Sublieferanten vertraglich gebunden
+  
+  **7. Besondere Kategorien (DSGVO Art. 9-10, 22):**
+  - Sensible Daten nur mit Erlaubnistatbestand
+  - Strafdaten nur mit gesetzlicher Grundlage
+  - Automatisierte Entscheidungen/Profiling mit Transparenz
+  
+  **8. Tracking & Consent (TDDDG §25):**
+  - Cookies/SDKs nur nach Opt-in
+  - Kein Pre-Consent Fire (Tracking vor Einwilligung)
+  - Manipulative CMPs entfernen
+  - Fernmeldegeheimnis wahren
+  
+  **9. Minderjährigenschutz (DSA Art. 28, JuSchG §24a):**
+  - Profiling-Werbung an Minderjährige unterbunden
+  - Profile standardmäßig privat
+  - Standort-/Kontaktdaten deaktiviert
+  - Kommunikation auf gewählten Kreis begrenzt
+  - Anonyme/pseudonyme Nutzung möglich
+  - Elternbegleitungs-Tools (Zeit-/Ausgabenlimits)
+  - Keine Kaufappelle/Tracking-Ads für Kinder
+  
+  **10. VLOP-Pflichten (DSA Art. 34-35):**
+  - Risikoanalyse für Kinder-Daten
+  - Risikominderungsplan implementiert
+  
+  **11. Sonderfälle:**
+  - Videoüberwachung mit Rechtsgrundlage
+  - Forschung/Statistik mit Pseudonymisierung
+  - Medienprivileg korrekt angewendet
+  - KI-Training nur mit Rechtsbasis & Transparenz
+  
+  **Folge bei Verstoß:**
+  - **Verarbeitung stoppen** bei fehlender Rechtsgrundlage
+  - **Einwilligung einholen** rechtskonform (opt-in, widerrufbar)
+  - **Daten löschen** unzulässige/übermäßige Daten
+  - **Transparenz schaffen** Informationspflichten erfüllen
+  - **TOMs stärken** Sicherheitsmaßnahmen implementieren
+  - **DSFA durchführen** bei hohem Risiko
+  - **Verträge schließen** AVV, Joint-Controller, SCC
+  - **Defaults ändern** Privacy by Default für Minderjährige
+  
+  **Bußgeldrahmen:**
+  - Bis zu 20 Mio. EUR oder 4% des weltweiten Jahresumsatzes (DSGVO Art. 83)
+  - Bis zu 300.000 EUR (TDDDG §28)
+  
+  **Performance:**
+  10 Teilschemas werden parallel evaluiert (begrenzt durch MAX_CONCURRENT_LLM_CALLS)

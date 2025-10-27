@@ -1,0 +1,49 @@
+id: protection_of_minors_2b_12_16_part3
+name: 'Jugendschutz 2B-12-16 - Teil 3: Altersfreigaben'
+description: Prüfung von Altersfreigaben und Kennzeichnungen für Jugendliche 12-16
+  Jahre
+dimension: protection_of_minors_2b_12_16_ratings
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 12-16
+age_label: Nicht geeignet für Jugendliche unter 16 Jahren
+gate_rules:
+- id: 2B-12-11
+  description: Angebot entwicklungsbeeinträchtigend für Altersstufe 12–16
+  legal_basis: JuSchG §14 Abs.1
+  action: Prüfen und bei Verstoß entfernen
+  scope: content
+- id: 2B-12-12
+  description: Fehlende oder unzutreffende Altersfreigabe 'ab 16' bei Film/Spielprogramm
+  legal_basis: JuSchG §14 Abs.2 Nr.4
+  action: Korrekte Altersfreigabe einholen (FSK/USK)
+  scope: platform
+- id: 2B-12-13
+  description: Fehlende oder unzutreffende Altersfreigabe 'ab 12' bei Film/Spielprogramm
+  legal_basis: JuSchG §14 Abs.2 Nr.3
+  action: Korrekte Altersfreigabe einholen (FSK/USK)
+  scope: platform
+- id: 2B-12-14
+  description: Fehlende Deskriptoren/Begründungen zur Altersfreigabe (Gewalt/Angst/Sexualität/Interaktion/Käufe)
+    für 12–16
+  legal_basis: JuSchG §14 Abs.2a
+  action: Korrekte Altersfreigabe einholen (FSK/USK)
+  scope: platform
+- id: 2B-12-15
+  description: Keine Prüfung durch anerkannte Selbstkontrolle (FSK/USK/FSF) trotz
+    Kennzeichnungspflicht (12–16)
+  legal_basis: JuSchG §14 Abs.6
+  action: Prüfung durch FSK/USK/FSF durchführen lassen
+  scope: platform
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 12-16 geeignet
+  '1': PASS - Geeignet für 12-16

@@ -1,0 +1,48 @@
+id: personal_law_3b_part2
+name: 'Strukturelle Vorsorge 3B - Teil 2: Mechanismen & Meldesystem'
+description: Prüfung auf exzessive Nutzung und Meldesystem-Anforderungen
+dimension: personal_law_3b_mechanisms_reporting
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 3B-06
+  description: Keine Vorsorge gegen Mechanismen exzessiver Nutzung (Endlos-Feeds,
+    Streaks, Autoplay, aggressive Pushes)
+  legal_basis: JuSchG § 10b Abs. 3 S. 2
+  action: Prüfen und bei Verstoß entfernen
+  scope: platform
+- id: 3B-07
+  description: Kein kind-/jugendgerechtes Melde- und Abhilfeverfahren vorhanden
+  legal_basis: JuSchG § 24a Abs. 2 Nr. 1
+  action: Altersgerechtes Melde- und Abhilfeverfahren implementieren
+  scope: platform
+- id: 3B-08
+  description: Meldeoption nicht leicht erkennbar, nicht ständig verfügbar, nicht
+    in max. zwei Klicks erreichbar
+  legal_basis: JuSchG § 24a Abs. 2 Nr. 1
+  action: Altersgerechtes Melde- und Abhilfeverfahren implementieren
+  scope: both
+- id: 3B-09
+  description: Meldeformular/Flow nicht altersgerecht (Fachsprache, Zwangsfreitext,
+    Barrieren)
+  legal_basis: JuSchG § 24a Abs. 2 Nr. 1
+  action: Altersgerechtes Melde- und Abhilfeverfahren implementieren
+  scope: both
+- id: 3B-10
+  description: Meldesystem deckt Integritätsbeeinträchtigungen durch UGC/Kontaktverhalten
+    nicht ab (z. B. Grooming, Mobbing, Doxing)
+  legal_basis: JuSchG § 24a Abs. 2 Nr. 2
+  action: Altersgerechtes Melde- und Abhilfeverfahren implementieren
+  scope: platform
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: structural_safety_measures
+labels:
+  '0': FAIL - Meldesystem unzureichend
+  '1': PASS - Meldesystem ausreichend

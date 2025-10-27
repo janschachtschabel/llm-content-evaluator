@@ -1,0 +1,44 @@
+id: data_privacy_4a_part6
+name: 'Datenschutz 4A - Teil 6: Tracking & Consent'
+description: Prüfung auf Tracking-Compliance nach TDDDG und DSA
+dimension: data_privacy_4a_tracking_consent
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 4A-26
+  description: Cookies/SDKs ohne Opt-in gesetzt
+  legal_basis: TDDDG § 25
+  action: Consent-Mechanismus implementieren, Chips erst nach Einwilligung laden
+  scope: both
+- id: 4A-27
+  description: Tracking vor Einwilligung ('Pre-Consent Fire') oder manipulative CMP
+  legal_basis: TDDDG § 25
+  action: CMP anpassen, Tracking bis Einwilligung unterbinden
+  scope: both
+- id: 4A-28
+  description: Kommunikationsinhalte/Metadaten unzulässig verarbeitet
+  legal_basis: TDDDG § 3
+  action: Fernmeldegeheimnis wahren, technische Maßnahmen anpassen
+  scope: content
+- id: 4A-29
+  description: Beschäftigtendaten über Zweck hinaus verarbeitet
+  legal_basis: BDSG § 26
+  action: Erforderlichkeit prüfen, Daten löschen/anonymisieren, Betriebsrat informieren
+  scope: both
+- id: 4A-30
+  description: Profiling-Werbung an Minderjährige nicht unterbunden
+  legal_basis: DSA Art. 28 Abs. 2
+  action: Personalisierte Werbung für Minderjährige deaktivieren, Altersprüfung sicherstellen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: critical
+compliance_type: data_protection
+labels:
+  '0': FAIL - Tracking/Consent unzureichend
+  '1': PASS - Tracking/Consent ausreichend

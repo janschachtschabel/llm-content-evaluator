@@ -1,0 +1,52 @@
+id: protection_of_minors_2b_u6_part4
+name: 'Jugendschutz 2B-U6 - Teil 4: Angst & Gewalt'
+description: Prüfung auf ängstigende und gewalthaltige Inhalte für Kinder unter 6
+  Jahren
+dimension: protection_of_minors_2b_u6_fear_violence
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 0-6
+age_label: Nicht geeignet für Kinder unter 6 Jahren
+gate_rules:
+- id: 2B-0-14
+  description: Inhalt ist übermäßig ängstigend für Kinder unter 6 Jahren (Dauerstress/Bedrohung/Hilflosigkeit)
+  legal_basis: JuSchG §10b Abs.1
+  action: Inhalt anpassen oder Zugangsbeschränkung U6 implementieren
+  scope: content
+- id: 2B-0-15
+  description: Inhalt befürwortet/legitimiert Gewalt (auch comic-haft) ohne Distanzierung
+    (U6)
+  legal_basis: JuSchG §10b Abs.1
+  action: Inhalt anpassen (Distanzierung/alternative Lösungen) oder Zugangsbeschränkung
+    U6
+  scope: content
+- id: 2B-0-16
+  description: Inhalt beeinträchtigt sozialethisches Wertebild (Herabwürdigung/Antisozialität)
+    für U6
+  legal_basis: JuSchG §10b Abs.1
+  action: Prüfen und bei Verstoß entfernen
+  scope: content
+- id: 2B-0-17
+  description: Darstellung realer Todes-/Unfall-/Katastrophenszenen ohne altersgerechte
+    Einordnung (U6)
+  legal_basis: JMStV §5 Abs.1
+  action: Altersgerechte Einordnung ergänzen oder Zugangsbeschränkung U6
+  scope: content
+- id: 2B-0-18
+  description: Deutliche Angst- und Schockeffekte (Jumpscares/bedrohliches Sounddesign)
+    für U6
+  legal_basis: JMStV §5 Abs.1
+  action: Inhalt anpassen oder Zugangsbeschränkung U6 implementieren
+  scope: content
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für U6 geeignet
+  '1': PASS - Geeignet für U6

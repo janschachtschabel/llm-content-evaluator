@@ -1,0 +1,46 @@
+id: personal_law_3a_part1
+name: 'Persönlichkeitsrechte 3A - Teil 1: APR & Ehrverletzungen'
+description: Prüfung auf allgemeine Persönlichkeitsrechtsverletzungen
+dimension: personal_law_3a_apr_defamation
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 3A-01
+  description: Bloßstellung/Schmähung einer identifizierbaren Person
+  legal_basis: GG Art. 1 Abs. 1 i.V.m. Art. 2 Abs. 1 (APR)
+  action: Abwägung APR > Art. 5 GG; bei Bloßstellung Takedown/Redaktion, ggf. Anonymisierung
+  scope: both
+- id: 3A-02
+  description: Unwahre rufschädigende Tatsachenbehauptung über eine Person
+  legal_basis: GG Art. 1 Abs. 1 i.V.m. Art. 2 Abs. 1 (APR) i.V.m. § 823 Abs. 1 BGB
+  action: Wahrheitsgehalt prüfen; bei Unwahrheit Takedown/Richtigstellung
+  scope: both
+- id: 3A-03
+  description: Unterlassungs-/Entfernungsanspruch bei APR-Eingriff (Takedown/De-Listing)
+  legal_basis: GG Art. 1 Abs. 1 i.V.m. Art. 2 Abs. 1 (APR) i.V.m. § 1004 BGB analog
+  action: Verfahren zur Takedown/Staydown implementieren
+  scope: both
+- id: 3A-04
+  description: Schmähkritik/Formalbeleidigung ohne Sachbezug (Abwägung zu Lasten der
+    Meinungsfreiheit)
+  legal_basis: Art. 5 Abs. 1, 2 GG i.V.m. APR
+  action: Abwägung (APR überwiegt); Takedown oder Redaction, strafrechtliche Relevanz
+    prüfen
+  scope: both
+- id: 3A-05
+  description: Beleidigende Kundgabe der Missachtung/Geringschätzung
+  legal_basis: § 185 StGB
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: personal_rights_violation
+labels:
+  '0': FAIL - APR-Verletzung
+  '1': PASS - Keine APR-Verletzung

@@ -1,0 +1,48 @@
+id: personal_law_3b_part5
+name: 'Strukturelle Vorsorge 3B - Teil 5: DSA Compliance'
+description: Prüfung auf DSA-Anforderungen für Minderjährigenschutz
+dimension: personal_law_3b_dsa_compliance
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 3B-21
+  description: Profiling-basierte Werbung an Minderjährige nicht wirksam unterbunden
+    (auch keine robuste Altersabsicherung)
+  legal_basis: DSA Art. 28 Abs. 2
+  action: Profiling-basierte Werbung für Minderjährige unterbinden
+  scope: platform
+- id: 3B-22
+  description: Keine systematische Risikoanalyse bzgl. Auswirkungen auf Minderjährige
+    (Empfehlungen, virale Mechanismen, Werbung)
+  legal_basis: DSA Art. 34 Abs. 1 lit. b (VLOPs)
+  action: Risk Assessment durchführen und dokumentieren
+  scope: platform
+- id: 3B-23
+  description: Keine wirksamen Risikominderungsmaßnahmen (Feature-Anpassungen, Intensitätsdrosseln,
+    strengere Defaults je Altersstufe)
+  legal_basis: DSA Art. 35
+  action: Altersdifferenzierte Defaults implementieren (0-6, 6-12, 12-16, 16-18)
+  scope: platform
+- id: 3B-24
+  description: AGB/Rechte nicht in leicht verständlicher, kindgerechter Sprache bereitgestellt
+  legal_basis: DSA Art. 14 Abs. 3
+  action: AGB/Nutzungsinfos kindgerecht aufbereiten (einfache Sprache, tl;dr)
+  scope: both
+- id: 3B-25
+  description: Kein zugängliches internes Beschwerde-/Rechtsbehelfsverfahren für Minderjährige/Eltern
+    (Self-Service fehlt, Status-Tracking fehlt)
+  legal_basis: DSA Art. 20
+  action: Profiling-basierte Werbung für Minderjährige unterbinden
+  scope: platform
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: structural_safety_measures
+labels:
+  '0': FAIL - DSA-Compliance unzureichend
+  '1': PASS - DSA-Compliance ausreichend

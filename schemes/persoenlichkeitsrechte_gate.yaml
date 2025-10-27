@@ -1,288 +1,321 @@
 id: persoenlichkeitsrechte_gate
 name: Persönlichkeitsrechte & Datenschutz Gate
-description: Binary gate for personality rights and privacy protection according to German law
+description: Binary gate for personality rights and privacy protection according to
+  German law
 dimension: personality_rights
 type: binary_gate
-version: "1.0"
-
+version: '1.0'
 output_range:
-  values: [true, false]
+  values:
+  - true
+  - false
   type: boolean
+criteria: 'Prüfung auf Unbedenklichkeit bezüglich Persönlichkeitsrechten nach deutschem
+  Recht:
 
-criteria: |
-  Prüfung auf Unbedenklichkeit bezüglich Persönlichkeitsrechten nach deutschem Recht:
-  
+
   GRUNDGESETZ (GG) - GRUNDRECHTE:
+
   - Art. 1 GG: Menschenwürde (unantastbar)
+
   - Art. 2 GG: Allgemeines Persönlichkeitsrecht
+
   - Art. 5 GG: Meinungsfreiheit vs. Persönlichkeitsschutz (Abwägung)
+
   - Art. 6 GG: Schutz von Ehe und Familie
+
   - Art. 8 GG: Versammlungsfreiheit (Bildrechte bei Demos)
-  
+
+
   BÜRGERLICHES GESETZBUCH (BGB):
+
   - § 12 BGB: Namensrecht (Schutz des Namens)
+
   - § 823 BGB: Deliktshaftung bei Persönlichkeitsrechtsverletzung
+
   - § 1004 BGB: Unterlassungsanspruch bei Persönlichkeitsrechtsverletzung
-  
+
+
   KUNSTURHEBERGESETZ (KUG):
+
   - § 22 KUG: Recht am eigenen Bild (Einwilligung erforderlich)
+
   - § 23 KUG: Ausnahmen (Zeitgeschichte, Versammlungen, Beiwerk)
+
   - § 24 KUG: Schutz der Privatsphäre
-  
+
+
   STRAFGESETZBUCH (StGB) - PERSÖNLICHKEITSSCHUTZ:
+
   - § 185-187 StGB: Beleidigung, üble Nachrede, Verleumdung
+
   - § 201 StGB: Verletzung der Vertraulichkeit des Wortes
+
   - § 201a StGB: Verletzung des Intimbereichs durch Bildaufnahmen
+
   - § 202a StGB: Ausspähen von Daten
+
   - § 238 StGB: Nachstellung (Stalking)
-  
+
+
   DATENSCHUTZ-GRUNDVERORDNUNG (DSGVO):
+
   - Art. 6 DSGVO: Rechtmäßigkeit der Verarbeitung
+
   - Art. 7 DSGVO: Bedingungen für die Einwilligung
+
   - Art. 9 DSGVO: Verarbeitung besonderer Kategorien (sensible Daten)
+
   - Art. 17 DSGVO: Recht auf Löschung ("Recht auf Vergessenwerden")
+
   - Art. 21 DSGVO: Widerspruchsrecht
-  
+
+
   BUNDESDATENSCHUTZGESETZ (BDSG):
+
   - § 23 BDSG: Verarbeitung zu journalistischen Zwecken
+
   - § 24 BDSG: Verarbeitung zu wissenschaftlichen Zwecken
-  
+
+
   MEDIENRECHT:
+
   - Pressekodex: Persönlichkeitsschutz in der Berichterstattung
+
   - Rundfunkstaatsvertrag: Schutz der Menschenwürde
+
   - Telemediengesetz: Verantwortlichkeit für Inhalte
-  
+
+
   BESONDERE SCHUTZBEREICHE:
+
   - Intimsphäre: Absolut geschützt
+
   - Privatsphäre: Hoher Schutz, begrenzte Ausnahmen
+
   - Sozialsphäre: Abwägung mit anderen Interessen
+
   - Öffentlichkeitssphäre: Geringerer Schutz bei Personen des öffentlichen Lebens
 
+  '
 gate_rules:
-  - condition: "bildrechte_verletzung"
-    action: reject
-    reason: "Verletzung des Rechts am eigenen Bild ohne Einwilligung (§ 22 KUG)"
-    severity: high
-    legal_reference: "§ 22 KUG"
-  
-  - condition: "intimsphäre_verletzung"
-    action: reject
-    reason: "Verletzung der Intimsphäre durch Bildaufnahmen (§ 201a StGB)"
-    severity: critical
-    legal_reference: "§ 201a StGB"
-  
-  - condition: "personenbezogene_daten_ohne_rechtsgrundlage"
-    action: reject
-    reason: "Verarbeitung personenbezogener Daten ohne Rechtsgrundlage (Art. 6 DSGVO)"
-    severity: high
-    legal_reference: "Art. 6 DSGVO"
-  
-  - condition: "sensible_daten_verarbeitung"
-    action: reject
-    reason: "Unzulässige Verarbeitung besonderer Kategorien personenbezogener Daten (Art. 9 DSGVO)"
-    severity: critical
-    legal_reference: "Art. 9 DSGVO"
-  
-  - condition: "beleidigung_ehrverletzung"
-    action: reject
-    reason: "Beleidigung oder Ehrverletzung (§ 185-187 StGB)"
-    severity: medium
-    legal_reference: "§ 185-187 StGB"
-  
-  - condition: "stalking_nachstellung"
-    action: reject
-    reason: "Nachstellung oder Stalking-Verhalten (§ 238 StGB)"
-    severity: high
-    legal_reference: "§ 238 StGB"
-  
-  - condition: "datenausspähung"
-    action: reject
-    reason: "Ausspähen von Daten oder unbefugter Zugriff (§ 202a StGB)"
-    severity: high
-    legal_reference: "§ 202a StGB"
-  
-  - condition: "vertraulichkeit_verletzung"
-    action: reject
-    reason: "Verletzung der Vertraulichkeit des Wortes (§ 201 StGB)"
-    severity: high
-    legal_reference: "§ 201 StGB"
-  
-  - condition: "menschenwürde_verletzung"
-    action: reject
-    reason: "Verletzung der Menschenwürde (Art. 1 GG)"
-    severity: critical
-    legal_reference: "Art. 1 GG"
-  
-  - condition: "namensrecht_verletzung"
-    action: reject
-    reason: "Verletzung des Namensrechts (§ 12 BGB)"
-    severity: medium
-    legal_reference: "§ 12 BGB"
-  
-  - condition: "kinder_jugendliche_ohne_einwilligung"
-    action: reject
-    reason: "Darstellung von Kindern/Jugendlichen ohne Einwilligung der Erziehungsberechtigten"
-    severity: high
-    legal_reference: "§ 22 KUG, Art. 8 DSGVO"
-  
-  - condition: "privatbereich_verletzung"
-    action: reject
-    reason: "Unzulässige Darstellung aus dem Privatbereich"
-    severity: medium
-    legal_reference: "§ 23, 24 KUG"
-  
-  - condition: "einwilligung_fehlt"
-    action: reject
-    reason: "Fehlende oder unwirksame Einwilligung zur Datenverarbeitung"
-    severity: medium
-    legal_reference: "Art. 7 DSGVO"
-  
-  - condition: "widerspruchsrecht_ignoriert"
-    action: reject
-    reason: "Ignorierung des Widerspruchsrechts (Art. 21 DSGVO)"
-    severity: medium
-    legal_reference: "Art. 21 DSGVO"
-  
-  - condition: "löschungsrecht_ignoriert"
-    action: reject
-    reason: "Ignorierung des Rechts auf Löschung (Art. 17 DSGVO)"
-    severity: medium
-    legal_reference: "Art. 17 DSGVO"
-  
-  - condition: "doxxing_private_daten"
-    action: reject
-    reason: "Doxxing - Veröffentlichung privater Daten ohne Berechtigung"
-    severity: high
-    legal_reference: "§ 823 BGB, DSGVO"
-  
-  - condition: "cybermobbing_persönlichkeitsverletzung"
-    action: reject
-    reason: "Cybermobbing mit Persönlichkeitsrechtsverletzung"
-    severity: high
-    legal_reference: "§ 185-187 StGB, § 238 StGB"
-
+- condition: bildrechte_verletzung
+  action: reject
+  reason: Verletzung des Rechts am eigenen Bild ohne Einwilligung (§ 22 KUG)
+  severity: high
+  legal_reference: § 22 KUG
+  scope: both
+- condition: intimsphäre_verletzung
+  action: reject
+  reason: Verletzung der Intimsphäre durch Bildaufnahmen (§ 201a StGB)
+  severity: critical
+  legal_reference: § 201a StGB
+  scope: both
+- condition: personenbezogene_daten_ohne_rechtsgrundlage
+  action: reject
+  reason: Verarbeitung personenbezogener Daten ohne Rechtsgrundlage (Art. 6 DSGVO)
+  severity: high
+  legal_reference: Art. 6 DSGVO
+  scope: both
+- condition: sensible_daten_verarbeitung
+  action: reject
+  reason: Unzulässige Verarbeitung besonderer Kategorien personenbezogener Daten (Art.
+    9 DSGVO)
+  severity: critical
+  legal_reference: Art. 9 DSGVO
+  scope: both
+- condition: beleidigung_ehrverletzung
+  action: reject
+  reason: Beleidigung oder Ehrverletzung (§ 185-187 StGB)
+  severity: medium
+  legal_reference: § 185-187 StGB
+  scope: both
+- condition: stalking_nachstellung
+  action: reject
+  reason: Nachstellung oder Stalking-Verhalten (§ 238 StGB)
+  severity: high
+  legal_reference: § 238 StGB
+  scope: both
+- condition: datenausspähung
+  action: reject
+  reason: Ausspähen von Daten oder unbefugter Zugriff (§ 202a StGB)
+  severity: high
+  legal_reference: § 202a StGB
+  scope: both
+- condition: vertraulichkeit_verletzung
+  action: reject
+  reason: Verletzung der Vertraulichkeit des Wortes (§ 201 StGB)
+  severity: high
+  legal_reference: § 201 StGB
+  scope: both
+- condition: menschenwürde_verletzung
+  action: reject
+  reason: Verletzung der Menschenwürde (Art. 1 GG)
+  severity: critical
+  legal_reference: Art. 1 GG
+  scope: both
+- condition: namensrecht_verletzung
+  action: reject
+  reason: Verletzung des Namensrechts (§ 12 BGB)
+  severity: medium
+  legal_reference: § 12 BGB
+  scope: both
+- condition: kinder_jugendliche_ohne_einwilligung
+  action: reject
+  reason: Darstellung von Kindern/Jugendlichen ohne Einwilligung der Erziehungsberechtigten
+  severity: high
+  legal_reference: § 22 KUG, Art. 8 DSGVO
+  scope: both
+- condition: privatbereich_verletzung
+  action: reject
+  reason: Unzulässige Darstellung aus dem Privatbereich
+  severity: medium
+  legal_reference: § 23, 24 KUG
+  scope: both
+- condition: einwilligung_fehlt
+  action: reject
+  reason: Fehlende oder unwirksame Einwilligung zur Datenverarbeitung
+  severity: medium
+  legal_reference: Art. 7 DSGVO
+  scope: both
+- condition: widerspruchsrecht_ignoriert
+  action: reject
+  reason: Ignorierung des Widerspruchsrechts (Art. 21 DSGVO)
+  severity: medium
+  legal_reference: Art. 21 DSGVO
+  scope: both
+- condition: löschungsrecht_ignoriert
+  action: reject
+  reason: Ignorierung des Rechts auf Löschung (Art. 17 DSGVO)
+  severity: medium
+  legal_reference: Art. 17 DSGVO
+  scope: both
+- condition: doxxing_private_daten
+  action: reject
+  reason: Doxxing - Veröffentlichung privater Daten ohne Berechtigung
+  severity: high
+  legal_reference: § 823 BGB, DSGVO
+  scope: both
+- condition: cybermobbing_persönlichkeitsverletzung
+  action: reject
+  reason: Cybermobbing mit Persönlichkeitsrechtsverletzung
+  severity: high
+  legal_reference: § 185-187 StGB, § 238 StGB
+  scope: both
 default_action: pass
-
 detection_patterns:
   bildrechte_problematisch:
-    - "ohne einwilligung fotografiert"
-    - "heimlich aufgenommen"
-    - "paparazzi foto"
-    - "unerlaubte veröffentlichung"
-    - "bildrechte verletzt"
-  
+  - ohne einwilligung fotografiert
+  - heimlich aufgenommen
+  - paparazzi foto
+  - unerlaubte veröffentlichung
+  - bildrechte verletzt
   intimsphäre_verletzung:
-    - "nacktbilder"
-    - "intimbereich"
-    - "voyeurismus"
-    - "upskirting"
-    - "revenge porn"
-  
+  - nacktbilder
+  - intimbereich
+  - voyeurismus
+  - upskirting
+  - revenge porn
   personendaten_problematisch:
-    - "vollständiger name und adresse"
-    - "telefonnummer veröffentlicht"
-    - "private email"
-    - "ausweisnummer"
-    - "sozialversicherungsnummer"
-  
+  - vollständiger name und adresse
+  - telefonnummer veröffentlicht
+  - private email
+  - ausweisnummer
+  - sozialversicherungsnummer
   sensible_daten:
-    - "gesundheitsdaten"
-    - "politische meinung"
-    - "religiöse überzeugung"
-    - "sexuelle orientierung"
-    - "gewerkschaftszugehörigkeit"
-    - "biometrische daten"
-    - "genetische daten"
-  
+  - gesundheitsdaten
+  - politische meinung
+  - religiöse überzeugung
+  - sexuelle orientierung
+  - gewerkschaftszugehörigkeit
+  - biometrische daten
+  - genetische daten
   ehrverletzung:
-    - "rufschädigung"
-    - "diffamierung"
-    - "verleumdung"
-    - "üble nachrede"
-    - "schmähkritik"
-  
+  - rufschädigung
+  - diffamierung
+  - verleumdung
+  - üble nachrede
+  - schmähkritik
   stalking_verhalten:
-    - "verfolgen"
-    - "belästigen"
-    - "auflauern"
-    - "kontakt aufzwingen"
-    - "überwachen"
-  
+  - verfolgen
+  - belästigen
+  - auflauern
+  - kontakt aufzwingen
+  - überwachen
   doxxing_indikatoren:
-    - "private adresse veröffentlicht"
-    - "telefonnummer geleakt"
-    - "arbeitgeber preisgegeben"
-    - "familienmitglieder genannt"
-    - "persönliche daten gesammelt"
-  
+  - private adresse veröffentlicht
+  - telefonnummer geleakt
+  - arbeitgeber preisgegeben
+  - familienmitglieder genannt
+  - persönliche daten gesammelt
   cybermobbing:
-    - "systematische belästigung"
-    - "online mobbing"
-    - "hasskommentare"
-    - "shitstorm"
-    - "rufmord kampagne"
-
+  - systematische belästigung
+  - online mobbing
+  - hasskommentare
+  - shitstorm
+  - rufmord kampagne
 privacy_spheres:
   intimsphäre:
-    description: "Absolut geschützter Kernbereich der Persönlichkeit"
-    protection_level: "critical"
-    examples: ["Sexualleben", "Körperliche Intimität", "Tagebucheinträge"]
-  
+    description: Absolut geschützter Kernbereich der Persönlichkeit
+    protection_level: critical
+    examples:
+    - Sexualleben
+    - Körperliche Intimität
+    - Tagebucheinträge
   privatsphäre:
-    description: "Privater Lebensbereich mit hohem Schutz"
-    protection_level: "high"
-    examples: ["Familienleben", "Wohnung", "Private Kommunikation"]
-  
+    description: Privater Lebensbereich mit hohem Schutz
+    protection_level: high
+    examples:
+    - Familienleben
+    - Wohnung
+    - Private Kommunikation
   sozialsphäre:
-    description: "Gesellschaftlicher Bereich mit Abwägung"
-    protection_level: "medium"
-    examples: ["Berufstätigkeit", "Vereinsmitgliedschaft", "Öffentliche Auftritte"]
-  
+    description: Gesellschaftlicher Bereich mit Abwägung
+    protection_level: medium
+    examples:
+    - Berufstätigkeit
+    - Vereinsmitgliedschaft
+    - Öffentliche Auftritte
   öffentlichkeitssphäre:
-    description: "Öffentlicher Bereich mit geringerem Schutz"
-    protection_level: "low"
-    examples: ["Politische Äußerungen", "Öffentliche Veranstaltungen"]
-
+    description: Öffentlicher Bereich mit geringerem Schutz
+    protection_level: low
+    examples:
+    - Politische Äußerungen
+    - Öffentliche Veranstaltungen
 special_protections:
   kinder_jugendliche:
-    - "Erhöhter Schutz für Minderjährige"
-    - "Einwilligung der Erziehungsberechtigten erforderlich"
-    - "Besondere Sorgfalt bei Bildveröffentlichungen"
-  
+  - Erhöhter Schutz für Minderjährige
+  - Einwilligung der Erziehungsberechtigten erforderlich
+  - Besondere Sorgfalt bei Bildveröffentlichungen
   personen_öffentlichen_lebens:
-    - "Geringerer Schutz bei Zeitgeschichte"
-    - "Abwägung mit Informationsinteresse"
-    - "Schutz der Privatsphäre bleibt bestehen"
-  
+  - Geringerer Schutz bei Zeitgeschichte
+  - Abwägung mit Informationsinteresse
+  - Schutz der Privatsphäre bleibt bestehen
   opfer_straftaten:
-    - "Besonderer Schutz vor Re-Viktimisierung"
-    - "Anonymisierung in Berichterstattung"
-    - "Schutz vor Stigmatisierung"
-
+  - Besonderer Schutz vor Re-Viktimisierung
+  - Anonymisierung in Berichterstattung
+  - Schutz vor Stigmatisierung
 compliance_requirements:
   einwilligung:
-    - "Freiwillig, spezifisch, informiert und eindeutig"
-    - "Widerrufbar jederzeit"
-    - "Dokumentiert und nachweisbar"
-  
+  - Freiwillig, spezifisch, informiert und eindeutig
+  - Widerrufbar jederzeit
+  - Dokumentiert und nachweisbar
   rechtsgrundlagen_dsgvo:
-    - "Art. 6 (1) a: Einwilligung"
-    - "Art. 6 (1) b: Vertragserfüllung"
-    - "Art. 6 (1) c: Rechtliche Verpflichtung"
-    - "Art. 6 (1) d: Lebenswichtige Interessen"
-    - "Art. 6 (1) e: Öffentliches Interesse"
-    - "Art. 6 (1) f: Berechtigte Interessen"
-  
+  - 'Art. 6 (1) a: Einwilligung'
+  - 'Art. 6 (1) b: Vertragserfüllung'
+  - 'Art. 6 (1) c: Rechtliche Verpflichtung'
+  - 'Art. 6 (1) d: Lebenswichtige Interessen'
+  - 'Art. 6 (1) e: Öffentliches Interesse'
+  - 'Art. 6 (1) f: Berechtigte Interessen'
   betroffenenrechte:
-    - "Auskunftsrecht (Art. 15 DSGVO)"
-    - "Berichtigungsrecht (Art. 16 DSGVO)"
-    - "Löschungsrecht (Art. 17 DSGVO)"
-    - "Einschränkungsrecht (Art. 18 DSGVO)"
-    - "Datenübertragbarkeit (Art. 20 DSGVO)"
-    - "Widerspruchsrecht (Art. 21 DSGVO)"
-
+  - Auskunftsrecht (Art. 15 DSGVO)
+  - Berichtigungsrecht (Art. 16 DSGVO)
+  - Löschungsrecht (Art. 17 DSGVO)
+  - Einschränkungsrecht (Art. 18 DSGVO)
+  - Datenübertragbarkeit (Art. 20 DSGVO)
+  - Widerspruchsrecht (Art. 21 DSGVO)
 severity_levels:
-  critical: "Schwere Verletzung der Menschenwürde oder Intimsphäre"
-  high: "Erhebliche Persönlichkeitsrechtsverletzung mit Schadenspotential"
-  medium: "Persönlichkeitsrechtsverletzung mit zivilrechtlichen Folgen"
-  low: "Geringfügige Beeinträchtigung der Persönlichkeitsrechte"
+  critical: Schwere Verletzung der Menschenwürde oder Intimsphäre
+  high: Erhebliche Persönlichkeitsrechtsverletzung mit Schadenspotential
+  medium: Persönlichkeitsrechtsverletzung mit zivilrechtlichen Folgen
+  low: Geringfügige Beeinträchtigung der Persönlichkeitsrechte

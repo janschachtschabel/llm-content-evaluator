@@ -1,0 +1,50 @@
+id: protection_of_minors_2a_part7
+name: 'Jugendschutz 2A - Teil 7: EU & JuSchG'
+description: Prüfung EU-rechtlicher Vorgaben und JuSchG-Anforderungen
+dimension: protection_of_minors_2a_eu_juschg
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_restriction: 18+ / AVS erforderlich
+gate_rules:
+- id: 2A-31
+  description: Schädlichste Inhalte (Pornografie) nicht mit strengsten Zugangskontrollen
+    gesichert
+  legal_basis: AVMD-RL Art.28b Abs.3 UAbs.4
+  action: Altersverifikation sicherstellen (AVS implementieren)
+  scope: content
+- id: 2A-32
+  description: Unzureichende Maßnahmen zum Schutz Minderjähriger vor besonders schädlichen
+    Inhalten
+  legal_basis: AVMD-RL Art.6a Abs.1
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 2A-33
+  description: Plattform trifft keine geeigneten/verhältnismäßigen Schutzmaßnahmen
+    für Minderjährige bei 18+-Inhalten
+  legal_basis: DSA Art.28 Abs.1
+  action: Prüfen und bei Verstoß entfernen
+  scope: platform
+- id: 2A-34
+  description: Personalisierte Empfehlungen/Ads zu 18+-Inhalten für als minderjährig
+    erkannte Nutzer nicht unterbunden
+  legal_basis: DSA Art.28 Abs.2
+  action: Empfehlungssystem anpassen (Minderjährigen-Filter)
+  scope: content
+- id: 2A-35
+  description: Zuwiderhandlung gegen Zugänglichmachungsverbote jugendgefährdender
+    Trägermedien (vertriebsseitig)
+  legal_basis: JuSchG §27 Abs.1 Nr.1
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_endangering_content
+labels:
+  '0': FAIL - EU/JuSchG-Verstöße
+  '1': PASS - EU/JuSchG-konform

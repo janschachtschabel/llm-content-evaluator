@@ -1,0 +1,54 @@
+id: protection_of_minors_2b_u6_part3
+name: "Jugendschutz 2B-U6 - Teil 3: Altersfreigaben"
+description: "Prüfung von Altersfreigaben und Kennzeichnungen für Kinder unter 6 Jahren"
+dimension: protection_of_minors_2b_u6_ratings
+type: binary_gate
+version: "1.0"
+
+output_range:
+  min: 0
+  max: 1
+  type: int
+
+age_group: "0-6"
+age_label: "Nicht geeignet für Kinder unter 6 Jahren"
+
+gate_rules:
+  - id: "2B-0-09"
+    description: "Angebot entwicklungsbeeinträchtigend für Altersstufe 0–6"
+    legal_basis: "JuSchG §14 Abs.1"
+    action: "Prüfen und bei Verstoß entfernen"
+    scope: "content"  # Gilt für alle Inhalte
+    
+  - id: "2B-0-10"
+    description: "Fehlende oder unzutreffende Altersfreigabe (0/6) bei Film/Spielprogramm"
+    legal_basis: "JuSchG §14 Abs.2"
+    action: "Korrekte Altersfreigabe einholen (FSK/USK)"
+    scope: "platform"  # Nur für kommerzielle Anbieter/Plattformen
+    
+  - id: "2B-0-11"
+    description: "Fehlende Deskriptoren/Begründungen zur Altersfreigabe (z. B. Angst/Gewalt/Interaktion/Käufe) für U6"
+    legal_basis: "JuSchG §14 Abs.2a"
+    action: "Korrekte Altersfreigabe einholen (FSK/USK)"
+    scope: "platform"  # Nur für kommerzielle Anbieter/Plattformen
+    
+  - id: "2B-0-12"
+    description: "Keine Prüfung durch anerkannte Selbstkontrolle (FSK/USK) trotz Kennzeichnungspflicht (U6)"
+    legal_basis: "JuSchG §14 Abs.6"
+    action: "Korrekte Altersfreigabe einholen (FSK/USK)"
+    
+  - id: "2B-0-13"
+    description: "Fehlende Kennzeichnung bei Online-Bereitstellung (Streaming/Download) für U6"
+    legal_basis: "JuSchG §14 Abs.9"
+    action: "Kennzeichnung korrigieren/ergänzen (ab 0/ab 6)"
+
+default_action:
+  value: 1
+  label: "PASS"
+
+severity: high
+compliance_type: "youth_protection_age_restricted"
+
+labels:
+  "0": "FAIL - Nicht für U6 geeignet"
+  "1": "PASS - Geeignet für U6"

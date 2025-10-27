@@ -1,0 +1,51 @@
+id: criminal_law_1b_part10
+name: 'Strafrecht 1B - Teil 10: Urheberrecht & Datenschutz'
+description: Prüfung auf Urheberrechtsverstöße und Datenschutzverstöße nach UrhG §§106,
+  108a-b und BDSG §42
+dimension: criminal_law_1b_ip_privacy
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 1B-40
+  description: Upload/Sharing kompletter Werke ohne Rechte
+  legal_basis: UrhG §106
+  definition: Verbreitung kompletter Filme/Musik/Software ohne Urheberrechte
+  action: Prüfen und bei Verstoß entfernen (Notice & Takedown)
+  scope: both
+- id: 1B-41
+  description: Gewerbsmäßige unerlaubte Verwertung
+  legal_basis: UrhG §108a
+  definition: Gewerbliche Verwertung urheberrechtlich geschützter Werke ohne Berechtigung
+  action: Prüfen und bei Verstoß entfernen (Notice & Takedown)
+  scope: both
+- id: 1B-42
+  description: Umgehung technischer Schutzmaßnahmen
+  legal_basis: UrhG §108b
+  definition: Verbreitung von DRM-Cracks oder Umgehungsmethoden
+  action: Prüfen und bei Verstoß entfernen (Notice & Takedown)
+  scope: both
+- id: 1B-43
+  description: Verkauf/Erpressung mit erlangten Personendaten
+  legal_basis: BDSG §42
+  definition: Leak-Angebote, Verkauf von Datenpaketen, Erpressung mit Daten
+  action: Sofort entfernen, an Strafverfolgung melden
+  scope: both
+- id: 1B-44
+  description: Verarbeitung personenbezogener Daten mit Schädigungsabsicht
+  legal_basis: BDSG §42
+  definition: Datenverarbeitung zur Schädigung oder Bereicherung
+  action: Sofort entfernen, an Strafverfolgung melden
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: criminal_law_contextual
+report_required: true
+labels:
+  '0': FAIL
+  '1': PASS

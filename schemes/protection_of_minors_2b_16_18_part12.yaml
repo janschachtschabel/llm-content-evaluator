@@ -1,0 +1,51 @@
+id: protection_of_minors_2b_16_18_part12
+name: 'Jugendschutz 2B-16-18 - Teil 12: JuSchG & Phänomene'
+description: Prüfung JuSchG-Anforderungen und Phänomene für Jugendliche 16-18 Jahre
+dimension: protection_of_minors_2b_16_18_juschg_phenomena
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 16-18
+age_label: Nicht geeignet für Jugendliche unter 18 Jahren
+gate_rules:
+- id: 2B-16-55
+  description: Unsichere Voreinstellungen (öffentliche Profile/Kontaktdaten standardmäßig
+    sichtbar) für U18
+  legal_basis: JuSchG §24a Abs.2 Nr.7
+  action: Kinderschutzmaßnahmen implementieren (Chats moderieren/sperren)
+  scope: platform
+- id: 2B-16-56
+  description: Fehlende Elternbegleitungstools (Zeitkontrolle/Ausgabenlimits/Zustimmungserfordernisse)
+    für U18
+  legal_basis: JuSchG §24a Abs.2 Nr.5
+  action: Elternkontrollfunktionen implementieren
+  scope: platform
+- id: 2B-16-57
+  description: Nutzungsbedingungen/Informationen nicht in altersgerechter Sprache
+    für U18 dargestellt
+  legal_basis: JuSchG §24a Abs.2 Nr.8
+  action: Sprache anpassen oder Zugangsbeschränkung U18 implementieren
+  scope: both
+- id: 2B-16-58
+  description: Transparenz über Auswahl-/Rankingkriterien fehlt bei rundfunkähnlichen
+    Telemedien/Intermediären (U18-relevant)
+  legal_basis: MStV §8 Abs.6, §74
+  action: Prüfen und bei Verstoß entfernen
+  scope: platform
+- id: 2B-16-59
+  description: Körperbild-/Essstörungs-Inhalte ohne klare Ablehnung/Hilfsangebote
+    (16–18)
+  legal_basis: Phänomen/JuSchG §10b Abs.1
+  action: Hilfsangebote/Prävention ergänzen, keine Verherrlichung
+  scope: content
+default_action:
+  value: 1
+  label: PASS
+severity: medium
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 16-18 geeignet
+  '1': PASS - Geeignet für 16-18

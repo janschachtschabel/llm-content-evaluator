@@ -1,0 +1,75 @@
+id: criminal_law_1b_part4
+name: 'Strafrecht 1B - Teil 4: Nötigung & Drohungen'
+description: Prüfung auf Nötigung, Bedrohung und öffentliche Aufforderung nach StGB
+  §§111, 126, 240, 241
+dimension: criminal_law_1b_threats
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 1B-13
+  description: Nötigung durch Drohlogik
+  legal_basis: StGB §240
+  definition: '''Wenn-du-nicht-dann''-Drohlogik zur Erzwingung von Handlungen'
+  action: Prüfen und bei Verstoß entfernen, ggf. Meldung
+  scope: both
+- id: 1B-14
+  description: Ausnutzen von Machtposition zur Nötigung
+  legal_basis: StGB §240
+  action: Prüfen und bei Verstoß entfernen, ggf. Meldung
+  scope: both
+- id: 1B-14a
+  description: Erpressung durch Drohung mit empfindlichem Übel
+  legal_basis: StGB §253
+  definition: Nötigung zur Vermögensverfügung durch Drohung (z.B. Datenveröffentlichung,
+    Rufschädigung)
+  action: Sofort entfernen, an Strafverfolgung melden
+  scope: both
+- id: 1B-15
+  description: Konkrete Tötungs-/Gewaltdrohung
+  legal_basis: StGB §241
+  definition: Konkrete Drohung gegen Person mit Zeit/Ort/Mittel
+  action: Sofort entfernen, an Strafverfolgung melden
+  scope: content
+- id: 1B-16
+  description: Adressierte Tötungsdrohung
+  legal_basis: StGB §241
+  definition: Direkt an Betroffene gerichtete Nachricht ('Ich bring dich um')
+  action: Sofort entfernen, an Strafverfolgung melden
+  scope: both
+- id: 1B-17
+  description: Androhung schwerer Straftat
+  legal_basis: StGB §126
+  definition: Bombendrohung, Amokankündigung gegen Öffentlichkeit
+  action: Sofort entfernen, an Strafverfolgung melden
+  scope: both
+- id: 1B-18
+  description: Konkrete Tatankündigung mit Ort/Zeit
+  legal_basis: StGB §126
+  definition: Angabe von Tatort/Tatzeit/Bezug zu öffentlichen Einrichtungen
+  action: Sofort entfernen, an Strafverfolgung melden
+  scope: both
+- id: 1B-19
+  description: Öffentlicher Aufruf zum Rechtsbruch
+  legal_basis: StGB §111
+  definition: Imperativ zum Rechtsbruch ('Greift an...', Hashtag-Mobilisierung)
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1B-20
+  description: Aufruf zur Straftat mit Anleitung
+  legal_basis: StGB §111
+  definition: Aufruf zur Teilnahme/Unterstützung mit Link/Anleitung
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: critical
+compliance_type: criminal_law_contextual
+report_required: true
+labels:
+  '0': FAIL
+  '1': PASS

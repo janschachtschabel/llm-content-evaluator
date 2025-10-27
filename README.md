@@ -4,11 +4,15 @@
 
 ## 🚀 Features
 
-- ✅ **17 Bewertungsschemas** für umfassende Qualitätsprüfung
-- ✅ **4 Schema-Typen**: Ordinal, Checklist, Binary Gates, Derived
+- ✅ **500+ Bewertungsindikatoren** in 59 Teilschemas für umfassende Compliance-Prüfung
+- ✅ **4 Master-Gates**: Strafrecht, Jugendschutz, Persönlichkeitsrechte, Datenschutz (kombinieren jeweils a/b Kataloge)
+- ✅ **4 Schema-Typen**: Ordinal, Checklist, Binary Gates, Derived (mit rekursiver Unterstützung)
 - ✅ **LLM as Judge Methodologie** mit OpenAI GPT-4 Integration
-- ✅ **Deutsche Rechtskonformität**: StGB, DSGVO, JuSchG, Persönlichkeitsrechte
+- ✅ **Context-Awareness**: Unterscheidung zwischen UGC (content-only) und kommerziellen Plattformen (full compliance)
+- ✅ **Parallele Evaluierung**: Mehrere Schemas werden gleichzeitig verarbeitet (max. 20 parallele LLM-Calls, konfigurierbar)
+- ✅ **Deutsche Rechtskonformität**: StGB, DSGVO, JuSchG, JMStV, DSA, AVMD-RL, EU-KI-VO
 - ✅ **Pädagogische Qualität**: Didaktik, Neutralität, Sachrichtigkeit, Aktualität
+- ✅ **Jugendschutz**: 278 Indikatoren für Altersfreigaben (FSK 0/6/12/16/18 + AVS)
 - ✅ **RESTful API** mit vollständiger OpenAPI/Swagger Dokumentation
 - ✅ **Produktionsbereit** mit Error Handling und Validation
 - ✅ **Flexible Ausgabe**: Detaillierte Begründungen und Kriterien-Breakdown
@@ -33,14 +37,31 @@
 | `medial_passend_old` | Ordinal | Mediale Passung (0-5) | 6 Stufen | Medieneignung, Darstellung |
 | `overall_quality` | Derived | Gesamtqualität | 0.0-5.0 | Gewichtete Kombination aller Dimensionen |
 
-### Compliance & Rechtssicherheit (4 Schemas)
+### Compliance & Rechtssicherheit - Master-Gates
 
-| Schema ID | Typ | Beschreibung | Rechtsbasis | Prüfbereiche |
-|-----------|-----|--------------|-------------|--------------|
-| `jugendschutz_gate` | Binary Gate | Jugendschutz | JuSchG, JMStV | Altersgerechte Inhalte, Entwicklungsschutz |
-| `strafrecht_gate` | Binary Gate | Strafrecht | StGB, NetzDG | Volksverhetzung, Gewaltverherrlichung |
-| `persoenlichkeitsrechte_gate` | Binary Gate | Persönlichkeitsrechte | DSGVO, KUG | Bildrechte, Datenschutz, Privatsphäre |
-| `rechtliche_compliance` | Derived | Rechtliche Gesamtbewertung | Alle Gates | UND-Verknüpfung aller Compliance-Gates |
+Die API bietet **4 Master-Gates**, die jeweils die a/b Kataloge der Hauptrechtsbereiche kombinieren:
+
+| Schema ID | Typ | Kombiniert | Output | Indikatoren | Beschreibung |
+|-----------|-----|------------|--------|-------------|--------------|  
+| `criminal_law_gate` | Master | 1A + 1B | 0-2 | 92 | **Strafrecht**: ILLEGAL (0) / KONTEXTABHÄNGIG (1) / LEGAL (2) |
+| `protection_of_minors_gate` | Master | 2A + 2B | 0-18, 100 | 278 | **Jugendschutz**: FSK-Freigaben (0,6,12,16,18) + AVS (100) |
+| `personal_law_gate` | Master | 3A + 3B | 0-3 | 88 | **Persönlichkeitsrechte**: KRITISCH (0) / STRUKTURELL (1) / CONTENT (2) / COMPLIANT (3) |
+| `data_privacy_gate` | Master | 4A + 4B | 0-3 | 87 | **Datenschutz**: KRITISCH (0) / TRANSPARENZ (1) / DSGVO (2) / COMPLIANT (3) |
+
+**Sub-Gates** (für granulare Prüfungen):
+
+| Schema ID | Typ | Beschreibung | Rechtsbasis | Indikatoren |
+|-----------|-----|--------------|-------------|-------------|
+| `criminal_law_1a_gate` | Binary | **Strafrecht 1A**: Per se illegal (Hard Illegal / AUA) | StGB, JMStV §4 | 49 |
+| `criminal_law_1b_gate` | Binary | **Strafrecht 1B**: Kontextabhängig strafbar | StGB, UrhG, BDSG | 43 |
+| `protection_of_minors_2a_gate` | Binary | **Jugendschutz 2A**: Jugendgefährdend (AVS-Pflicht) | JMStV §4 Abs.2 | 37 |
+| `protection_of_minors_2b_gate` | Derived | **Jugendschutz 2B**: Entwicklungsbeeinträchtigend (FSK) | JMStV §5, JuSchG §14 | 241 |
+| `personal_law_3a_gate` | Binary | **Persönlichkeitsrechte 3A**: Individuelle Verletzungen | GG, BGB, KUG, StGB | 44 |
+| `personal_law_3b_gate` | Binary | **Persönlichkeitsrechte 3B**: Strukturelle Vorsorge | JuSchG §24a, DSA | 44 |
+| `data_privacy_4a_gate` | Binary | **Datenschutz 4A**: Profiling & Einwilligung | DSGVO, TDDDG | 50 |
+| `data_privacy_4b_gate` | Binary | **Datenschutz 4B**: Transparenz & KI-Kennzeichnung | MStV, DSA, EU-KI-VO | 37 |
+
+**Hinweis**: Teilschemas (z.B. `*_part1`, `*_part2`) sind interne Bausteine und werden in der API-Übersicht standardmäßig ausgeblendet (mit `?include_parts=true` sichtbar).
 
 ## 🛠️ Installation & Setup
 
@@ -72,6 +93,39 @@ python main.py
 📚 **API Dokumentation: http://localhost:8001/docs**  
 🔍 **Alternative Docs: http://localhost:8001/redoc**
 
+### ⚙️ Umgebungsvariablen
+
+Erstelle eine `.env` Datei im Projektverzeichnis:
+
+```bash
+# LLM Settings
+OPENAI_API_KEY=your_api_key_here
+OPENAI_MODEL=gpt-4o-mini
+OPENAI_BASE_URL=https://api.openai.com/v1
+
+# Concurrency Control
+MAX_CONCURRENT_LLM_CALLS=20
+
+# APP Settings
+LOG_LEVEL=INFO
+SCHEMES_DIR=schemes
+
+# API Configuration
+API_HOST=0.0.0.0
+API_PORT=8001
+API_DEBUG=true
+
+# Request Timeouts
+HTTP_TIMEOUT_SECONDS=30
+OPENAI_TIMEOUT_SECONDS=60
+```
+
+**Wichtige Variablen:**
+- `MAX_CONCURRENT_LLM_CALLS`: Begrenzt parallele LLM-Aufrufe (Standard: 20)
+  - Verhindert Rate Limits bei großen Schemas (z.B. Gate 2B mit 50+ Teilschemas)
+  - Höhere Werte = schneller, aber mehr API-Last
+  - Niedrigere Werte = langsamer, aber stabiler
+
 ## 🔗 API Endpoints
 
 ### 🏥 Health Check
@@ -83,10 +137,15 @@ GET /health
 
 ### 📋 Schema-Übersicht  
 ```http
-GET /schemes
+GET /schemes?include_parts=false
 ```
 **Status:** ✅ Funktionsfähig  
-**Zweck:** Alle 15 verfügbaren Bewertungsschemas auflisten
+**Zweck:** Alle verfügbaren Bewertungsschemas auflisten (standardmäßig nur Master/Gate-Schemas)
+
+**Query-Parameter:**
+- `include_parts` (default: `false`): 
+  - `false`: Nur Master-Gates und Sub-Gates (empfohlen für Endnutzer)
+  - `true`: Alle Schemas inkl. interner Teilschemas (*_part1, *_part2, etc.)
 
 ### 🎯 Text-Bewertung
 ```http
@@ -127,6 +186,127 @@ POST /evaluate
     }
 }
 ```
+
+## 🎯 Context-Awareness (Content vs. Platform vs. Both)
+
+Die API unterscheidet zwischen **reiner Inhaltsbewertung** (für UGC, Blogs) und **voller Platform-Compliance** (für kommerzielle Anbieter).
+
+### Context-Typen
+
+| Context | Scope-Filter | Beschreibung | Anwendungsfall |
+|---------|--------------|--------------|----------------|
+| `content` (Default) | Nur `content` + `both` | Bewertet nur den **Inhalt** selbst | UGC, Social Media, Blogs, News, YouTube-Videos |
+| `platform` | Nur `platform` + `both` | Bewertet **Metadaten & technische Maßnahmen** | Streaming-Plattformen, App Stores, VOD-Dienste |
+| `both` | Alle Scopes | **Volle Compliance-Prüfung** (Inhalt + Plattform) | Audits, Rechtsberatung, kommerzielle Content-Prüfung |
+
+### Scope-Feld in YAML-Schemas
+
+Jedes Gate-Rule hat ein `scope`-Feld, das die Anwendbarkeit definiert:
+
+```yaml
+gate_rules:
+  - id: 2B-16-40
+    description: "Realistische Gewalt mit Leidfolgen ohne Kontextualisierung"
+    scope: content    # Wird bei context_type="content" geprüft
+    
+  - id: 2B-16-08
+    description: "Fehlende Alterskennzeichnung nach JuSchG"
+    scope: platform   # Wird nur bei context_type="platform" geprüft
+    
+  - id: 2B-16-39
+    description: "Belastende Nachrichten ohne Einordnung"
+    scope: both       # Wird immer geprüft (content + platform)
+```
+
+**Scope-Werte:**
+- `content`: Inhaltliche Eigenschaften (Gewalt, Sexualität, Sprache, Themen)
+- `platform`: Technische/organisatorische Maßnahmen (FSK-Label, Jugendschutzprogramme, Zeitsteuerung)
+- `both`: Kombination (z.B. "Belastende Inhalte ohne Einordnung" = Inhalt + fehlender Warnhinweis)
+
+### Beispiel: UGC-Bewertung (User-Generated Content)
+
+```json
+{
+    "text": "brutale Kampfszene in einem Online Video",
+    "schemes": ["protection_of_minors_gate"],
+    "context_type": "content",
+    "include_reasoning": true
+}
+```
+
+**Geprüft werden:**
+- ✅ Gewaltdarstellungen (`scope: content`)
+- ✅ Sexuelle Inhalte (`scope: content`)
+- ✅ Belastende Inhalte ohne Einordnung (`scope: both`)
+
+**Ignoriert werden:**
+- ❌ FSK-Kennzeichnung fehlt (`scope: platform`)
+- ❌ Jugendschutzprogramm-Signalisierung (`scope: platform`)
+- ❌ Zeitsteuerung 20:00-06:00 (`scope: platform`)
+
+**Vorteil:** UGC-Inhalte werden nicht wegen fehlender technischer Maßnahmen abgelehnt!
+
+### Beispiel: Kommerzielle Plattform (Netflix, Amazon Prime)
+
+```json
+{
+    "text": "Film mit FSK 16 Label, aber keine Zeitsteuerung implementiert",
+    "schemes": ["protection_of_minors_gate"],
+    "context_type": "platform",
+    "include_reasoning": true
+}
+```
+
+**Geprüft werden:**
+- ✅ FSK-Kennzeichnung vorhanden? (`scope: platform`)
+- ✅ Jugendschutzprogramm-Signalisierung? (`scope: platform`)
+- ✅ Zeitsteuerung 22:00-06:00 für FSK 16? (`scope: platform`)
+- ✅ Belastende Inhalte ohne Einordnung (`scope: both`)
+
+**Ignoriert werden:**
+- ❌ Inhaltliche Gewaltbewertung (`scope: content`) - wird als durch FSK-Label abgedeckt betrachtet
+
+### Beispiel: Vollständiger Audit (Beides)
+
+```json
+{
+    "text": "...",
+    "schemes": ["criminal_law_gate", "protection_of_minors_gate", "data_privacy_gate"],
+    "context_type": "both",
+    "include_reasoning": true
+}
+```
+
+**Geprüft werden:** Alle Rules unabhängig vom Scope
+
+### Automatische Keyword-Erkennung
+
+Das System klassifiziert Rules automatisch anhand von Keywords in der Beschreibung:
+
+**Content-Rules** (Inhaltliche Eigenschaften):
+- Gewalt, Darstellung, Thematisierung, Bedrohung, Sexualität
+- Brutal, explizit, zeigt, enthält, verherrlicht
+- Diskriminierung, Hassrede, Beleidigung
+
+**Platform-Rules** (Technische Maßnahmen):
+- Fehlende Kennzeichnung, Keine Altersfreigabe, Unzureichende Maßnahmen
+- Zeitsteuerung, Jugendschutzprogramm, FSK-Label, PIN-Schutz
+- Meldesystem, Elternkontrollen, Voreinstellungen
+
+**Both-Rules** (Kombination):
+- "ohne Einordnung", "ohne Warnhinweis", "ohne Kontextualisierung"
+- Inhaltsproblem + fehlende Plattform-Maßnahme
+
+### Best Practice: Context-Typ Wählen
+
+| Anwendungsfall | Empfohlener Context | Begründung |
+|----------------|---------------------|------------|
+| **Social Media Post** | `content` | Nur Inhalt relevant, keine Plattform-Verantwortung des Posters |
+| **YouTube Video (Creator)** | `content` | Creator verantwortlich für Inhalt, nicht für Plattform-Features |
+| **Streaming-Dienst (Betreiber)** | `platform` | Prüfung der technischen Jugendschutzmaßnahmen |
+| **App Store (Review)** | `platform` | Prüfung der Metadaten und Kennzeichnungen |
+| **Rechtsberatung/Audit** | `both` | Vollständige Compliance-Prüfung |
+| **Content-Moderation** | `content` | Schnelle Inhaltsprüfung ohne Plattform-Overhead |
 
 ## 📖 YAML Schema-Parameter - Detaillierte Anleitung
 
@@ -501,7 +681,8 @@ normalization: true
 ```
 
 **Kombinationslogik:**
-- `weighted_average`: Gewichteter Durchschnitt
+- `weighted_average`: Gewichteter Durchschnitt (für Gesamtqualität)
+- `sum`: Einfache Summe aller Werte (für Split-Schemas)
 - `min`: Minimum aller Werte
 - `max`: Maximum aller Werte
 - `and_gate`: Alle müssen TRUE sein
@@ -517,7 +698,85 @@ normalization: true
 - `in`: Wert in Liste
 - `not_in`: Wert nicht in Liste
 
-**Vollständiges Beispiel:** `overall_quality.yaml`
+**Performance-Optimierung:**
+- Dependencies werden **parallel ausgeführt** (asyncio.gather) für maximale Geschwindigkeit
+- Mehrere Schemas im selben Request werden ebenfalls parallel evaluiert
+- Binary Gates: **LLM-Aufrufe laufen parallel**, aber logische Auswertung ist sequenziell (Early Exit bei Fehlschlag im Top-Level)
+
+**Ausgabestruktur für Derived Schemas:**
+
+Derived Schemas geben sowohl die Einzelergebnisse der Dependencies als auch das kombinierte Gesamtergebnis zurück:
+
+```json
+{
+  "scheme_id": "overall_quality",
+  "dimension": "overall_quality",
+  "value": 3.85,
+  "label": "Gute Qualität",
+  "reasoning": "Gewichteter Durchschnitt: 3.85/5.0\n\nEinzelbewertungen:\n- neutrality: 4.0 × 2.0\n- factuality: 4.5 × 2.5\n...",
+  "confidence": 0.9,
+  "scale_info": {
+    "type": "derived",
+    "method": "weighted_average",
+    "dependencies": 6,
+    "weights": {"neutrality": 2.0, "factuality": 2.5}
+  },
+  "criteria": {
+    "neutralitaet_old": {
+      "dimension": "neutrality",
+      "value": 4.0,
+      "label": "Weitgehend neutral",
+      "weight": 2.0,
+      "confidence": 0.88,
+      "reasoning": "Der Text stellt verschiedene Perspektiven ausgewogen dar...",
+      "scale_info": {
+        "type": "ordinal_rubric",
+        "range": {"min": 0, "max": 5},
+        "anchors": 6
+      },
+      "criteria": null
+    },
+    "sachrichtigkeit_new": {
+      "dimension": "factuality", 
+      "value": 4.5,
+      "label": "Hohe Sachrichtigkeit",
+      "weight": 2.5,
+      "confidence": 0.8,
+      "reasoning": "Fakten sind korrekt und gut belegt...",
+      "scale_info": {
+        "type": "checklist_additive",
+        "raw_range": "0.0-1.0",
+        "normalized_range": "0.0-5.0"
+      },
+      "criteria": {
+        "fakten_belegt": {
+          "name": "Faktische Belege",
+          "response": "4",
+          "normalized_score": 4.0,
+          "weight": 1.0,
+          "reasoning": "Alle wichtigen Aussagen sind belegt"
+        },
+        "quellenangaben": {
+          "name": "Quellenangaben",
+          "response": "4",
+          "normalized_score": 4.0,
+          "weight": 1.0,
+          "reasoning": "Quellen sind korrekt angegeben"
+        }
+      }
+    }
+  }
+}
+```
+
+**Vollständige Transparenz:** Jedes Dependency-Schema enthält:
+- `value`, `label`: Bewertungsergebnis
+- `confidence`: Konfidenzwert der Bewertung
+- `reasoning`: Vollständige Begründung (nicht verkürzt)
+- `scale_info`: Metadaten zum verwendeten Schema-Typ
+- `criteria`: Verschachtelte Sub-Kriterien (bei Checklists)
+
+**Vollständiges Beispiel:** `overall_quality.yaml`, `rechtliche_compliance.yaml`
 
 ### Erweiterte YAML-Features
 
@@ -581,6 +840,175 @@ rules:
         value: true
     value: true
     label: "Rechtlich unbedenklich"
+```
+
+#### Regeln für Derived Schema-Verknüpfungen
+
+**Grundprinzipien:**
+
+1. **Dependencies müssen existieren**: Alle Schemas in `dependencies` müssen als YAML-Dateien vorhanden sein
+2. **Keine Zirkelbezüge**: Schema A darf nicht direkt oder indirekt auf sich selbst verweisen
+3. **Dimension-Matching**: Die `dimension` in Bedingungen muss mit der `dimension` der Dependency-Schemas übereinstimmen
+4. **Richtige Datentypen**: Werte in Bedingungen müssen zum `output_range.type` der Dependency passen
+
+**Verknüpfungsarten:**
+
+```yaml
+# 1. Gewichteter Durchschnitt (für Qualitätsmetriken)
+rules:
+  - conditions:
+      - dimension: neutrality
+        operator: ">="
+        value: 0
+    value: "weighted_average"
+    weights:
+      neutrality: 2.0
+      factuality: 2.5
+      pedagogy: 2.0
+      # Summe der Gewichte muss nicht 1.0 sein
+      # Wird automatisch normalisiert
+
+# 2. UND-Verknüpfung (für Compliance)
+rules:
+  - conditions:
+      - dimension: youth_protection_legal
+        operator: "=="
+        value: 1
+      - dimension: legal_compliance
+        operator: "=="
+        value: 1
+    value: 1
+    label: "COMPLIANT"
+
+# 3. ODER-Verknüpfung (mindestens eine Bedingung)
+rules:
+  - conditions:
+      - dimension: neutrality
+        operator: ">="
+        value: 4
+    value: 4.0
+    label: "Exzellent in Neutralität"
+  - conditions:
+      - dimension: factuality
+        operator: ">="
+        value: 4
+    value: 4.0
+    label: "Exzellent in Sachrichtigkeit"
+
+# 4. Hierarchische Regeln (erste passende Regel gewinnt)
+rules:
+  # Spezialfall: Niedrige Sachrichtigkeit → Schlechte Bewertung
+  - conditions:
+      - dimension: factuality
+        operator: "<"
+        value: 2.0
+    value: 1.0
+    label: "Unzureichend"
+  # Normalfall: Gewichteter Durchschnitt
+  - conditions:
+      - dimension: factuality
+        operator: ">="
+        value: 2.0
+    value: "weighted_average"
+    label: "Berechnet"
+
+# 5. Summen-Aggregation (für Split-Schemas)
+# Ideal für große Schemas (z.B. 50 Items) in Teilschemas (z.B. 5×10)
+id: sachrichtigkeit_gesamt
+dependencies:
+  - sachrichtigkeit_teil1  # Items 1-10
+  - sachrichtigkeit_teil2  # Items 11-20
+  - sachrichtigkeit_teil3  # Items 21-30
+  - sachrichtigkeit_teil4  # Items 31-40
+  - sachrichtigkeit_teil5  # Items 41-50
+
+rules:
+  - conditions:
+      - dimension: factuality_part1
+        operator: ">="
+        value: 0
+    value: "sum"
+    label: "Gesamtbewertung"
+    reasoning: "Summe aller Teilbewertungen"
+
+# Beispiel: 5 Teilschemas à 10 Punkte = max. 50 Punkte gesamt
+output_range:
+  min: 0.0
+  max: 50.0
+  type: float
+```
+
+**Split-Schema-Pattern für große Bewertungen:**
+
+Große Schemas (>30 Items) können in kleinere Teilschemas aufgeteilt werden für:
+
+1. **Performance-Optimierung**: Teilschemas werden parallel evaluiert
+2. **Token-Limits**: Umgehung von LLM-Context-Limits
+3. **Modularität**: Einfachere Wartung und Updates einzelner Teile
+4. **Caching**: Teilschemas können separat gecacht werden
+
+**Beispiel-Struktur:**
+```
+sachrichtigkeit_teil1.yaml (Items 1-10)   → Score 0-10
+sachrichtigkeit_teil2.yaml (Items 11-20)  → Score 0-10
+sachrichtigkeit_teil3.yaml (Items 21-30)  → Score 0-10
+sachrichtigkeit_teil4.yaml (Items 31-40)  → Score 0-10
+sachrichtigkeit_teil5.yaml (Items 41-50)  → Score 0-10
+    ↓
+sachrichtigkeit_gesamt.yaml (Derived)     → Score 0-50 (Summe)
+```
+
+**Vorteile:**
+- ✅ **5× schneller** durch Parallelisierung (5 Schemas gleichzeitig)
+- ✅ Jedes Teilschema bleibt unter Token-Limits
+- ✅ Fehler in einem Teil beeinträchtigen andere nicht
+- ✅ Einzelne Teile können aktualisiert werden ohne Gesamtschema zu ändern
+
+**Best Practices:**
+
+- ✅ **Aussagekräftige Labels**: Labels sollten den Zustand klar beschreiben
+- ✅ **Fallback definieren**: Immer ein `default` für unerwartete Fälle
+- ✅ **Confidence-Werte**: Höhere confidence bei strengeren Bedingungen
+- ✅ **Dokumentation**: `reasoning` sollte die Logik erklären
+- ✅ **Split-Schemas**: Bei >30 Items in Teilschemas aufteilen
+- ⚠️ **Reihenfolge**: Spezifische Regeln vor allgemeinen Regeln
+- ⚠️ **Gewichte sinnvoll**: Wichtigere Dimensionen stärker gewichten
+
+**Häufige Fehler vermeiden:**
+
+```yaml
+# ❌ FALSCH: Zirkelbezug
+# overall_quality.yaml:
+dependencies:
+  - neutralitaet_old
+  - overall_quality  # Fehler: Selbstreferenz!
+
+# ❌ FALSCH: Falsche Dimension
+dependencies:
+  - neutralitaet_old  # dimension: neutrality
+rules:
+  - conditions:
+      - dimension: neutralitaet  # Fehler: Muss "neutrality" sein!
+        operator: ">="
+        value: 3
+
+# ❌ FALSCH: Typ-Mismatch
+dependencies:
+  - jugendschutz_gate  # output_range.type: int (0 oder 1)
+rules:
+  - conditions:
+      - dimension: youth_protection_legal
+        operator: ">="
+        value: 0.5  # Fehler: Muss integer sein!
+
+# ✅ RICHTIG: Korrekte Verknüpfung
+dependencies:
+  - jugendschutz_gate  # dimension: youth_protection_legal
+rules:
+  - conditions:
+      - dimension: youth_protection_legal
+        operator: "=="
+        value: 1  # Korrekt: Integer-Wert
 ```
 
 #### Metadata und Dokumentation
@@ -683,7 +1111,94 @@ examples:
   - "Historische Fakten sind korrekt dargestellt"
 ```
 
-## 🔄 Derived Schemas - Kombinationslogik
+## 🔄 Derived Schemas - Kombinationslogik & Rekursion
+
+### Rekursive Evaluation (Master-Gates)
+
+Die API unterstützt **mehrstufige Derived-Schemas** für komplexe Evaluierungen:
+
+```yaml
+# Ebene 3: Master-Gate (kombiniert Sub-Gates)
+id: criminal_law_gate
+dependencies:
+  - criminal_law_1a_gate  # Ebene 2: Sub-Gate
+  - criminal_law_1b_gate  # Ebene 2: Sub-Gate
+
+# Ebene 2: Sub-Gate (kombiniert Parts)
+id: criminal_law_1a_gate
+dependencies:
+  - criminal_law_1a_part1  # Ebene 1: Part-Schema
+  - criminal_law_1a_part2
+  - criminal_law_1a_part3
+  # ... bis part10
+
+# Ebene 1: Part-Schema (eigentliche LLM-Evaluation)
+id: criminal_law_1a_part1
+type: binary_gate
+gate_rules: [...]  # Tatsächliche Prüfkriterien
+```
+
+**Hierarchie:**
+```
+Master-Gate (Ebene 3)
+  ↓ [parallel]
+Sub-Gates (Ebene 2)
+  ↓ [parallel]
+Part-Schemas (Ebene 1)
+  ↓ [parallel]
+LLM-Calls
+```
+
+**Vorteile der Rekursion:**
+- ✅ **Performance**: Alle Dependencies werden parallel evaluiert
+- ✅ **Modularität**: Änderungen auf einer Ebene beeinflussen höhere Ebenen nicht
+- ✅ **Transparenz**: Vollständige Kriterien-Hierarchie in der Response
+- ✅ **Flexibilität**: Master-Gates können granular (Sub-Gates) oder vollständig (Master-Gate) abgefragt werden
+
+**Beispiel-Aufruf:**
+
+```json
+// Master-Gate (empfohlen für Endnutzer)
+{"schemes": ["criminal_law_gate"]}  
+// → Evaluiert automatisch 1A + 1B → jeweils 10+8 Parts → 200+ Indikatoren
+
+// Sub-Gate (für granulare Prüfung)
+{"schemes": ["criminal_law_1a_gate"]}  
+// → Nur Hard Illegal (1A) → 10 Parts → 49 Indikatoren
+
+// Part-Schema (für Entwickler/Debugging)
+{"schemes": ["criminal_law_1a_part1"]}  
+// → Nur Verfassungsfeindliche Symbole → 5 Indikatoren
+```
+
+**Response-Struktur** (verschachtelt):
+
+```json
+{
+  "scheme_id": "criminal_law_gate",
+  "value": 2,  // LEGAL
+  "criteria": {
+    "criminal_law_1a_gate": {
+      "value": 1,  // PASS
+      "criteria": {
+        "criminal_law_1a_part1": {
+          "value": 1,  // PASS
+          "criteria": {
+            "aspekt_1": {"passed": true, "rule_id": "1A-01"},
+            "aspekt_2": {"passed": true, "rule_id": "1A-02"}
+          }
+        }
+      }
+    },
+    "criminal_law_1b_gate": {"value": 1}
+  }
+}
+```
+
+**Best Practice:**
+- **Endnutzer**: Immer Master-Gates verwenden (`*_gate` ohne Zahl)
+- **Entwickler**: Sub-Gates für spezifische Tests
+- **Debugging**: Part-Schemas nur bei Fehlersuche
 
 ### UND-Verknüpfung (AND Logic)
 ```yaml

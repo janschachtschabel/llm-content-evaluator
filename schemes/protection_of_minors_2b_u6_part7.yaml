@@ -1,0 +1,67 @@
+id: protection_of_minors_2b_u6_part7
+name: 'Jugendschutz 2B-U6 - Teil 7: Interaktion & Nutzungsschutz'
+description: Prüfung von Interaktions- und Nutzungsschutzmaßnahmen für Kinder unter
+  6 Jahren
+dimension: protection_of_minors_2b_u6_interaction
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 0-6
+age_label: Nicht geeignet für Kinder unter 6 Jahren
+gate_rules:
+- id: 2B-0-29
+  description: Kommunikations-/Kontaktfunktionen ohne kindgerechte Vorsorgemaßnahmen
+    (offene Chats/DMs) (U6)
+  legal_basis: JuSchG §10b Abs.3
+  action: Kinderschutzmaßnahmen implementieren (Chats moderieren/sperren)
+  scope: both
+- id: 2B-0-30
+  description: Kauffunktionen/In-App-Käufe ohne Schutz (Sperren/Limits/Elternkontrolle)
+    in Angeboten für Kinder (U6)
+  legal_basis: JuSchG §10b Abs.3
+  action: Kaufschutz implementieren (PIN, Elternkontrolle, Limits)
+  scope: platform
+- id: 2B-0-31
+  description: Mechaniken fördern exzessive Nutzung (Autoplay/Endlos-Feed/Streaks)
+    ohne Schutzmaßnahmen (U6)
+  legal_basis: JuSchG §10b Abs.3
+  action: Nutzungsschutz implementieren (Zeitlimits, Pausen, Deaktivierung)
+  scope: platform
+- id: 2B-0-32
+  description: Unbedenkliche Kinderangebote nicht für anerkanntes Jugendschutzprogramm
+    programmiert (Whitelists/Label fehlen)
+  legal_basis: JMStV §11 Abs.5
+  action: Jugendschutzprogramm-Signalisierung implementieren (age-de.xml, Whitelisting)
+  scope: platform
+- id: 2B-0-33
+  description: Fehlende geeignete/verhältnismäßige Minderjährigenschutz-Voreinstellungen
+    (Default-Sichtbarkeit/Autoplay/DMs) für U6-Zielgruppen
+  legal_basis: DSA Art.28 Abs.1
+  action: Kinderschutzmaßnahmen implementieren (Chats moderieren/sperren)
+  scope: platform
+  trigger_keywords:
+    - voreinstellung
+    - default
+    - autoplay
+    - sichtbarkeit
+    - standardmäßig aktiviert
+  not_trigger_keywords:
+    - gewalt
+    - kampf
+    - brutal
+    - kriegsbild
+    - katastrophe
+  evaluation_hint: Dieser Indikator prüft TECHNISCHE EINSTELLUNGEN der Plattform,
+    nicht den Inhalt selbst. Trigger nur wenn Autoplay, Default-Sichtbarkeit oder
+    DM-Einstellungen problematisch sind.
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für U6 geeignet
+  '1': PASS - Geeignet für U6

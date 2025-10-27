@@ -1,0 +1,41 @@
+id: criminal_law_1a_part8
+name: 'Strafrecht 1A - Teil 8: Staatsschutz & Cybergrooming'
+description: Prüfung auf Staatsverunglimpfung, Billigung von Straftaten, Wählertäuschung
+  und Cybergrooming nach StGB §§90a, 108a, 140, 176b
+dimension: criminal_law_1a_state_protection
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 1A-37
+  description: Verunglimpfung des Staates/Seiner Symbole
+  legal_basis: StGB §90a
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1A-38
+  description: Billigung/Belohnung begangener schwerer Straftaten
+  legal_basis: StGB §140
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1A-39
+  description: Wählertäuschung durch falsche Informationen
+  legal_basis: StGB §108a
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1A-40
+  description: Cybergrooming (sexuelle Anbahnung gegenüber Kindern)
+  legal_basis: StGB §176b
+  action: Sofort entfernen, an Strafverfolgung melden (§ 15 NetzDG)
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: critical
+compliance_type: criminal_law
+report_required: true
+labels:
+  '0': FAIL
+  '1': PASS

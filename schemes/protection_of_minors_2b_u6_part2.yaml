@@ -1,0 +1,50 @@
+id: protection_of_minors_2b_u6_part2
+name: 'Jugendschutz 2B-U6 - Teil 2: Technische Schutzmaßnahmen'
+description: Prüfung technischer Jugendschutzmaßnahmen für Kinder unter 6 Jahren
+dimension: protection_of_minors_2b_u6_technical
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 0-6
+age_label: Nicht geeignet für Kinder unter 6 Jahren
+gate_rules:
+- id: 2B-0-06
+  description: Eingesetztes Jugendschutzprogramm nicht als geeignet anerkannt
+  legal_basis: JMStV §11 Abs.1
+  action: Jugendschutzprogramm-Signalisierung implementieren (age-de.xml, Whitelisting)
+  scope: platform
+- id: 2B-0-07
+  description: Keine maschinenlesbare Alterskennzeichnung für Jugendschutzprogramme
+    (U6)
+  legal_basis: JMStV §5 Abs.3 S.1 Nr.1 i. V. m. §11
+  action: Jugendschutzprogramm-Signalisierung implementieren (age-de.xml, Whitelisting)
+  scope: platform
+- id: 2B-0-08
+  description: Entwicklungsbeeinträchtigende Inhalte nicht getrennt von für Kinder
+    bestimmten Angeboten (z. B. Startseite/Kids-Bereich)
+  legal_basis: JMStV §5 Abs.5
+  action: Inhaltstrennung implementieren (Kinder-/Erwachsenenbereich)
+  scope: content
+- id: 2B-0-44
+  description: Fehlende PIN-/Profil-Barrieren zwischen Kinder- und Allgemeinbereich
+    (U6)
+  legal_basis: JMStV §5 Abs.3 S.1 Nr.1
+  action: Technische Schutzmaßnahmen implementieren (Alterslabel, Kids-Mode, PIN)
+  scope: platform
+- id: 2B-0-45
+  description: Fehlende Zeitsteuerung/'Üblicherweise nicht wahrnehmbar'-Konfiguration
+    für U6
+  legal_basis: JMStV §5 Abs.3 S.1 Nr.1
+  action: Technische Schutzmaßnahmen implementieren (Alterslabel, Kids-Mode, PIN)
+  scope: platform
+default_action:
+  value: 1
+  label: PASS
+severity: medium
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für U6 geeignet
+  '1': PASS - Geeignet für U6

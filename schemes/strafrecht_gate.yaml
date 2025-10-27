@@ -1,290 +1,312 @@
 id: strafrecht_gate
 name: Strafrechtliche & Ethische Unbedenklichkeit Gate
-description: Binary gate for legal and ethical compliance according to German criminal law
+description: Binary gate for legal and ethical compliance according to German criminal
+  law
 dimension: legal_compliance
 type: binary_gate
-version: "1.0"
-
+version: '1.0'
 output_range:
-  values: [true, false]
+  values:
+  - true
+  - false
   type: boolean
+criteria: 'Prüfung auf strafrechtliche Unbedenklichkeit nach deutschem Recht:
 
-criteria: |
-  Prüfung auf strafrechtliche Unbedenklichkeit nach deutschem Recht:
-  
+
   STRAFGESETZBUCH (StGB) - KERNPARAGRAPHEN:
+
   - § 86 StGB: Verbreiten von Propagandamitteln verfassungswidriger Organisationen
+
   - § 86a StGB: Verwenden von Kennzeichen verfassungswidriger Organisationen
+
   - § 89a StGB: Vorbereitung schwerer staatsgefährdender Gewalttaten
+
   - § 91 StGB: Anleitungen zu Straftaten (Waffen, Sprengstoff)
+
   - § 100a StGB: Telekommunikationsüberwachung (Kooperationspflicht)
+
   - § 108a StGB: Wählertäuschung durch Fake News
+
   - § 111 StGB: Öffentliche Aufforderung zu Straftaten
+
   - § 126 StGB: Störung öffentlichen Friedens durch Straftaten-Androhung
+
   - § 129-129b StGB: Bildung krimineller/terroristischer Vereinigungen
+
   - § 130 StGB: Volksverhetzung (Hassrede, Holocaustleugnung)
+
   - § 131 StGB: Gewaltdarstellung und -verherrlichung
+
   - § 140 StGB: Belohnung und Billigung von Straftaten
+
   - § 166 StGB: Beschimpfung von Religionsgemeinschaften
+
   - § 184b StGB: Kinderpornografische Inhalte (CSAM)
+
   - § 185-187 StGB: Beleidigung, üble Nachrede, Verleumdung
+
   - § 189 StGB: Verunglimpfung des Andenkens Verstorbener
+
   - § 201a StGB: Verletzung Intimbereich durch Bildaufnahmen
+
   - § 223/230 StGB: Körperverletzung durch Gesundheits-Falschinformationen
+
   - § 241 StGB: Bedrohung mit Straftaten
+
   - § 263 StGB: Betrug durch Desinformation
+
   - § 269 StGB: Fälschung beweiserheblicher Daten
-  
+
+
   MEDIENRECHT & DIGITALE GESETZE:
+
   - NetzDG: Strafbare Inhalte in sozialen Netzwerken
+
   - DSA (Digital Services Act): Desinformation, Transparenzpflichten
+
   - MStV (Medienstaatsvertrag): Wahrheitsgemäße Berichterstattung
+
   - Pressekodex: Journalistische Sorgfaltspflicht
-  
+
+
   URHEBERRECHT & DATENSCHUTZ:
+
   - UrhG: Urheberrechtsverletzungen, illegale Kopien
+
   - DSGVO: Datenschutzverstöße bei Nutzerdatenverarbeitung
+
   - Markenrecht: Unbefugte Verwendung geschützter Marken
-  
+
+
   DESINFORMATION & FAKE NEWS:
+
   - Wahlbeeinflussung durch gezielte Falschinformationen
+
   - Gesundheits-Desinformation mit Schadenspotential
+
   - Wissenschafts-Leugnung mit gesellschaftlichem Schaden
+
   - Verschwörungstheorien mit Gewaltpotential
 
+  '
 gate_rules:
-  - condition: "verfassungswidrige_propaganda"
-    action: reject
-    reason: "Verbreitung verfassungswidriger Propaganda (§ 86 StGB)"
-    severity: critical
-    legal_reference: "§ 86 StGB"
-  
-  - condition: "verfassungswidrige_symbole"
-    action: reject
-    reason: "Verwendung verfassungswidriger Kennzeichen (§ 86a StGB)"
-    severity: critical
-    legal_reference: "§ 86a StGB"
-  
-  - condition: "terrorismus_vorbereitung"
-    action: reject
-    reason: "Vorbereitung staatsgefährdender Gewalttaten (§ 89a StGB)"
-    severity: critical
-    legal_reference: "§ 89a StGB"
-  
-  - condition: "straftaten_anleitung"
-    action: reject
-    reason: "Anleitungen zu schweren Straftaten (§ 91 StGB)"
-    severity: critical
-    legal_reference: "§ 91 StGB"
-  
-  - condition: "volksverhetzung"
-    action: reject
-    reason: "Volksverhetzung oder Hassrede (§ 130 StGB)"
-    severity: critical
-    legal_reference: "§ 130 StGB"
-  
-  - condition: "gewaltverherrlichung"
-    action: reject
-    reason: "Gewaltdarstellung oder -verherrlichung (§ 131 StGB)"
-    severity: critical
-    legal_reference: "§ 131 StGB"
-  
-  - condition: "kinderpornografie"
-    action: reject
-    reason: "Kinderpornografische Inhalte (§ 184b StGB)"
-    severity: critical
-    legal_reference: "§ 184b StGB"
-  
-  - condition: "straftaten_aufforderung"
-    action: reject
-    reason: "Öffentliche Aufforderung zu Straftaten (§ 111 StGB)"
-    severity: critical
-    legal_reference: "§ 111 StGB"
-  
-  - condition: "kriminelle_vereinigung"
-    action: reject
-    reason: "Bildung/Unterstützung krimineller Vereinigungen (§ 129-129b StGB)"
-    severity: critical
-    legal_reference: "§ 129-129b StGB"
-  
-  - condition: "straftaten_billigung"
-    action: reject
-    reason: "Belohnung oder Billigung von Straftaten (§ 140 StGB)"
-    severity: high
-    legal_reference: "§ 140 StGB"
-  
-  - condition: "bedrohung"
-    action: reject
-    reason: "Bedrohung mit Straftaten (§ 241 StGB)"
-    severity: high
-    legal_reference: "§ 241 StGB"
-  
-  - condition: "religionsbeschimpfung"
-    action: reject
-    reason: "Beschimpfung von Religionsgemeinschaften (§ 166 StGB)"
-    severity: high
-    legal_reference: "§ 166 StGB"
-  
-  - condition: "friedensstoerung_drohung"
-    action: reject
-    reason: "Störung öffentlichen Friedens durch Drohungen (§ 126 StGB)"
-    severity: high
-    legal_reference: "§ 126 StGB"
-  
-  - condition: "waehler_taeuschung"
-    action: reject
-    reason: "Wählertäuschung durch Fake News (§ 108a StGB)"
-    severity: high
-    legal_reference: "§ 108a StGB"
-  
-  - condition: "beleidigung_verleumdung"
-    action: reject
-    reason: "Beleidigung, üble Nachrede oder Verleumdung (§ 185-187 StGB)"
-    severity: medium
-    legal_reference: "§ 185-187 StGB"
-  
-  - condition: "verstorbene_verunglimpfung"
-    action: reject
-    reason: "Verunglimpfung des Andenkens Verstorbener (§ 189 StGB)"
-    severity: medium
-    legal_reference: "§ 189 StGB"
-  
-  - condition: "intimbereich_verletzung"
-    action: reject
-    reason: "Verletzung Intimbereich durch Bildaufnahmen (§ 201a StGB)"
-    severity: medium
-    legal_reference: "§ 201a StGB"
-  
-  - condition: "gesundheits_desinformation"
-    action: reject
-    reason: "Gesundheitsgefährdende Falschinformationen (§ 223/230 StGB)"
-    severity: medium
-    legal_reference: "§ 223/230 StGB"
-  
-  - condition: "betrug_desinformation"
-    action: reject
-    reason: "Betrug durch Desinformation (§ 263 StGB)"
-    severity: medium
-    legal_reference: "§ 263 StGB"
-  
-  - condition: "daten_faelschung"
-    action: reject
-    reason: "Fälschung beweiserheblicher Daten (§ 269 StGB)"
-    severity: medium
-    legal_reference: "§ 269 StGB"
-  
-  - condition: "urheberrechtsverletzung"
-    action: reject
-    reason: "Urheberrechtsverletzung oder illegale Kopien (UrhG)"
-    severity: medium
-    legal_reference: "UrhG"
-  
-  - condition: "datenschutz_verstoss"
-    action: reject
-    reason: "DSGVO-Verstoß bei Datenverarbeitung"
-    severity: medium
-    legal_reference: "DSGVO"
-  
-  - condition: "markenrechtsverletzung"
-    action: reject
-    reason: "Unbefugte Verwendung geschützter Marken"
-    severity: low
-    legal_reference: "MarkenG"
-
+- condition: verfassungswidrige_propaganda
+  action: reject
+  reason: Verbreitung verfassungswidriger Propaganda (§ 86 StGB)
+  severity: critical
+  legal_reference: § 86 StGB
+  scope: both
+- condition: verfassungswidrige_symbole
+  action: reject
+  reason: Verwendung verfassungswidriger Kennzeichen (§ 86a StGB)
+  severity: critical
+  legal_reference: § 86a StGB
+  scope: both
+- condition: terrorismus_vorbereitung
+  action: reject
+  reason: Vorbereitung staatsgefährdender Gewalttaten (§ 89a StGB)
+  severity: critical
+  legal_reference: § 89a StGB
+  scope: both
+- condition: straftaten_anleitung
+  action: reject
+  reason: Anleitungen zu schweren Straftaten (§ 91 StGB)
+  severity: critical
+  legal_reference: § 91 StGB
+  scope: both
+- condition: volksverhetzung
+  action: reject
+  reason: Volksverhetzung oder Hassrede (§ 130 StGB)
+  severity: critical
+  legal_reference: § 130 StGB
+  scope: both
+- condition: gewaltverherrlichung
+  action: reject
+  reason: Gewaltdarstellung oder -verherrlichung (§ 131 StGB)
+  severity: critical
+  legal_reference: § 131 StGB
+  scope: both
+- condition: kinderpornografie
+  action: reject
+  reason: Kinderpornografische Inhalte (§ 184b StGB)
+  severity: critical
+  legal_reference: § 184b StGB
+  scope: both
+- condition: straftaten_aufforderung
+  action: reject
+  reason: Öffentliche Aufforderung zu Straftaten (§ 111 StGB)
+  severity: critical
+  legal_reference: § 111 StGB
+  scope: both
+- condition: kriminelle_vereinigung
+  action: reject
+  reason: Bildung/Unterstützung krimineller Vereinigungen (§ 129-129b StGB)
+  severity: critical
+  legal_reference: § 129-129b StGB
+  scope: both
+- condition: straftaten_billigung
+  action: reject
+  reason: Belohnung oder Billigung von Straftaten (§ 140 StGB)
+  severity: high
+  legal_reference: § 140 StGB
+  scope: both
+- condition: bedrohung
+  action: reject
+  reason: Bedrohung mit Straftaten (§ 241 StGB)
+  severity: high
+  legal_reference: § 241 StGB
+  scope: both
+- condition: religionsbeschimpfung
+  action: reject
+  reason: Beschimpfung von Religionsgemeinschaften (§ 166 StGB)
+  severity: high
+  legal_reference: § 166 StGB
+  scope: both
+- condition: friedensstoerung_drohung
+  action: reject
+  reason: Störung öffentlichen Friedens durch Drohungen (§ 126 StGB)
+  severity: high
+  legal_reference: § 126 StGB
+  scope: both
+- condition: waehler_taeuschung
+  action: reject
+  reason: Wählertäuschung durch Fake News (§ 108a StGB)
+  severity: high
+  legal_reference: § 108a StGB
+  scope: both
+- condition: beleidigung_verleumdung
+  action: reject
+  reason: Beleidigung, üble Nachrede oder Verleumdung (§ 185-187 StGB)
+  severity: medium
+  legal_reference: § 185-187 StGB
+  scope: both
+- condition: verstorbene_verunglimpfung
+  action: reject
+  reason: Verunglimpfung des Andenkens Verstorbener (§ 189 StGB)
+  severity: medium
+  legal_reference: § 189 StGB
+  scope: both
+- condition: intimbereich_verletzung
+  action: reject
+  reason: Verletzung Intimbereich durch Bildaufnahmen (§ 201a StGB)
+  severity: medium
+  legal_reference: § 201a StGB
+  scope: both
+- condition: gesundheits_desinformation
+  action: reject
+  reason: Gesundheitsgefährdende Falschinformationen (§ 223/230 StGB)
+  severity: medium
+  legal_reference: § 223/230 StGB
+  scope: both
+- condition: betrug_desinformation
+  action: reject
+  reason: Betrug durch Desinformation (§ 263 StGB)
+  severity: medium
+  legal_reference: § 263 StGB
+  scope: both
+- condition: daten_faelschung
+  action: reject
+  reason: Fälschung beweiserheblicher Daten (§ 269 StGB)
+  severity: medium
+  legal_reference: § 269 StGB
+  scope: both
+- condition: urheberrechtsverletzung
+  action: reject
+  reason: Urheberrechtsverletzung oder illegale Kopien (UrhG)
+  severity: medium
+  legal_reference: UrhG
+  scope: both
+- condition: datenschutz_verstoss
+  action: reject
+  reason: DSGVO-Verstoß bei Datenverarbeitung
+  severity: medium
+  legal_reference: DSGVO
+  scope: both
+- condition: markenrechtsverletzung
+  action: reject
+  reason: Unbefugte Verwendung geschützter Marken
+  severity: low
+  legal_reference: MarkenG
+  scope: both
 default_action: pass
-
 detection_patterns:
   verfassungswidrige_symbole:
-    - "hakenkreuz"
-    - "ss-runen"
-    - "hitlergruß"
-    - "reichskriegsflagge"
-    - "ns-symbole"
-  
+  - hakenkreuz
+  - ss-runen
+  - hitlergruß
+  - reichskriegsflagge
+  - ns-symbole
   terrorismus_keywords:
-    - "bomben bauen"
-    - "sprengstoff"
-    - "anschlag planen"
-    - "terroranschlag"
-    - "dschihadismus"
-  
+  - bomben bauen
+  - sprengstoff
+  - anschlag planen
+  - terroranschlag
+  - dschihadismus
   volksverhetzung_patterns:
-    - "holocaustleugnung"
-    - "rassenhass"
-    - "judenhass"
-    - "muslimhass"
-    - "vernichtung"
-    - "ausrotten"
-  
+  - holocaustleugnung
+  - rassenhass
+  - judenhass
+  - muslimhass
+  - vernichtung
+  - ausrotten
   gewalt_verherrlichung:
-    - "folter verherrlichen"
-    - "hinrichtung feiern"
-    - "gewalt glorifizieren"
-    - "sadismus"
-    - "verstümmelung"
-  
+  - folter verherrlichen
+  - hinrichtung feiern
+  - gewalt glorifizieren
+  - sadismus
+  - verstümmelung
   straftaten_aufrufe:
-    - "tötet"
-    - "vernichtet"
-    - "greift an"
-    - "zerstört"
-    - "brennt nieder"
-  
+  - tötet
+  - vernichtet
+  - greift an
+  - zerstört
+  - brennt nieder
   bedrohungen:
-    - "ich bringe dich um"
-    - "du bist tot"
-    - "ich finde dich"
-    - "warte nur ab"
-    - "rache"
-  
+  - ich bringe dich um
+  - du bist tot
+  - ich finde dich
+  - warte nur ab
+  - rache
   fake_news_indicators:
-    - "geheime verschwörung"
-    - "medien verschweigen"
-    - "politiker lügen"
-    - "wissenschaft betrug"
-    - "impfung gefährlich"
-  
+  - geheime verschwörung
+  - medien verschweigen
+  - politiker lügen
+  - wissenschaft betrug
+  - impfung gefährlich
   gesundheits_desinformation:
-    - "krebs heilbar mit"
-    - "medizin schadet"
-    - "ärzte lügen"
-    - "pharma verschwörung"
-    - "natürlich heilen"
-  
+  - krebs heilbar mit
+  - medizin schadet
+  - ärzte lügen
+  - pharma verschwörung
+  - natürlich heilen
   urheberrecht_verletzung:
-    - "illegal kopiert"
-    - "raubkopie"
-    - "ohne lizenz"
-    - "copyright verletzung"
-    - "plagiat"
-
+  - illegal kopiert
+  - raubkopie
+  - ohne lizenz
+  - copyright verletzung
+  - plagiat
 compliance_frameworks:
   criminal_law:
-    - "Strafgesetzbuch (StGB)"
-    - "Netzwerkdurchsetzungsgesetz (NetzDG)"
-  
+  - Strafgesetzbuch (StGB)
+  - Netzwerkdurchsetzungsgesetz (NetzDG)
   media_law:
-    - "Medienstaatsvertrag (MStV)"
-    - "Rundfunkstaatsvertrag"
-    - "Pressekodex"
-  
+  - Medienstaatsvertrag (MStV)
+  - Rundfunkstaatsvertrag
+  - Pressekodex
   digital_law:
-    - "Digital Services Act (DSA)"
-    - "Digital Markets Act (DMA)"
-    - "ePrivacy-Verordnung"
-  
+  - Digital Services Act (DSA)
+  - Digital Markets Act (DMA)
+  - ePrivacy-Verordnung
   data_protection:
-    - "DSGVO"
-    - "Bundesdatenschutzgesetz (BDSG)"
-    - "Telekommunikation-Telemedien-Datenschutz-Gesetz (TTDSG)"
-  
+  - DSGVO
+  - Bundesdatenschutzgesetz (BDSG)
+  - Telekommunikation-Telemedien-Datenschutz-Gesetz (TTDSG)
   intellectual_property:
-    - "Urheberrechtsgesetz (UrhG)"
-    - "Markengesetz (MarkenG)"
-    - "Patentgesetz (PatG)"
-
+  - Urheberrechtsgesetz (UrhG)
+  - Markengesetz (MarkenG)
+  - Patentgesetz (PatG)
 severity_levels:
-  critical: "Schwere Straftaten mit Gefängnisstrafe"
-  high: "Straftaten mit erheblicher gesellschaftlicher Relevanz"
-  medium: "Rechtsverstöße mit zivilrechtlichen Konsequenzen"
-  low: "Geringfügige Rechtsverstöße oder Ordnungswidrigkeiten"
+  critical: Schwere Straftaten mit Gefängnisstrafe
+  high: Straftaten mit erheblicher gesellschaftlicher Relevanz
+  medium: Rechtsverstöße mit zivilrechtlichen Konsequenzen
+  low: Geringfügige Rechtsverstöße oder Ordnungswidrigkeiten

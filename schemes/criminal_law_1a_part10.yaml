@@ -1,0 +1,41 @@
+id: criminal_law_1a_part10
+name: 'Strafrecht 1A - Teil 10: Meldepflichten & Kooperation'
+description: Prüfung auf Meldepflichten nach DSA Art. 18 und RL 2011/93/EU (CSAM)
+dimension: criminal_law_1a_reporting
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 1A-47
+  description: Verdacht auf Straftat mit Gefahr für Leben/Sicherheit
+  legal_basis: DSA Art. 18
+  definition: Inhalt mit Verdacht auf Straftat und unmittelbarer Gefahr für Leben
+    oder Sicherheit
+  action: Verfahren zur Meldung/Kooperation implementieren
+  scope: both
+- id: 1A-48
+  description: Hinweise auf sexuellen Missbrauch/Ausbeutung von Kindern
+  legal_basis: RL 2011/93/EU
+  definition: Hinweise auf sexuellen Missbrauch oder Ausbeutung von Kindern (CSAM)
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1A-49
+  description: Pflicht zur Mitteilung an Strafverfolgung
+  legal_basis: JuSchG §14 Abs. 3, §27
+  definition: Anhaltspunkte für Verstoß gegen §15 Abs. 1 JuSchG
+  action: Verfahren zur Meldung/Kooperation implementieren
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+  reasoning: Keine Meldepflicht erforderlich
+severity: critical
+compliance_type: criminal_law
+report_required: true
+report_authority: Strafverfolgungsbehörden, BKA, Nationale Kontaktstelle
+labels:
+  '0': FAIL - Meldepflicht
+  '1': PASS

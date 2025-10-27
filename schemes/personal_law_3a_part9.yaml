@@ -1,0 +1,39 @@
+id: personal_law_3a_part9
+name: 'Persönlichkeitsrechte 3A - Teil 9: DSA & Haftung'
+description: Prüfung auf DSA-Compliance und Haftungsregeln
+dimension: personal_law_3a_dsa_liability
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 3A-40
+  description: Unzureichende transparente Beschwerde-/Meldemechanismen bei Video-Sharing-Plattformen
+  legal_basis: AVMD-RL Art. 28b Abs. 3
+  action: Beschwerde-/Meldemechanismen implementieren
+  scope: platform
+- id: 3A-41
+  description: Unterlassungsanspruch gegen Host-Provider nach Kenntnis (Notice → Takedown/Staydown)
+  legal_basis: TMG/TDDDG Haftungsgrundsätze i.V.m. § 1004 BGB analog
+  action: Verfahren zur Takedown/Staydown implementieren
+  scope: both
+- id: 3A-42
+  description: Geldentschädigung (Schmerzensgeld) bei schwerwiegender Persönlichkeitsrechtsverletzung
+  legal_basis: APR i.V.m. § 253 Abs. 2 BGB
+  action: Verfahren zur Schadensregulierung vorsehen
+  scope: content
+- id: 3A-43
+  description: Schadensersatz/Herstellung des rechtmäßigen Zustands (z. B. Löschung/De-Indexierung/Entschuldigung)
+  legal_basis: APR i.V.m. § 249 BGB
+  action: Verfahren zur Wiederherstellung implementieren
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: personal_rights_violation
+labels:
+  '0': FAIL - DSA-/Haftungsverstoß
+  '1': PASS - Keine Verletzung

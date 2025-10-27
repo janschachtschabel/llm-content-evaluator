@@ -1,0 +1,50 @@
+id: protection_of_minors_2b_16_18_part4
+name: 'Jugendschutz 2B-16-18 - Teil 4: Gewalt & Desorientierung'
+description: Prüfung auf Gewalt und sozialethische Desorientierung für Jugendliche
+  16-18 Jahre
+dimension: protection_of_minors_2b_16_18_violence_disorientation
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 16-18
+age_label: Nicht geeignet für Jugendliche unter 18 Jahren
+gate_rules:
+- id: 2B-16-16
+  description: Gewalt befürwortend/bagatellisierend ohne Distanzierung (16–18)
+  legal_basis: JuSchG §10b Abs.1
+  action: Inhalt anpassen (Distanzierung/alternative Lösungen) oder Zugangsbeschränkung
+    U18
+  scope: content
+- id: 2B-16-17
+  description: Sozialethische Desorientierung ohne kritische Einordnung (Mobbing/Diskriminierung/antisoziales
+    Verhalten) (16–18)
+  legal_basis: JuSchG §10b Abs.1
+  action: Inhalt anpassen (Einordnung) oder Zugangsbeschränkung U18
+  scope: content
+- id: 2B-16-18
+  description: Riskante nachahmbare Handlungen/Challenges ohne Warn-/Präventionshinweis
+    (16–18)
+  legal_basis: JuSchG §10b Abs.1
+  action: Warnhinweise ergänzen oder Zugangsbeschränkung U18
+  scope: both
+- id: 2B-16-19
+  description: Drogen-/Alkoholverharmlosung ohne Risikodarstellung/Distanzierung (16–18)
+  legal_basis: JuSchG §10b Abs.1
+  action: Kritische Einordnung ergänzen oder Zugangsbeschränkung U18
+  scope: content
+- id: 2B-16-20
+  description: Selbstverletzung/Suizid ohne Präventionskontext/Hotlines (16–18)
+  legal_basis: JuSchG §10b Abs.1
+  action: Inhalt anpassen oder Zugangsbeschränkung U18 implementieren
+  scope: content
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 16-18 geeignet
+  '1': PASS - Geeignet für 16-18

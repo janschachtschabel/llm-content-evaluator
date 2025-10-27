@@ -1,0 +1,46 @@
+id: data_privacy_4a_part5
+name: 'Datenschutz 4A - Teil 5: Verträge & Transfers'
+description: Prüfung auf Verträge und Drittlandtransfers
+dimension: data_privacy_4a_contracts_transfers
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 4A-21
+  description: Gemeinsame Verantwortlichkeit ohne Vereinbarung
+  legal_basis: DSGVO Art. 26
+  action: Joint-Controller-Vereinbarung erstellen, Transparenz gegenüber Betroffenen
+    sicherstellen
+  scope: both
+- id: 4A-22
+  description: Drittlandtransfer ohne Garantien
+  legal_basis: DSGVO Art. 44–49
+  action: Transfer Impact Assessment durchführen, SCC/zusätzliche Maßnahmen implementieren
+  scope: both
+- id: 4A-23
+  description: Automatisierte Entscheidungen/Profiling ohne Rechtsgrundlage/Transparenz
+  legal_basis: DSGVO Art. 4 Nr. 4, Art. 22
+  action: Rechtsgrundlage schaffen, Transparenz & human-in-the-loop etablieren
+  scope: both
+- id: 4A-24
+  description: Verarbeitung besonderer Kategorien ohne Erlaubnis
+  legal_basis: DSGVO Art. 9
+  action: Erlaubnistatbestand prüfen, ggf. Verarbeitung stoppen oder Einwilligung
+    einholen
+  scope: both
+- id: 4A-25
+  description: Strafdaten ohne gesetzliche Grundlage
+  legal_basis: DSGVO Art. 10
+  action: Rechtsgrundlage prüfen, unzulässige Daten löschen, Prozesse anpassen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: critical
+compliance_type: data_protection
+labels:
+  '0': FAIL - Verträge/Transfers unzureichend
+  '1': PASS - Verträge/Transfers ausreichend

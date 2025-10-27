@@ -1,0 +1,52 @@
+id: protection_of_minors_2b_16_18_part5
+name: 'Jugendschutz 2B-16-18 - Teil 5: Rollenbilder & FSF'
+description: Prüfung auf problematische Rollenbilder und FSF-Kriterien für Jugendliche
+  16-18 Jahre
+dimension: protection_of_minors_2b_16_18_roles_fsf
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 16-18
+age_label: Nicht geeignet für Jugendliche unter 18 Jahren
+gate_rules:
+- id: 2B-16-21
+  description: Identifikationsfiguren vermitteln problematische Rollenbilder/Haltungen
+    (Dominanz/Misogynie/Rassismus) (16–18)
+  legal_basis: KJM-Kriterien B.3.9
+  action: Inhalte prüfen und ggf. anpassen (positive Rollenmodelle, Einordnung)
+  scope: content
+- id: 2B-16-22
+  description: Diskriminierende Darstellungen ohne Einordnung (Herkunft/Religion/Behinderung/Körperbild)
+    (16–18)
+  legal_basis: KJM-Kriterien B.5.3
+  action: Inhalte prüfen und ggf. anpassen (positive Rollenmodelle, Einordnung)
+  scope: content
+- id: 2B-16-23
+  description: Sexualdarstellungen erfordern Erwachsenenperspektive/Erfahrungswissen
+    (Überforderung 16–18)
+  legal_basis: KJM-Kriterien B.4.4
+  action: Inhalt anpassen oder Zugangsbeschränkung U18 implementieren
+  scope: content
+- id: 2B-16-24
+  description: Intensive Gewaltdarstellung mit suggestiver Wirkung ohne pädagogische
+    Distanzierung (16–18)
+  legal_basis: FSF-Richtlinien V
+  action: Prüfung durch FSK/USK/FSF durchführen lassen
+  scope: content
+- id: 2B-16-25
+  description: Sexualthemen/Geschlechterrollen unterminieren Gleichberechtigung/Partnerschaftlichkeit
+    ohne Einordnung (16–18)
+  legal_basis: FSF-Richtlinien IX
+  action: Prüfung durch FSK/USK/FSF durchführen lassen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: medium
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 16-18 geeignet
+  '1': PASS - Geeignet für 16-18

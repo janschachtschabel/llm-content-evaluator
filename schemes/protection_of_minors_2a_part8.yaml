@@ -1,0 +1,47 @@
+id: protection_of_minors_2a_part8
+name: 'Jugendschutz 2A - Teil 8: Kennzeichnung & KJM'
+description: Prüfung von Kennzeichnungen und KJM-Kriterien
+dimension: protection_of_minors_2a_labeling_kjm
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_restriction: 18+ / AVS erforderlich
+gate_rules:
+- id: 2A-36
+  description: '''Keine Jugendfreigabe/18''-Kennzeichnung fehlt/ist fehlerhaft'
+  legal_basis: JuSchG §14
+  action: Prüfen und bei Verstoß entfernen
+  scope: platform
+- id: 2A-37
+  description: Plattform-Kennzeichnung 18+ fehlt/ist inkonsistent im Bereitstellungsprozess
+  legal_basis: JuSchG §14a
+  action: Prüfen und bei Verstoß entfernen
+  scope: platform
+- id: 2A-38
+  description: Glücksspiel-Inhalte (18+) ohne wirksame Alters-/Identitätskontrolle
+    zugänglich/beworben
+  legal_basis: GlüStV 2021 §4 Abs.3
+  action: AVS für Glücksspiel-Inhalte implementieren
+  scope: content
+- id: 2A-39
+  description: Fehlende Offenlegung/Begrenzung von Empfehlungssystemen, die 18+-Inhalte
+    Minderjährigen sichtbar machen
+  legal_basis: MStV §8 Abs.6
+  action: Empfehlungssystem anpassen (Minderjährigen-Filter)
+  scope: platform
+- id: 2A-40
+  description: Fehlende Session-Bindung/2-Faktor-Authentifizierung bei AVS-Login
+  legal_basis: KJM-Kriterien (technisch)
+  action: AVS-System verbessern/ersetzen (KJM-konform)
+  scope: platform
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_endangering_content
+labels:
+  '0': FAIL - Kennzeichnung/KJM-Verstöße
+  '1': PASS - Kennzeichnung/KJM-konform

@@ -1,0 +1,42 @@
+id: criminal_law_1a_part7
+name: 'Strafrecht 1A - Teil 7: Terrorismus & Extremismus'
+description: Prüfung auf Terrorismus, extreme Gewalt und Selbstjustiz nach StGB §§129,
+  129a, 138, 140
+dimension: criminal_law_1a_terrorism
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 1A-33
+  description: Nahelegen von Selbstjustiz als einzig bewährtes Mittel
+  legal_basis: JuSchG §18 Abs. 1 S. 2
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1A-34
+  description: Besonders realistische, grausame, selbstzweckhafte Gewaltdarstellungen
+  legal_basis: JuSchG §15 Abs. 2 Nr. 3a
+  action: Prüfen und entfernen, ggf. Altersverifikation erwägen
+  scope: content
+- id: 1A-35
+  description: Kriminelle/terroristische Vereinigung
+  legal_basis: StGB §§129, 129a, 129b
+  action: Sofort entfernen, an Strafverfolgung melden (DSA Art. 18)
+  scope: both
+- id: 1A-36
+  description: Vorbereitung/Beteiligung/Finanzierung terroristischer Straftaten
+  legal_basis: StGB §§89a–89c
+  action: Sofort entfernen, an Strafverfolgung melden (DSA Art. 18)
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: critical
+compliance_type: criminal_law
+report_required: true
+report_authority: Strafverfolgungsbehörden, Verfassungsschutz
+labels:
+  '0': FAIL - Terrorismus/Extremismus
+  '1': PASS

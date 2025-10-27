@@ -1,0 +1,49 @@
+id: protection_of_minors_2b_u6_part6
+name: 'Jugendschutz 2B-U6 - Teil 6: Nachahmung & Werbung'
+description: Prüfung auf nachahmbare Handlungen und problematische Werbung für Kinder
+  unter 6 Jahren
+dimension: protection_of_minors_2b_u6_imitation_ads
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 0-6
+age_label: Nicht geeignet für Kinder unter 6 Jahren
+gate_rules:
+- id: 2B-0-24
+  description: Gefährliche nachahmbare Handlungen ohne Warnhinweise (Feuer, Ertrinken,
+    Fenstersturz) (U6)
+  legal_basis: JMStV §5 Abs.1
+  action: Warnhinweise ergänzen oder Zugangsbeschränkung U6
+  scope: both
+- id: 2B-0-25
+  description: Werbung nicht klar als solche erkennbar in kindgerichteten Angeboten
+    (U6)
+  legal_basis: JMStV §6 Abs.1
+  action: Werbung kindgerecht gestalten (eindeutig kennzeichnen, kein Druck)
+  scope: both
+- id: 2B-0-26
+  description: Direkte Kaufappelle an Kinder ('Kauf jetzt', 'Hol dir...') (U6)
+  legal_basis: JMStV §6 Abs.2 Nr.1
+  action: Werbung kindgerecht gestalten (eindeutig kennzeichnen, kein Druck)
+  scope: both
+- id: 2B-0-27
+  description: Unangemessener Druck/Angst in Werbung gegenüber Kindern (U6)
+  legal_basis: JMStV §6 Abs.2 Nr.2
+  action: Werbung kindgerecht gestalten (eindeutig kennzeichnen, kein Druck)
+  scope: both
+- id: 2B-0-28
+  description: Ausnutzung kindlicher Unerfahrenheit/Leichtgläubigkeit in Werbung (U6)
+  legal_basis: JMStV §6 Abs.2 Nr.3
+  action: Werbung kindgerecht gestalten (eindeutig kennzeichnen, kein Druck)
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: medium
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für U6 geeignet
+  '1': PASS - Geeignet für U6

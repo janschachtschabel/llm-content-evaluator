@@ -1,0 +1,47 @@
+id: personal_law_3b_part3
+name: 'Strukturelle Vorsorge 3B - Teil 3: Hilfe & Elternkontrollen'
+description: Prüfung auf externe Hilfe und Elternkontrollfunktionen
+dimension: personal_law_3b_help_parental
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 3B-11
+  description: Kein klarer Hinweis/Link auf unabhängige Hilfe-, Beratungs- und externe
+    Meldestellen (z. B. Nummer gegen Kummer, Polizeilinks)
+  legal_basis: JuSchG § 24a Abs. 2 Nr. 4
+  action: Altersgerechtes Melde- und Abhilfeverfahren implementieren
+  scope: platform
+- id: 3B-12
+  description: Fehlende Elternbegleitungs-/Steuerungstools (Parental Controls)
+  legal_basis: JuSchG § 24a Abs. 2 Nr. 5
+  action: Elternkontrollen implementieren (Zeitlimits, Ausgabenlimits, Kommunikationsfreigaben)
+  scope: platform
+- id: 3B-13
+  description: Parental Controls ohne Zeit-/Ausgabenlimits, Kommunikationsfreigaben,
+    Kontakt-/DM-Freigabelisten
+  legal_basis: JuSchG § 24a Abs. 2 Nr. 5
+  action: Elternkontrollen implementieren (Zeitlimits, Ausgabenlimits, Kommunikationsfreigaben)
+  scope: platform
+- id: 3B-14
+  description: Fehlende sichere Voreinstellungen (Safety by Default) für Minderjährige
+  legal_basis: JuSchG § 24a Abs. 2 Nr. 6
+  action: Safety by Default implementieren
+  scope: platform
+- id: 3B-15
+  description: Profile von Minderjährigen standardmäßig öffentlich/auffindbar (Discovery/Search/Index
+    offen)
+  legal_basis: JuSchG § 24a Abs. 2 Nr. 7 a
+  action: Safety by Default implementieren
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: structural_safety_measures
+labels:
+  '0': FAIL - Hilfe/Elternkontrollen unzureichend
+  '1': PASS - Hilfe/Elternkontrollen ausreichend

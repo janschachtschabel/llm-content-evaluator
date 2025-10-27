@@ -1,0 +1,44 @@
+id: data_privacy_4b_part1
+name: 'Transparenz 4B - Teil 1: KI/Bot-Kennzeichnung'
+description: Prüfung auf KI- und Bot-Kennzeichnung nach MStV und DSA
+dimension: data_privacy_4b_ai_bot_labeling
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 4B-01
+  description: Automatisierte Inhalte/Bot-Accounts nicht als automatisiert gekennzeichnet
+  legal_basis: MStV § 18 Abs. 3
+  action: Klare, dauerhafte KI/Bot-Kennzeichnung implementieren
+  scope: content
+- id: 4B-02
+  description: Bot-/KI-Kennzeichnung nicht altersgerecht (Minderjährige)
+  legal_basis: MStV § 18 Abs. 3
+  action: Kennzeichnung kindgerecht gestalten und dauerhaft einblenden
+  scope: platform
+- id: 4B-03
+  description: Hauptparameter von Empfehlungssystemen nicht offengelegt
+  legal_basis: MStV § 8 Abs. 6
+  action: Hauptparameter und Gewichtungen transparent dokumentieren
+  scope: platform
+- id: 4B-04
+  description: Ranking-/Auswahlkriterien bei Medienintermediären intransparent
+  legal_basis: MStV § 74
+  action: Ranking-Kriterien veröffentlichen, ggf. Nutzerhinweise hinzufügen
+  scope: both
+- id: 4B-05
+  description: Werbe-Transparenz (Warum diese Anzeige?) fehlt
+  legal_basis: DSA Art. 26
+  action: Werbehinweis inkl. Hauptparameter und Zahler anzeigen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: transparency
+labels:
+  '0': FAIL - KI/Bot-Kennzeichnung fehlt
+  '1': PASS - KI/Bot-Kennzeichnung vorhanden

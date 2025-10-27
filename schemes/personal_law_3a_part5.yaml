@@ -1,0 +1,44 @@
+id: personal_law_3a_part5
+name: 'Persönlichkeitsrechte 3A - Teil 5: Unternehmen & Schutzgesetze'
+description: Prüfung auf Unternehmenspersönlichkeitsrecht und deliktischen Schutz
+dimension: personal_law_3a_business_protection
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 3A-21
+  description: Kreditgefährdung durch unwahre wirtschaftsbezogene Tatsachenbehauptungen
+  legal_basis: § 824 BGB
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 3A-22
+  description: Diffamierung eines Unternehmens/Berufsehre (Ruf-/Sozialsphäre)
+  legal_basis: § 823 Abs. 1 BGB (Unternehmenspersönlichkeitsrecht)
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 3A-23
+  description: Deliktischer Schutz bei Verstoß gegen Schutzgesetze (Audio/Intimbild)
+  legal_basis: § 823 Abs. 2 BGB i.V.m. §§ 201, 201a StGB
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 3A-24
+  description: Anspruch auf Gegendarstellung bei Tatsachenbehauptungen
+  legal_basis: Landespressegesetze (Gegendarstellung)
+  action: Verfahren zur Gegendarstellung implementieren
+  scope: content
+- id: 3A-25
+  description: Verstoß gegen journalistische Sorgfaltspflichten (unzureichende Recherche/Einordnung/Verdachtsberichterstattung)
+  legal_basis: MStV § 19
+  action: Prüfen und ggf. korrigieren oder entfernen
+  scope: platform
+default_action:
+  value: 1
+  label: PASS
+severity: medium
+compliance_type: personal_rights_violation
+labels:
+  '0': FAIL - Unternehmen-/Schutzgesetzverletzung
+  '1': PASS - Keine Verletzung

@@ -1,0 +1,49 @@
+id: personal_law_3b_part4
+name: 'Strukturelle Vorsorge 3B - Teil 4: Safety by Default'
+description: Prüfung auf sichere Standardeinstellungen für Minderjährige
+dimension: personal_law_3b_safety_default
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 3B-16
+  description: Standort-/Kontaktdaten standardmäßig sichtbar oder freigegeben (Geotags,
+    'in der Nähe'-Funktion)
+  legal_basis: JuSchG § 24a Abs. 2 Nr. 7 b
+  action: Safety by Default implementieren
+  scope: both
+- id: 3B-17
+  description: Offene Kommunikation standardmäßig für jede:n möglich (keine Begrenzung
+    auf einen gewählten Kreis)
+  legal_basis: JuSchG § 24a Abs. 2 Nr. 7 c
+  action: Safety by Default implementieren
+  scope: platform
+- id: 3B-18
+  description: Keine Option bzw. kein Default für anonyme/pseudonyme Nutzung (Klarnamenpflicht
+    ohne Not)
+  legal_basis: JuSchG § 24a Abs. 2 Nr. 7 d
+  action: Prüfen und bei Verstoß entfernen
+  scope: platform
+- id: 3B-19
+  description: AGB/Nutzungsinfos nicht kindgerecht (Sprache/Design), keine 'tl;dr'-Erklärung
+    relevanter Risiken/Rechte
+  legal_basis: JuSchG § 24a Abs. 2 Nr. 8
+  action: AGB/Nutzungsinfos kindgerecht aufbereiten (einfache Sprache, tl;dr)
+  scope: platform
+- id: 3B-20
+  description: Plattform trifft keine geeigneten/verhältnismäßigen Minderjährigenschutz-Maßnahmen
+    (insb. Default-Settings/Ranking/Empfehlungen)
+  legal_basis: DSA Art. 28 Abs. 1
+  action: Profiling-basierte Werbung für Minderjährige unterbinden
+  scope: platform
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: structural_safety_measures
+labels:
+  '0': FAIL - Safety by Default unzureichend
+  '1': PASS - Safety by Default ausreichend

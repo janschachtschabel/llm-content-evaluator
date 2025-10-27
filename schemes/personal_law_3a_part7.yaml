@@ -1,0 +1,47 @@
+id: personal_law_3a_part7
+name: 'Persönlichkeitsrechte 3A - Teil 7: Phänomene'
+description: Prüfung auf moderne Phänomene (Sexting, Sharenting, Identitätsdiebstahl)
+dimension: personal_law_3a_phenomena
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 3A-31
+  description: Weiterleitung/Verbreitung intimer Bilder ohne Einwilligung der betroffenen
+    Person
+  legal_basis: Phänomen (Sexting) i.V.m. APR/KUG
+  action: Prüfen und bei Verstoß entfernen (Einwilligung prüfen)
+  scope: both
+- id: 3A-32
+  description: Unangemessenes Teilen von Kinderfotos/Informationen durch Sorgeberechtigte
+    (fehlende/konkludente Einwilligung)
+  legal_basis: Phänomen (Sharenting) i.V.m. APR/KUG
+  action: Prüfen und bei Verstoß entfernen (Einwilligung prüfen)
+  scope: platform
+- id: 3A-33
+  description: Missbräuchliches Handeln im Namen der betroffenen Person (Fake-Accounts/Deep
+    Impersonation)
+  legal_basis: Phänomen (Identitätsdiebstahl) i.V.m. § 12 BGB/APR
+  action: Prüfen und bei Verstoß entfernen, Account sperren, Identitätsnachweis einholen
+  scope: both
+- id: 3A-44
+  description: Unzulässige Identifizierbarkeit von Opfer-/Zeugenidentitäten
+  legal_basis: APR i.V.m. presseethischen Grundsätzen
+  action: Anonymisieren/Redact oder Takedown, Schutz der Betroffenen sicherstellen
+  scope: both
+- id: 3A-34
+  description: Unterlassung/Beseitigung bei unbefugter Nutzung geschützter Werke (Bild/Text/Video)
+  legal_basis: UrhG § 97 Abs. 1 (zivil)
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: personal_rights_violation
+labels:
+  '0': FAIL - Phänomen-/Urheberrechtsverletzung
+  '1': PASS - Keine Verletzung

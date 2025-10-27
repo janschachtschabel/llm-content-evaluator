@@ -1,0 +1,70 @@
+id: protection_of_minors_2b_12_16_part9
+name: 'Jugendschutz 2B-12-16 - Teil 9: Medien & Gewalt'
+description: Prüfung von Medien und Gewaltdarstellungen für Jugendliche 12-16 Jahre
+dimension: protection_of_minors_2b_12_16_media_violence
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 12-16
+age_label: Nicht geeignet für Jugendliche unter 16 Jahren
+gate_rules:
+- id: 2B-12-41
+  description: Belastende Nachrichten/Dokus ohne altersangemessene Einordnung/Didaktik
+    in U16-Umfeldern
+  legal_basis: MStV §19 i.V.m. JMStV §5
+  action: Warnhinweis ergänzen, Einordnung sicherstellen oder Zugangsbeschränkung
+    U16
+  scope: both
+  trigger_keywords:
+    - gewalt
+    - kampf
+    - brutal
+    - krieg
+    - katastrophe
+    - belastend
+    - nachricht
+    - doku
+  not_trigger_keywords:
+    - autoplay
+    - voreinstellung
+    - default
+    - sichtbarkeit
+  evaluation_hint: Dieser Indikator prüft INHALTLICHE BELASTUNG (Gewalt, Krieg,
+    Katastrophen etc.) ohne Einordnung. Trigger wenn der INHALT selbst belastend ist,
+    nicht wenn Platform-Einstellungen fehlen.
+- id: 2B-12-42
+  description: Realistische Gewalt mit sichtbaren Folgen ohne ausreichende Kontextualisierung
+    (12–16)
+  legal_basis: JMStV §5 Abs.1
+  action: Inhalt anpassen (Distanzierung/alternative Lösungen) oder Zugangsbeschränkung
+    U16
+  scope: content
+- id: 2B-12-43
+  description: Deutlich bedrohliche Situationen mit anhaltender Verfolgung/Spannung
+    ohne Entlastung (12–16)
+  legal_basis: JMStV §5 Abs.1
+  action: Inhalt anpassen oder Zugangsbeschränkung U16 implementieren
+  scope: content
+- id: 2B-12-44
+  description: Sexualität als Thema (Küsse/Teilnacktheit betont, nicht pornografisch)
+    ohne Einordnung (12–16)
+  legal_basis: JMStV §5 Abs.1
+  action: Inhalt anpassen oder Zugangsbeschränkung U16 implementieren
+  scope: content
+- id: 2B-12-45
+  description: Derbe/obszöne Sprache häufiger Bestandteil des Dialogs ohne Kontext
+    (12–16)
+  legal_basis: JMStV §5 Abs.1
+  action: Sprache anpassen oder Zugangsbeschränkung U16 implementieren
+  scope: content
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 12-16 geeignet
+  '1': PASS - Geeignet für 12-16

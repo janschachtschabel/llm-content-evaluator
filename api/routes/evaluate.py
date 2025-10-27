@@ -1,6 +1,6 @@
 """Evaluation endpoint for text assessment."""
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Body, Depends, HTTPException
 from openai import AsyncOpenAI
 from datetime import datetime
 from typing import Dict, Any
@@ -19,12 +19,12 @@ def get_evaluation_engine() -> EvaluationEngine:
 
 def get_openai_client() -> AsyncOpenAI:
     """Get OpenAI client."""
-    return AsyncOpenAI(api_key=settings.openai_api_key)
+    return AsyncOpenAI(api_key=settings.openai_api_key, base_url=settings.openai_base_url)
 
 
 @router.post("/", response_model=EvaluationResponse,
          summary="Evaluate Text Content")
-async def evaluate_text(request: EvaluationRequest) -> EvaluationResponse:
+async def evaluate_text(payload: EvaluationRequest = Body(...)) -> EvaluationResponse:
     """Evaluate text content against quality and compliance schemes.
     
     This endpoint evaluates educational content, articles, or other text materials
@@ -81,10 +81,10 @@ async def evaluate_text(request: EvaluationRequest) -> EvaluationResponse:
     try:
         # Initialize engine and client directly (no dependency injection for Swagger compatibility)
         engine = EvaluationEngine()
-        openai_client = AsyncOpenAI(api_key=settings.openai_api_key)
+        openai_client = AsyncOpenAI(api_key=settings.openai_api_key, base_url=settings.openai_base_url)
         # Validate schemes exist
         available_schemes = {s["id"] for s in engine.get_schemes()}
-        invalid_schemes = set(request.schemes) - available_schemes
+        invalid_schemes = set(payload.schemes) - available_schemes
         if invalid_schemes:
             raise HTTPException(
                 status_code=400, 
@@ -94,9 +94,11 @@ async def evaluate_text(request: EvaluationRequest) -> EvaluationResponse:
         # Perform evaluation
         start_time = datetime.now()
         evaluation_data = await engine.evaluate_text(
-            text=request.text,
-            scheme_ids=request.schemes,
-            llm_client=openai_client
+            text=payload.text,
+            scheme_ids=payload.schemes,
+            llm_client=openai_client,
+            model=settings.openai_model,
+            context_type=payload.context_type
         )
         end_time = datetime.now()
         
@@ -108,8 +110,8 @@ async def evaluate_text(request: EvaluationRequest) -> EvaluationResponse:
                 value=result.get("value"),
                 label=result.get("label"),
                 confidence=result.get("confidence"),
-                reasoning=result.get("reasoning") if request.include_reasoning else None,
-                criteria=result.get("criteria") if request.include_reasoning else None,
+                reasoning=result.get("reasoning") if payload.include_reasoning else None,
+                criteria=result.get("criteria") if payload.include_reasoning else None,
                 scale_info=result.get("scale_info"),
                 na_reason=result.get("na_reason")
             )
@@ -120,14 +122,14 @@ async def evaluate_text(request: EvaluationRequest) -> EvaluationResponse:
         metadata = {
             "processing_time_ms": int((end_time - start_time).total_seconds() * 1000),
             "model_used": settings.openai_model,
-            "include_reasoning": request.include_reasoning
+            "include_reasoning": payload.include_reasoning
         }
         
         provenance = {
             "timestamp": start_time.isoformat(),
             "api_version": "0.1.0",
-            "text_length": len(request.text),
-            "schemes_count": len(request.schemes)
+            "text_length": len(payload.text),
+            "schemes_count": len(payload.schemes)
         }
         
         return EvaluationResponse(

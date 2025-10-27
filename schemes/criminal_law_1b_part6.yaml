@@ -1,0 +1,44 @@
+id: criminal_law_1b_part6
+name: 'Strafrecht 1B - Teil 6: Verletzung der Vertraulichkeit'
+description: Prüfung auf Verletzung der Vertraulichkeit des Wortes und intime Bildaufnahmen
+  nach StGB §§201, 201a
+dimension: criminal_law_1b_privacy
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 1B-23
+  description: Verbreitung nichtöffentlicher Gespräche
+  legal_basis: StGB §201
+  definition: Mitschnitt/Verbreitung heimlich aufgenommener Gespräche
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1B-24
+  description: Weiterleitung vertraulicher Audios
+  legal_basis: StGB §201
+  definition: Weiterleitung vertraulicher Audios/Sprachchats ohne Einwilligung
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1B-25
+  description: Bloßstellende/intime Bildaufnahmen veröffentlicht
+  legal_basis: StGB §201a
+  definition: Veröffentlichung von Nackt-/Unfallopfer-/Hilflosen-Bildern
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1B-26
+  description: Weiterverbreitung Demütigungsbilder
+  legal_basis: StGB §201a
+  definition: Re-Uploads/Leaks von bloßstellenden Bildern
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: criminal_law_contextual
+labels:
+  '0': FAIL
+  '1': PASS

@@ -1,0 +1,49 @@
+id: personal_law_3b_part1
+name: 'Strukturelle Vorsorge 3B - Teil 1: Vorsorgemaßnahmen'
+description: Prüfung grundlegender Vorsorgemaßnahmen nach JuSchG §24a
+dimension: personal_law_3b_preventive_measures
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 3B-01
+  description: Anbieter hostet/aggregiert UGC mit Gewinnerzielungsabsicht ohne angemessene/wirksame
+    Vorsorgemaßnahmen gegen Integritätsrisiken
+  legal_basis: JuSchG § 24a Abs. 1
+  action: Vorsorgemaßnahmen implementieren (Risk Assessment, Safety Features)
+  scope: both
+- id: 3B-02
+  description: Schutzziel 'persönliche Integrität Minderjähriger' nicht erkennbar
+    umgesetzt (Policy/Design/Prozess)
+  legal_basis: JuSchG § 10a Nr. 3
+  action: Profiling-basierte Werbung für Minderjährige unterbinden
+  scope: both
+- id: 3B-03
+  description: Interaktionsrisiken werden in der Gesamtbeurteilung nicht hinreichend
+    berücksichtigt (Risk-Assessment fehlt/ungenügend)
+  legal_basis: JuSchG § 10b Abs. 3 S. 2
+  action: Risk Assessment durchführen und dokumentieren
+  scope: both
+- id: 3B-04
+  description: Keine Vorsorge gegen Risiken aus Kommunikations-/Kontaktfunktionen
+    (Cybergrooming, Cybermobbing, Stalking)
+  legal_basis: JuSchG § 10b Abs. 3 S. 2
+  action: Kommunikation standardmäßig auf gewählten Kreis beschränken
+  scope: platform
+- id: 3B-05
+  description: Keine Vorsorge gegen Risiken aus Kauffunktionen/glücksspielähnlichen
+    Mechaniken (Lootboxen, Pay-to-win, Kostenfallen)
+  legal_basis: JuSchG § 10b Abs. 3 S. 2
+  action: Prüfen und bei Verstoß entfernen
+  scope: platform
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: structural_safety_measures
+labels:
+  '0': FAIL - Vorsorgemaßnahmen unzureichend
+  '1': PASS - Vorsorgemaßnahmen ausreichend

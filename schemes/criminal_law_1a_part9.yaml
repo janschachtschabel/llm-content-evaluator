@@ -1,0 +1,50 @@
+id: criminal_law_1a_part9
+name: 'Strafrecht 1A - Teil 9: Pornografie an Minderjährige & Bildrechtsverletzungen'
+description: Prüfung auf Zugänglichmachen pornografischer Inhalte an Minderjährige
+  und intime Bildaufnahmen nach StGB §§184d-l, 201a
+dimension: criminal_law_1a_minor_protection
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 1A-41
+  description: Zugänglichmachen pornografischer Inhalte an Minderjährige
+  legal_basis: StGB §184d
+  action: Altersverifikation sicherstellen, ggf. entfernen
+  scope: content
+- id: 1A-42
+  description: Verbreitung pornografischer Inhalte an Minderjährige
+  legal_basis: StGB §184e
+  action: Altersverifikation sicherstellen, ggf. entfernen
+  scope: content
+- id: 1A-43
+  description: Pornografische Darbietungen gegenüber Jugendlichen
+  legal_basis: StGB §184f
+  action: Altersverifikation sicherstellen, ggf. entfernen
+  scope: both
+- id: 1A-44
+  description: Nicht-einvernehmliche intime Bildaufnahmen (Upskirting/Downblousing)
+  legal_basis: StGB §184k
+  action: Altersverifikation sicherstellen, ggf. entfernen
+  scope: both
+- id: 1A-45
+  description: Verbreitung/Erwerb/Besitz kindlicher Sexpuppen
+  legal_basis: StGB §184l
+  action: Altersverifikation sicherstellen, ggf. entfernen
+  scope: both
+- id: 1A-46
+  description: Bildaufnahmen des höchstpersönlichen Lebensbereichs
+  legal_basis: StGB §201a
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: criminal_law
+labels:
+  '0': FAIL
+  '1': PASS

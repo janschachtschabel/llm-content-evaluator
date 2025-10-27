@@ -1,0 +1,48 @@
+id: personal_law_3a_part6
+name: 'Persönlichkeitsrechte 3A - Teil 6: Kontextrahmung & Anonymisierung'
+description: Prüfung auf Kontextrahmung und Anonymisierungsanforderungen
+dimension: personal_law_3a_context_anonymization
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 3A-26
+  description: Verletzende Kontextrahmung/Bild-Text-Schere (irreführende Rahmung wahrer
+    Inhalte)
+  legal_basis: APR i.V.m. § 823 Abs. 1 BGB
+  action: Prüfen und bei Verstoß entfernen oder korrigieren
+  scope: content
+- id: 3A-27
+  description: 'Unkenntlichmachung Dritter erforderlich (Beifang: Passanten/Kfz-Kennzeichen/Hausnummern)'
+  legal_basis: APR/KUG
+  action: Unkenntlichmachung implementieren oder entfernen
+  scope: both
+- id: 3A-28
+  description: Unzulässige Identifizierbarkeit trotz Pseudonymisierung (Re-Identifikation
+    möglich)
+  legal_basis: APR i.V.m. § 823 Abs. 1 BGB
+  action: Prüfen und bei Verstoß entfernen oder nachbessern
+  scope: both
+- id: 3A-29
+  description: '''Pranger''-Veröffentlichung alter Verfehlungen ohne aktuellen Anlass
+    (Recht auf Vergessen II)'
+  legal_basis: APR (Resozialisierungsgrundsatz) i.V.m. § 823 Abs. 1 BGB
+  action: Prüfen und bei Verstoß entfernen (Recht auf Vergessen)
+  scope: both
+- id: 3A-30
+  description: Öffentliche Bloßstellung durch Veröffentlichung sensibler personenbezogener
+    Daten
+  legal_basis: Phänomen (Online-Pranger/Doxing) i.V.m. APR/§ 823 Abs. 1 BGB
+  action: Sofort entfernen, ggf. Meldung an Strafverfolgung, Redaction sensibler Daten
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: personal_rights_violation
+labels:
+  '0': FAIL - Kontextrahmung/Anonymisierung unzureichend
+  '1': PASS - Keine Verletzung

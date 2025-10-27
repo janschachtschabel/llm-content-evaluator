@@ -1,0 +1,32 @@
+id: criminal_law_1b_part3
+name: 'Strafrecht 1B - Teil 3: Falsche Verdächtigung'
+description: Prüfung auf falsche Verdächtigung und politische Verdächtigung nach StGB
+  §§164, 241a
+dimension: criminal_law_1b_false_accusation
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 1B-11
+  description: Falsche Verdächtigung gegenüber Behörden/Öffentlichkeit
+  legal_basis: StGB §164
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1B-12
+  description: Politische Verdächtigung
+  legal_basis: StGB §241a
+  definition: Wider besseres Wissen anti-verfassungsrechtliche Gesinnung unterstellen
+  action: Sofort entfernen, an Strafverfolgung melden
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: critical
+compliance_type: criminal_law_contextual
+report_required: true
+labels:
+  '0': FAIL
+  '1': PASS

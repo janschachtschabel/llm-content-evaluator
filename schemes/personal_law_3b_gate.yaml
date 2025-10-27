@@ -1,0 +1,163 @@
+id: personal_law_3b_gate
+name: "GATE 3B - Strukturelle Vorsorge & Interaktionsrisiken"
+description: "Prüfung auf strukturelle Schutzmaßnahmen und Interaktionsrisiken nach JuSchG §24a und DSA Art. 28"
+dimension: personal_law_3b_compliance
+type: derived
+version: "1.0"
+
+output_range:
+  min: 0
+  max: 1
+  type: int
+
+# 9 Teilschemas als Dependencies
+dependencies:
+  - personal_law_3b_part1    # Vorsorgemaßnahmen (3B-01 bis 05)
+  - personal_law_3b_part2    # Mechanismen & Meldesystem (3B-06 bis 10)
+  - personal_law_3b_part3    # Hilfe & Elternkontrollen (3B-11 bis 15)
+  - personal_law_3b_part4    # Safety by Default (3B-16 bis 20)
+  - personal_law_3b_part5    # DSA Compliance (3B-21 bis 25)
+  - personal_law_3b_part6    # DSA & AVMD-RL (3B-26 bis 30)
+  - personal_law_3b_part7    # AVMD-RL & KI-Risiken (3B-31 bis 35)
+  - personal_law_3b_part8    # Safety Features (3B-36 bis 40)
+  - personal_law_3b_part9    # Privacy & Kompatibilität (3B-41 bis 44)
+
+# UND-Verknüpfung: ALLE Teilprüfungen müssen bestanden werden
+rules:
+  - conditions:
+      - dimension: personal_law_3b_preventive_measures
+        operator: "=="
+        value: 1
+      - dimension: personal_law_3b_mechanisms_reporting
+        operator: "=="
+        value: 1
+      - dimension: personal_law_3b_help_parental
+        operator: "=="
+        value: 1
+      - dimension: personal_law_3b_safety_default
+        operator: "=="
+        value: 1
+      - dimension: personal_law_3b_dsa_compliance
+        operator: "=="
+        value: 1
+      - dimension: personal_law_3b_dsa_avmd
+        operator: "=="
+        value: 1
+      - dimension: personal_law_3b_avmd_ai
+        operator: "=="
+        value: 1
+      - dimension: personal_law_3b_safety_features
+        operator: "=="
+        value: 1
+      - dimension: personal_law_3b_privacy_compatibility
+        operator: "=="
+        value: 1
+    value: 1
+    label: "PASS - Strukturelle Vorsorge ausreichend"
+    reasoning: "Alle Prüfungen bestanden - angemessene Schutzmaßnahmen gegen Interaktionsrisiken vorhanden"
+    confidence: 0.85
+
+default:
+  value: 0
+  label: "FAIL - Strukturelle Vorsorge unzureichend"
+  reasoning: "Mindestens eine Prüfung nicht bestanden - unzureichende Schutzmaßnahmen gegen Interaktionsrisiken"
+  confidence: 0.85
+
+labels:
+  "0": "FAIL - Strukturelle Schutzmaßnahmen unzureichend"
+  "1": "PASS - Strukturelle Schutzmaßnahmen ausreichend"
+
+metadata:
+  legal_framework: "JuSchG §10a, §10b, §24a; DSA Art. 14, 20-21, 25, 28, 34-35; AVMD-RL Art. 28b; DSGVO Art. 8, 25; JMStV §6, §11"
+  gate_type: "3B - Strukturelle Vorsorge & Interaktionsrisiken"
+  action_required: "Safety by Design / Meldesystem / Elternkontrollen / Risk Assessment"
+  total_indicators: 44
+  severity: "HIGH"
+  
+description_text: |
+  GATE 3B prüft auf strukturelle Schutzmaßnahmen gegen Interaktionsrisiken.
+  
+  **Funktion:** Safety by Design und Vorsorgemaßnahmen für Minderjährige
+  **Aktion:** Risk Assessment / Safety Features / Meldesystem / Elternkontrollen
+  
+  **Prüfkategorien (44 Indikatoren):**
+  
+  **1. Vorsorgemaßnahmen (JuSchG §24a Abs. 1):**
+  - Risk Assessment gegen Integritätsrisiken
+  - Schutz persönlicher Integrität Minderjähriger
+  - Berücksichtigung von Interaktionsrisiken
+  - Vorsorge gegen Kommunikationsrisiken (Cybergrooming, Cybermobbing)
+  - Vorsorge gegen Kaufrisiken (Lootboxen, Kostenfallen)
+  - Vorsorge gegen exzessive Nutzung (Endlos-Feeds, Streaks)
+  
+  **2. Meldesystem (JuSchG §24a Abs. 2 Nr. 1-2, 4):**
+  - Kind-/jugendgerechtes Melde- und Abhilfeverfahren
+  - Leicht erkennbar, max. 2 Klicks erreichbar
+  - Altersgerechtes Meldeformular (keine Fachsprache)
+  - Abdeckung aller Integritätsbeeinträchtigungen (Grooming, Mobbing, Doxing)
+  - Hinweise auf externe Hilfe-/Beratungsstellen
+  
+  **3. Elternkontrollen (JuSchG §24a Abs. 2 Nr. 5):**
+  - Elternbegleitungs-/Steuerungstools (Parental Controls)
+  - Zeit-/Ausgabenlimits
+  - Kommunikationsfreigaben
+  - Kontakt-/DM-Freigabelisten
+  
+  **4. Safety by Default (JuSchG §24a Abs. 2 Nr. 6-7):**
+  - Sichere Voreinstellungen für Minderjährige
+  - Profile standardmäßig nicht öffentlich/auffindbar
+  - Standort-/Kontaktdaten standardmäßig deaktiviert
+  - Kommunikation auf gewählten Kreis beschränkt
+  - Option für anonyme/pseudonyme Nutzung
+  
+  **5. Kindgerechte Information (JuSchG §24a Abs. 2 Nr. 8, DSA Art. 14):**
+  - AGB/Nutzungsinfos kindgerecht aufbereitet
+  - Einfache Sprache, tl;dr-Erklärungen
+  - Risiken und Rechte verständlich dargestellt
+  
+  **6. DSA-Compliance:**
+  - Geeignete/verhältnismäßige Minderjährigenschutz-Maßnahmen (Art. 28)
+  - Profiling-basierte Werbung unterbunden (Art. 28 Abs. 2)
+  - Risikoanalyse für VLOPs (Art. 34)
+  - Risikominderungsmaßnahmen (Art. 35)
+  - Internes Beschwerdesystem (Art. 20)
+  - Außergerichtliche Streitbeilegung (Art. 21)
+  - Keine Dark Patterns (Art. 25)
+  
+  **7. AVMD-RL (Video-Sharing-Plattformen):**
+  - Angemessene Maßnahmen zum Minderjährigenschutz
+  - Transparente Meldemechanismen
+  - Elterlich steuerbare Kontrollsysteme
+  - Hinweise auf externe Beratungsstellen
+  
+  **8. Moderne Safety Features:**
+  - Schutz gegen KI-gestütztes Grooming (Deepfake-Stimmen)
+  - Altersdifferenzierte Defaults (0-6, 6-12, 12-16, 16-18)
+  - Safety-Center mit Hilfen und Selbstschutz-Anleitungen
+  - Minor Mode/Kinderprofil mit gehärteten Limits
+  - Rate-Limiting gegen Massen-Kontaktanfragen
+  - Eskalationslogik gegen Wiederholungstäter
+  - Sensitivitätsfilter/Blur-Preview für sensible Medien
+  - Sichere Medienweiterleitung (Forward-Friction)
+  - Geo-/Proximity-Kontrollen deaktiviert
+  
+  **9. Privacy & Kompatibilität:**
+  - Privacy by Design/Default (DSGVO Art. 25)
+  - Datenminimierende Voreinstellungen
+  - Altersabsicherung und Einwilligung (DSGVO Art. 8)
+  - Kompatibilität mit Jugendschutzprogrammen (JMStV §11)
+  
+  **Folge bei Verstoß:**
+  - **Risk Assessment:** Systematische Risikoanalyse durchführen
+  - **Safety Features:** Technische Schutzmaßnahmen implementieren
+  - **Meldesystem:** Altersgerechtes Melde- und Abhilfeverfahren
+  - **Elternkontrollen:** Parental Controls mit Zeit-/Ausgabenlimits
+  - **Safety by Default:** Sichere Voreinstellungen für alle Altersgruppen
+  - **Altersdifferenzierung:** Separate Defaults für 0-6, 6-12, 12-16, 16-18
+  
+  **Unterschied zu Gate 3A:**
+  Gate 3A prüft auf **individuelle Rechtsverletzungen** (konkrete Inhalte).
+  Gate 3B prüft auf **strukturelle Vorsorgemaßnahmen** (Systemdesign).
+  
+  **Performance:**
+  9 Teilschemas werden parallel evaluiert (begrenzt durch MAX_CONCURRENT_LLM_CALLS)

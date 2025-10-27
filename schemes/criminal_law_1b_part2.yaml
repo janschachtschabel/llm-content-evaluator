@@ -1,0 +1,49 @@
+id: criminal_law_1b_part2
+name: 'Strafrecht 1B - Teil 2: Verleumdung & Politische Angriffe'
+description: Prüfung auf Verleumdung, Angriffe auf Politiker und Verstorbene nach
+  StGB §§187-189
+dimension: criminal_law_1b_slander
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 1B-06
+  description: Nachweislich falsche Tatsachen wider besseres Wissen
+  legal_basis: StGB §187
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1B-07
+  description: Belegter Vorsatz bei rufschädigender Behauptung
+  legal_basis: StGB §187
+  definition: Formulierungen wie 'ich weiß, aber...' bei rufschädigenden Behauptungen
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1B-08
+  description: Angriffe gegen Personen des politischen Lebens
+  legal_basis: StGB §188
+  definition: Kampagnen oder reichweitenstarke Angriffe auf Politiker:innen
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1B-09
+  description: Übersteigerte Schmähung gegen Amtsträger
+  legal_basis: StGB §188
+  definition: Schmähung oder Hetze gegen Amtsträger:innen oder Politiker:innen
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1B-10
+  description: Beschimpfung/Verunglimpfung Verstorbener
+  legal_basis: StGB §189
+  definition: Beschimpfung oder Verunglimpfung verstorbener Personen in Posts/Memes
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: criminal_law_contextual
+labels:
+  '0': FAIL
+  '1': PASS

@@ -1,0 +1,50 @@
+id: protection_of_minors_2b_16_18_part13
+name: 'Jugendschutz 2B-16-18 - Teil 13: Phänomene'
+description: Prüfung spezifischer Phänomene für Jugendliche 16-18 Jahre
+dimension: protection_of_minors_2b_16_18_phenomena
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 16-18
+age_label: Nicht geeignet für Jugendliche unter 18 Jahren
+gate_rules:
+- id: 2B-16-60
+  description: Selbstverletzung/Suizid thematisiert ohne Präventionsrahmen/Hotlines
+    (16–18)
+  legal_basis: Phänomen/JuSchG §10b Abs.1
+  action: Inhalt anpassen oder Zugangsbeschränkung U18 implementieren
+  scope: content
+- id: 2B-16-61
+  description: Drogen-/Alkoholverharmlosung oder Gruppendruck ohne Distanzierung (16–18)
+  legal_basis: Phänomen/JuSchG §10b Abs.1
+  action: Werbung kindgerecht gestalten (eindeutig kennzeichnen, kein Druck)
+  scope: content
+- id: 2B-16-62
+  description: Parasoziale Bindungen/Creator-Druck (Monetarisierung/Nudging) ohne
+    Transparenz/Schutz (16–18)
+  legal_basis: Phänomen
+  action: Werbung kindgerecht gestalten (eindeutig kennzeichnen, kein Druck)
+  scope: both
+- id: 2B-16-63
+  description: Empfehlungssystem kumuliert belastende Inhalte (Filterblasen) ohne
+    Vielfalt-Kontrollen (16–18)
+  legal_basis: Phänomen
+  action: No-recommend oberhalb Profilalter, Vielfalt-Kontrollen implementieren
+  scope: both
+- id: 2B-16-64
+  description: Exzessives Nutzungsdesign (Streaks/Belohnungsloops) ohne Pausen-/Zeitlimit-Mechanismen
+    (16–18)
+  legal_basis: Phänomen
+  action: Nutzungsschutz implementieren (Zeitlimits, Pausen, Deaktivierung)
+  scope: platform
+default_action:
+  value: 1
+  label: PASS
+severity: medium
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 16-18 geeignet
+  '1': PASS - Geeignet für 16-18

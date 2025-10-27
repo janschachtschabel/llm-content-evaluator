@@ -1,0 +1,44 @@
+id: data_privacy_4b_part4
+name: 'Transparenz 4B - Teil 4: VLOP & Audit'
+description: Prüfung auf VLOP-Pflichten und Audit-Anforderungen
+dimension: data_privacy_4b_vlop_audit
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 4B-16
+  description: Audit-Vorgaben nicht umgesetzt/Kooperation fehlt
+  legal_basis: DSA Art. 40
+  action: Auditempfehlungen umsetzen, Kooperation sicherstellen
+  scope: platform
+- id: 4B-17
+  description: Datenzugang für Forschende unzureichend
+  legal_basis: DSA Art. 42
+  action: Prozess für Forschendendatenzugang etablieren
+  scope: platform
+- id: 4B-18
+  description: Melde-/Abhilfeverfahren nicht kindgerecht
+  legal_basis: JuSchG § 24a Abs. 2 Nr. 1
+  action: Meldesystem vereinfachen, max. zwei Klicks, kindgerechte Sprache
+  scope: both
+- id: 4B-19
+  description: Wesentliche Infos nicht altersgerecht erklärt
+  legal_basis: JuSchG § 24a Abs. 2 Nr. 8
+  action: Infoseiten mit Icons, Beispielen und einfacher Sprache ergänzen
+  scope: both
+- id: 4B-20
+  description: VSP ohne transparentes Meldesystem
+  legal_basis: AVMD-RL Art. 28b Abs. 3 lit. d
+  action: Niedrigschwellige Meldeoptionen implementieren
+  scope: platform
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: transparency
+labels:
+  '0': FAIL - VLOP/Audit unzureichend
+  '1': PASS - VLOP/Audit ausreichend

@@ -1,0 +1,141 @@
+id: criminal_law_gate
+name: "Strafrecht MASTER-GATE - Alle strafrechtlichen Prüfungen"
+description: "Kombinierte Prüfung aller strafrechtlichen Verstöße (1A: Per se illegal + 1B: Kontextabhängig)"
+dimension: criminal_law_compliance
+type: derived
+version: "1.0"
+
+output_range:
+  min: 0
+  max: 2
+  type: int
+  values: [0, 1, 2]
+
+# Dependencies: 1A (Hard Illegal) und 1B (Kontextabhängig)
+dependencies:
+  - criminal_law_1a_gate  # Per se illegal (Hard Illegal / AUA)
+  - criminal_law_1b_gate  # Kontextabhängig strafbar
+
+# Bewertungslogik: Worst-Case-Prinzip
+rules:
+  # LEGAL: Beide Gates bestanden
+  - conditions:
+      - dimension: criminal_law_1a_compliance
+        operator: "=="
+        value: 1
+      - dimension: criminal_law_1b_compliance
+        operator: "=="
+        value: 1
+    value: 2
+    label: "LEGAL - Kein Strafrechtsverstoß"
+    reasoning: "Alle strafrechtlichen Prüfungen bestanden - Inhalt ist rechtlich zulässig"
+    confidence: 0.95
+    gates_passed: true
+
+  # KONTEXTABHÄNGIG: 1A bestanden, 1B failed
+  - conditions:
+      - dimension: criminal_law_1a_compliance
+        operator: "=="
+        value: 1
+      - dimension: criminal_law_1b_compliance
+        operator: "=="
+        value: 0
+    value: 1
+    label: "KONTEXTABHÄNGIG - Prüfung erforderlich"
+    reasoning: "Hard Illegal ausgeschlossen, aber kontextabhängige Straftatbestände erkannt - Einzelfallprüfung erforderlich"
+    confidence: 0.90
+    gates_passed: false
+
+# Fallback: ILLEGAL (1A failed - per se illegal)
+default:
+  value: 0
+  label: "ILLEGAL - Strafrechtsverstoß"
+  reasoning: "Hard Illegal (1A) erkannt - Inhalt verstößt gegen deutsches Strafrecht und ist absolut unzulässig"
+  confidence: 0.95
+  gates_passed: false
+
+labels:
+  "0": "ILLEGAL - Per se Strafrechtsverstoß (Hard Illegal)"
+  "1": "KONTEXTABHÄNGIG - Prüfung erforderlich"
+  "2": "LEGAL - Kein Strafrechtsverstoß"
+
+metadata:
+  legal_framework: "StGB, JMStV §4, JuSchG §15, DSA Art. 18, NetzDG, UrhG, BDSG"
+  gate_type: "Master - Strafrecht (1A + 1B)"
+  action_required:
+    illegal: "Hard Delete & Report an Strafverfolgungsbehörden"
+    context_dependent: "Einzelfallprüfung / Moderation / Kontext-Review"
+    legal: "Keine Aktion erforderlich"
+  report_authority:
+    - "Strafverfolgungsbehörden"
+    - "BKA (bei CSAM)"
+    - "Verfassungsschutz (bei Terrorismus)"
+    - "Bundesnetzagentur (bei NetzDG)"
+  total_indicators_1a: 49
+  total_indicators_1b: 44
+  total_indicators: 93
+
+description_text: |
+  Das Strafrecht MASTER-GATE prüft umfassend auf alle strafrechtlichen Verstöße.
+  
+  **Funktion:** Vollständige strafrechtliche Compliance-Prüfung
+  **Output:** 3-stufige Bewertung (ILLEGAL / KONTEXTABHÄNGIG / LEGAL)
+  
+  **Struktur (93 Indikatoren gesamt):**
+  
+  **1A - Per se illegal (Hard Illegal / AUA) - 49 Indikatoren:**
+  - Verfassungsfeindliche Symbole & Propaganda (§§86, 86a StGB)
+  - Volksverhetzung & Hassrede (§130 StGB)
+  - Gewaltdarstellungen & Anleitungen (§§130a, 131 StGB)
+  - Kriegsverherrlichung & Menschenwürdeverletzungen
+  - Kinder-/Jugendpornografie (§§184b, 184c StGB) - CSAM
+  - Schwere Pornografie (§184a StGB) & Indizierung
+  - Terrorismus & Extremismus (§§129, 89a StGB)
+  - Staatsschutz & Cybergrooming (§§90a, 176b StGB)
+  - Pornografie an Minderjährige (§§184d-f StGB)
+  - Meldepflichten (DSA Art. 18, CSAM-RL)
+  
+  **1B - Kontextabhängig strafbar - 44 Indikatoren:**
+  - Beleidigung, üble Nachrede, Verleumdung (§§185-187 StGB)
+  - Erpressung, Bedrohung & Nötigung (§§240-241, 253 StGB)
+  - Urheberrechtsverletzungen (UrhG §§95a, 106 StGB)
+  - Datenschutzverletzungen (BDSG §42, §43)
+  - Wirtschaftsstraftaten (§§263, 263a, 299b StGB)
+  - Nachstellung (Stalking) (§238 StGB)
+  - Verletzung Vertraulichkeit des Wortes (§201 StGB)
+  - Persönlichkeitsrechtsverletzungen (§§22, 33 KUG)
+  - NetzDG-relevante Inhalte (§1 Abs.3 NetzDG)
+  - Schmähkritik & Satire-Grenzen
+  
+  **Bewertungslogik:**
+  - **ILLEGAL (0):** 1A-Verstoß erkannt → Sofortige Löschung + Meldung
+  - **KONTEXTABHÄNGIG (1):** 1A clean, aber 1B-Verstoß → Einzelfallprüfung
+  - **LEGAL (2):** Beide Gates clean → Keine Aktion
+  
+  **Aktionen je Kategorie:**
+  
+  **ILLEGAL (Hard Illegal):**
+  - Sofortige Entfernung ohne Vorwarnung
+  - Pflichtmeldung an Strafverfolgungsbehörden
+  - Bei CSAM: Sofortmeldung an BKA
+  - Bei Terrorismus: Meldung an Verfassungsschutz
+  - Account-Sperre bei schweren Verstößen
+  - Beweissicherung für Strafverfahren
+  
+  **KONTEXTABHÄNGIG:**
+  - Einzelfallprüfung durch Moderation
+  - Kontext-Review (Satire, Zitat, Berichterstattung?)
+  - Ggf. Verwarnung oder temporäre Sperre
+  - Dokumentation der Prüfentscheidung
+  - Meldung nur bei eindeutigem Verstoß
+  
+  **LEGAL:**
+  - Keine Aktion erforderlich
+  - Content bleibt online
+  - Keine Meldung nötig
+  
+  **Performance:**
+  Beide Gates (1A + 1B) werden parallel evaluiert.
+  - 1A: 10 Teilschemas parallel
+  - 1B: 8 Teilschemas parallel
+  - Gesamtlaufzeit: ~Max(1A-Zeit, 1B-Zeit)

@@ -1,0 +1,44 @@
+id: data_privacy_4b_part3
+name: 'Transparenz 4B - Teil 3: Moderation & Beschwerde'
+description: Prüfung auf Transparenz bei Moderation und Beschwerdesystem
+dimension: data_privacy_4b_moderation_complaints
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 4B-11
+  description: Begründungen für Moderationsmaßnahmen fehlen/unspezifisch
+  legal_basis: DSA Art. 17
+  action: Konkrete Begründungen automatisiert bereitstellen
+  scope: both
+- id: 4B-12
+  description: Internes Beschwerdemanagement unzureichend
+  legal_basis: DSA Art. 20
+  action: Beschwerdeprozess mit Fristen, Tracking und Antworten etablieren
+  scope: platform
+- id: 4B-13
+  description: Keine außergerichtliche Streitbeilegung
+  legal_basis: DSA Art. 21
+  action: Zugang zu Streitbeilegung kommunizieren (Links, Infos)
+  scope: platform
+- id: 4B-14
+  description: Transparenzberichte unvollständig/selten
+  legal_basis: DSA Art. 24
+  action: Berichte periodisch, verständlich und mit Kennzahlen veröffentlichen
+  scope: platform
+- id: 4B-15
+  description: VLOPs ohne Risikoanalyse/Recommender-Risikominderung
+  legal_basis: DSA Art. 34–35
+  action: Systemische Risiken analysieren, Minderungsplan umsetzen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: transparency
+labels:
+  '0': FAIL - Moderation/Beschwerde intransparent
+  '1': PASS - Moderation/Beschwerde transparent

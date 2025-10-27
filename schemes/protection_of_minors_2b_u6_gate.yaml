@@ -1,0 +1,82 @@
+id: protection_of_minors_2b_u6_gate
+name: "Jugendschutz 2B - Unter 6 Jahre Gate"
+description: "Prüfung auf entwicklungsbeeinträchtigende Inhalte für Kinder unter 6 Jahren"
+dimension: protection_of_minors_2b_u6
+type: derived
+version: "1.0"
+
+output_range:
+  min: 0
+  max: 1
+  type: int
+
+age_group: "0-6"
+age_restriction: "Nicht für Kinder unter 6 Jahren geeignet"
+
+# 10 Teilschemas (47 Indikatoren, max. 5 pro Teil)
+dependencies:
+  - protection_of_minors_2b_u6_part1    # Grundlagen (2B-0-01 bis 05)
+  - protection_of_minors_2b_u6_part2    # Technische Schutzmaßnahmen (2B-0-06 bis 08, 44, 45)
+  - protection_of_minors_2b_u6_part3    # Altersfreigaben (2B-0-09 bis 13)
+  - protection_of_minors_2b_u6_part4    # Angst & Gewalt (2B-0-14 bis 18)
+  - protection_of_minors_2b_u6_part5    # Gewalt & Sexualisierung (2B-0-19 bis 23)
+  - protection_of_minors_2b_u6_part6    # Nachahmung & Werbung (2B-0-24 bis 28)
+  - protection_of_minors_2b_u6_part7    # Interaktion & Nutzungsschutz (2B-0-29 bis 33)
+  - protection_of_minors_2b_u6_part8    # EU-Vorgaben (2B-0-34, 35, 32, 46, 47)
+  - protection_of_minors_2b_u6_part9    # KJM-Kriterien (2B-0-36 bis 39, 17)
+  - protection_of_minors_2b_u6_part10   # Bedrohungsszenarien (2B-0-40 bis 43)
+
+# UND-Verknüpfung: ALLE Teilprüfungen müssen bestanden werden
+rules:
+  - conditions:
+      - dimension: protection_of_minors_2b_u6_basics
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_u6_technical
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_u6_ratings
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_u6_fear_violence
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_u6_violence_sexual
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_u6_imitation_ads
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_u6_interaction
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_u6_eu
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_u6_kjm
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_u6_threats
+        operator: "=="
+        value: 1
+    value: 1
+    label: "GEEIGNET für U6"
+    reasoning: "Alle Prüfungen für Kinder unter 6 Jahren bestanden - keine Entwicklungsbeeinträchtigung festgestellt"
+    confidence: 0.90
+
+default:
+  value: 0
+  label: "NICHT GEEIGNET für U6"
+  reasoning: "Mindestens eine Prüfung für Kinder unter 6 Jahren nicht bestanden - Inhalt entwicklungsbeeinträchtigend"
+  confidence: 0.90
+
+labels:
+  "0": "NICHT GEEIGNET - Entwicklungsbeeinträchtigung für U6"
+  "1": "GEEIGNET - Keine Beeinträchtigung für U6"
+
+metadata:
+  legal_framework: "JMStV §5, JuSchG §10b, §14, DSA Art.28, AVMD-RL Art.6a"
+  age_group: "0-6 Jahre"
+  total_indicators: 47
+  parts_count: 10
+  action_required: "Zugangsbeschränkung U6 / Kids-Mode / PIN / Alterskennzeichnung"

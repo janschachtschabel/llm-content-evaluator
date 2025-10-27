@@ -1,0 +1,45 @@
+id: criminal_law_1a_part4
+name: 'Strafrecht 1A - Teil 4: Kriegsverherrlichung & Menschenwürde'
+description: Prüfung auf Kriegsverherrlichung und menschenwürdeverletzende Darstellungen
+  nach JMStV §4 und JuSchG §15
+dimension: criminal_law_1a_dignity
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 1A-17
+  description: Verherrlichung des Krieges
+  legal_basis: JMStV §4 Abs. 1 Nr. 7
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1A-18
+  description: Kriegsverherrlichende Trägermedien
+  legal_basis: JuSchG §15 Abs. 2 Nr. 2
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1A-19
+  description: Darstellung Sterbender/Leidender menschenwürdeverletzend
+  legal_basis: JMStV §4 Abs. 1 Nr. 8
+  action: Prüfen und bei Verstoß entfernen
+  scope: content
+- id: 1A-20
+  description: Realdarstellungen Sterbender ohne Berichtsinteresse
+  legal_basis: JuSchG §15 Abs. 2 Nr. 3
+  action: Prüfen und bei Verstoß entfernen
+  scope: content
+- id: 1A-21
+  description: Allgemeiner Verstoß gegen die Menschenwürde
+  legal_basis: JMStV §4 Abs. 1 Nr. 8
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: critical
+compliance_type: criminal_law
+labels:
+  '0': FAIL
+  '1': PASS

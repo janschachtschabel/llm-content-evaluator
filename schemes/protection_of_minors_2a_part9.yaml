@@ -1,0 +1,48 @@
+id: protection_of_minors_2a_part9
+name: 'Jugendschutz 2A - Teil 9: KJM & Beispiele'
+description: Prüfung KJM-Kriterien und pornografischer Beispielkonstellationen
+dimension: protection_of_minors_2a_kjm_examples
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_restriction: 18+ / AVS erforderlich
+gate_rules:
+- id: 2A-41
+  description: AVS-Prüfung nicht medienbruchfest (z. B. reine Self-Declaration/Soft-Matching)
+  legal_basis: KJM-Kriterien (technisch)
+  action: Prüfen und bei Verstoß entfernen
+  scope: platform
+- id: 2A-42
+  description: Keine regelmäßige Re-Verifikation/fehlendes Missbrauchs-/Weitergabemanagement
+    für AVS-Zugänge
+  legal_basis: KJM-Kriterien (organisatorisch)
+  action: Re-Verifikation und Missbrauchsmanagement implementieren
+  scope: platform
+- id: 2A-43
+  description: Angebot nicht korrekt für anerkannte Jugendschutzprogramme signalisiert
+    (Meta-Tags/Robots/Labeling)
+  legal_basis: KJM-Kriterien (Jugendschutzprog.)
+  action: Alterskennzeichnung/Jugendschutzprogramm-Signalisierung implementieren
+  scope: platform
+- id: 2A-44
+  description: Sexualisierte 'Teen/School'-Inszenierung mit volljährigen Darstellern
+    → 18+ ohne Zweifel an Volljährigkeit
+  legal_basis: JMStV §4 Abs.2 (Beispielkonstellation)
+  action: Altersverifikation sicherstellen (AVS implementieren)
+  scope: content
+- id: 2A-45
+  description: Pornografische Live-Streams/Cam-Sites ohne AVS-Session-Sicherung
+  legal_basis: JMStV §4 Abs.2 (Beispielkonstellation)
+  action: Altersverifikation sicherstellen (AVS implementieren)
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_endangering_content
+labels:
+  '0': FAIL - KJM-Verstöße / Pornografie ohne AVS
+  '1': PASS - KJM-konform / Keine Pornografie oder AVS vorhanden

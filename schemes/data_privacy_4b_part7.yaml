@@ -1,0 +1,54 @@
+id: data_privacy_4b_part7
+name: 'Transparenz 4B - Teil 7: Barrierefreiheit & Defaults'
+description: Prüfung auf Barrierefreiheit und transparente Defaults
+dimension: data_privacy_4b_accessibility_defaults
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 4B-31
+  description: Hilfecenter/Infos nicht klar/barrierefrei
+  legal_basis: DSA Art. 38
+  action: Hilfeseiten überarbeiten (Struktur, Barrierefreiheit, Konsistenz)
+  scope: both
+- id: 4B-32
+  description: Safety-by-Default-Einstellungen nicht transparent erläutert
+  legal_basis: JuSchG § 24a Abs. 2 Nr. 6
+  action: Wirkung der Defaults erklären, Tooltips bereitstellen
+  scope: platform
+- id: 4B-33
+  description: Intransparente Sichtbarkeits-/Kontakt-Defaults
+  legal_basis: JuSchG § 24a Abs. 2 Nr. 7 a–d
+  action: Privatsphäre-/Kontakt-Defaults klar kommunizieren, Anpassung anbieten
+  scope: platform
+- id: 4B-34
+  description: Transparenz zu Startleisten/Promotionslots fehlt
+  legal_basis: MStV § 70 Abs. 3
+  action: Kriterien für prominente Platzierungen offenlegen
+  scope: both
+- id: 4B-35
+  description: Einfluss vergüteter Inhalte auf Ranking nicht offengelegt
+  legal_basis: MStV § 74 Abs. 2
+  action: Kommerzielle Vereinbarungen deklarieren
+  scope: content
+- id: 4B-36
+  description: Kindgerechte Erklärungen zu Recommender/Melde/Complaint fehlen
+  legal_basis: DSA Art. 28 Abs. 1
+  action: Design und Texte für Minderjährige anpassen
+  scope: both
+- id: 4B-37
+  description: Kein prominenter Profiling-Off-Schalter für Kinderprofile
+  legal_basis: DSA Art. 27 Abs. 3 i.V.m. Art. 28 Abs. 2
+  action: Prominenten Umschalter 'ohne Profiling' implementieren
+  scope: platform
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: transparency
+labels:
+  '0': FAIL - Barrierefreiheit/Defaults intransparent
+  '1': PASS - Barrierefreiheit/Defaults transparent

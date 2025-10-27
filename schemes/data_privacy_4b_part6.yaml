@@ -1,0 +1,44 @@
+id: data_privacy_4b_part6
+name: 'Transparenz 4B - Teil 6: Vielfalt & Kinder'
+description: Prüfung auf Vielfalt, Partizipation und kindgerechte Transparenz
+dimension: data_privacy_4b_diversity_children
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 4B-26
+  description: Filterblasen ohne Vielfaltssignale für junge Zielgruppen
+  legal_basis: VN-KRK Art. 17
+  action: Empfehlungsvielfalt fördern, Diversity-Signale einbauen
+  scope: both
+- id: 4B-27
+  description: Kinder können sich nicht an Entscheidungen beteiligen
+  legal_basis: VN-KRK Art. 12
+  action: Feedback- und Mitwirkungsmechanismen schaffen
+  scope: both
+- id: 4B-28
+  description: KI-Inhalte als redaktionell präsentiert
+  legal_basis: MStV § 19 i.V.m. § 18 Abs. 3
+  action: KI-Generierung deutlich machen, Redaktionstrennung
+  scope: content
+- id: 4B-29
+  description: Schutz vor missbräuchlichen Meldungen fehlt
+  legal_basis: DSA Art. 23
+  action: Anti-Abuse-Prozess für Meldungen implementieren
+  scope: both
+- id: 4B-30
+  description: Werbebibliothek unvollständig/ohne Filter
+  legal_basis: DSA Art. 30
+  action: Ad Library vervollständigen, Such-/Filterfunktionen anbieten
+  scope: platform
+default_action:
+  value: 1
+  label: PASS
+severity: medium
+compliance_type: transparency
+labels:
+  '0': FAIL - Vielfalt/Kinder-Transparenz unzureichend
+  '1': PASS - Vielfalt/Kinder-Transparenz ausreichend

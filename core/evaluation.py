@@ -3,37 +3,16 @@
 from typing import Any, Dict, List, Optional, Union
 from loguru import logger
 import yaml
+import asyncio
+import os
 from pathlib import Path
 
-# Import enums directly to avoid circular imports
-from enum import Enum
-
-class ScaleType(str, Enum):
-    """Supported evaluation scale types."""
-    ORDINAL_RUBRIC = "ordinal_rubric"
-    CHECKLIST_ADDITIVE = "checklist_additive"
-    BINARY_GATE = "binary_gate"
-    DERIVED = "derived"
-
-class SelectionStrategy(str, Enum):
-    """Selection strategies for ordinal rubrics."""
-    FIRST_MATCH = "first_match"
-    BEST_FIT = "best_fit"
-    MANUAL = "manual"
-
-class AggregationStrategy(str, Enum):
-    """Aggregation strategies for scales."""
-    FIRST_MATCH = "first_match"
-    WEIGHTED_MEAN = "weighted_mean"
-    MIN = "min"
-    MAX = "max"
-    MEDIAN = "median"
-
-class MissingStrategy(str, Enum):
-    """Strategies for handling missing values."""
-    IGNORE = "ignore"
-    ZERO = "zero"
-    IMPUTE = "impute"
+from models.schemas import (
+    AggregationStrategy,
+    MissingStrategy,
+    ScaleType,
+    SelectionStrategy,
+)
 
 
 class EvaluationEngine:
@@ -42,6 +21,8 @@ class EvaluationEngine:
     def __init__(self, schemes_dir: str = "schemes"):
         self.schemes_dir = Path(schemes_dir)
         self.schemes: Dict[str, Dict[str, Any]] = {}
+        self.max_concurrent_llm_calls = int(os.getenv("MAX_CONCURRENT_LLM_CALLS", "20"))
+        logger.info(f"Concurrency limit: {self.max_concurrent_llm_calls} parallel LLM calls")
         self._load_schemes()
     
     def _load_schemes(self) -> None:
@@ -74,11 +55,42 @@ class EvaluationEngine:
             for scheme in self.schemes.values()
         ]
     
+    async def _run_with_concurrency_limit(
+        self,
+        tasks: List[asyncio.Task],
+        semaphore: Optional[asyncio.Semaphore] = None
+    ) -> List[Any]:
+        """
+        Run tasks with concurrency limit using a semaphore.
+        
+        Args:
+            tasks: List of asyncio tasks to execute
+            semaphore: Optional semaphore for limiting concurrency
+            
+        Returns:
+            List of results in the same order as input tasks
+        """
+        if semaphore is None:
+            semaphore = asyncio.Semaphore(self.max_concurrent_llm_calls)
+        
+        async def run_with_semaphore(task):
+            async with semaphore:
+                return await task
+        
+        # Wrap all tasks with semaphore
+        limited_tasks = [run_with_semaphore(task) for task in tasks]
+        
+        # Execute all tasks (semaphore limits actual concurrency)
+        return await asyncio.gather(*limited_tasks, return_exceptions=True)
+    
     async def evaluate_text(
-        self, 
-        text: str, 
+        self,
+        text: str,
         scheme_ids: List[str],
-        llm_client: Any
+        llm_client: Any,
+        model: str,
+        gates_passed: bool = True,
+        context_type: str = "content"
     ) -> Dict[str, Any]:
         """Evaluate text using specified schemes."""
         results = []
@@ -91,7 +103,7 @@ class EvaluationEngine:
                 continue
                 
             if scheme["type"] == ScaleType.BINARY_GATE:
-                result = await self._evaluate_binary_gate(text, scheme, llm_client)
+                result = await self._evaluate_binary_gate(text, scheme, llm_client, model, context_type)
                 results.append(result)
                 if result["value"] is False:
                     gates_passed = False
@@ -106,22 +118,39 @@ class EvaluationEngine:
                 "overall_label": "REJECTED"
             }
         
-        # Process other scale types
+        # Process other scale types in parallel
+        eval_tasks = []
+        scheme_order = []  # Track order for maintaining result sequence
+        
         for scheme_id in scheme_ids:
             scheme = self.schemes.get(scheme_id)
             if not scheme or scheme["type"] == ScaleType.BINARY_GATE:
                 continue
             
+            scheme_order.append(scheme_id)
             if scheme["type"] == ScaleType.ORDINAL_RUBRIC:
-                result = await self._evaluate_ordinal_rubric(text, scheme, llm_client)
+                eval_tasks.append(self._evaluate_ordinal_rubric(text, scheme, llm_client, model))
             elif scheme["type"] == ScaleType.CHECKLIST_ADDITIVE:
-                result = await self._evaluate_checklist_additive(text, scheme, llm_client)
+                eval_tasks.append(self._evaluate_checklist_additive(text, scheme, llm_client, model))
             elif scheme["type"] == ScaleType.DERIVED:
-                result = await self._evaluate_derived(text, scheme, llm_client)
-            else:
-                continue
-                
-            results.append(result)
+                eval_tasks.append(self._evaluate_derived(text, scheme, llm_client, model))
+        
+        # Execute all evaluations in parallel (with concurrency limit)
+        if eval_tasks:
+            parallel_results = await self._run_with_concurrency_limit(eval_tasks)
+            
+            # Handle results and potential exceptions
+            for i, result in enumerate(parallel_results):
+                if isinstance(result, Exception):
+                    logger.error(f"Evaluation failed for {scheme_order[i]}: {result}")
+                    results.append({
+                        "scheme_id": scheme_order[i],
+                        "dimension": "unknown",
+                        "value": None,
+                        "na_reason": f"Evaluation error: {str(result)}"
+                    })
+                else:
+                    results.append(result)
         
         # Calculate overall metrics
         overall_score, overall_label = self._calculate_overall(results)
@@ -132,17 +161,19 @@ class EvaluationEngine:
         }
     
     async def _evaluate_binary_gate(
-        self, 
-        text: str, 
-        scheme: Dict[str, Any], 
-        llm_client: Any
+        self,
+        text: str,
+        scheme: Dict[str, Any],
+        llm_client: Any,
+        model: str,
+        context_type: str = "content",
     ) -> Dict[str, Any]:
         """Evaluate binary gate (KO criteria)."""
-        prompt = self._build_gate_prompt(text, scheme)
+        prompt = self._build_gate_prompt(text, scheme, context_type)
         
         try:
             response = await llm_client.chat.completions.create(
-                model="gpt-4o-mini",
+                model=model,
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.1
             )
@@ -209,8 +240,11 @@ class EvaluationEngine:
                     criteria_results[aspect_key] = {
                         "passed": aspect_passed,
                         "reasoning": aspect_reasoning,
-                        "rule": rule.get('reason', rule.get('condition', 'Unbekannter Aspekt')),
-                        "severity": rule.get('severity', 'unbekannt')
+                        "rule": rule.get('description', 'Unbekannter Aspekt'),
+                        "severity": rule.get('severity', 'unbekannt'),
+                        "legal_basis": rule.get('legal_basis'),
+                        "action": rule.get('action'),
+                        "rule_id": rule.get('id')
                     }
             
             # Enhanced reasoning for binary gates - extract only main reasoning
@@ -228,6 +262,20 @@ class EvaluationEngine:
             
             enhanced_reasoning = f"**Ergebnis:** {'BESTANDEN' if passed else 'NICHT BESTANDEN'}\n\n**Begründung:** {main_reasoning}"
             
+            # Collect legal violations for failed gates
+            legal_violations = []
+            if not passed and gate_rules:
+                for i, rule in enumerate(gate_rules, 1):
+                    aspect_key = f"aspekt_{i}"
+                    if aspect_key in criteria_results and not criteria_results[aspect_key].get('passed', True):
+                        violation = {
+                            "rule_id": rule.get('id'),
+                            "description": rule.get('description'),
+                            "legal_basis": rule.get('legal_basis'),
+                            "action": rule.get('action')
+                        }
+                        legal_violations.append(violation)
+            
             return {
                 "scheme_id": scheme["id"],
                 "dimension": scheme["dimension"],
@@ -239,7 +287,8 @@ class EvaluationEngine:
                     "type": "binary_gate",
                     "description": scheme.get("description", ""),
                     "criteria": scheme.get("criteria", ""),
-                    "total_aspects": len(gate_rules)
+                    "total_aspects": len(gate_rules),
+                    "legal_violations": legal_violations if legal_violations else None
                 },
                 "confidence": 0.9 if passed is not None else 0.6
             }
@@ -253,17 +302,18 @@ class EvaluationEngine:
             }
     
     async def _evaluate_ordinal_rubric(
-        self, 
-        text: str, 
-        scheme: Dict[str, Any], 
-        llm_client: Any
+        self,
+        text: str,
+        scheme: Dict[str, Any],
+        llm_client: Any,
+        model: str,
     ) -> Dict[str, Any]:
         """Evaluate using ordinal rubric with anchors."""
         prompt = self._build_rubric_prompt(text, scheme)
         
         try:
             response = await llm_client.chat.completions.create(
-                model="gpt-4o-mini",
+                model=model,
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.2
             )
@@ -331,17 +381,18 @@ class EvaluationEngine:
             }
     
     async def _evaluate_checklist_additive(
-        self, 
-        text: str, 
-        scheme: Dict[str, Any], 
-        llm_client: Any
+        self,
+        text: str,
+        scheme: Dict[str, Any],
+        llm_client: Any,
+        model: str,
     ) -> Dict[str, Any]:
         """Evaluate using additive checklist."""
         prompt = self._build_checklist_prompt(text, scheme)
         
         try:
             response = await llm_client.chat.completions.create(
-                model="gpt-4o-mini",
+                model=model,
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.1
             )
@@ -364,7 +415,7 @@ Erstellen Sie eine zusammenhängende, ausführliche Bewertung (2-3 Sätze), die 
             
             try:
                 reasoning_response = await llm_client.chat.completions.create(
-                    model="gpt-4o-mini",
+                    model=model,
                     messages=[{"role": "user", "content": reasoning_prompt}],
                     temperature=0.3
                 )
@@ -413,10 +464,12 @@ Erstellen Sie eine zusammenhängende, ausführliche Bewertung (2-3 Sätze), die 
             }
     
     async def _evaluate_derived(
-        self, 
+        self,
         text: str,
         scheme: Dict[str, Any],
-        llm_client: Any
+        llm_client: Any,
+        model: str,
+        context_type: str = "content",
     ) -> Dict[str, Any]:
         """Evaluate derived metric based on dependency schemas."""
         try:
@@ -430,23 +483,42 @@ Erstellen Sie eine zusammenhängende, ausführliche Bewertung (2-3 Sätze), die 
                     "na_reason": "No dependencies defined"
                 }
             
-            # Evaluate all dependency schemas
-            dependency_results = []
+            # Evaluate all dependency schemas in parallel
+            dependency_tasks = []
+            dependency_order = []
+            
             for dep_scheme_id in dependencies:
                 dep_scheme = self.schemes.get(dep_scheme_id)
                 if not dep_scheme:
                     continue
-                    
+                
+                dependency_order.append(dep_scheme_id)
                 if dep_scheme["type"] == ScaleType.CHECKLIST_ADDITIVE:
-                    result = await self._evaluate_checklist_additive(text, dep_scheme, llm_client)
+                    dependency_tasks.append(self._evaluate_checklist_additive(text, dep_scheme, llm_client, model))
                 elif dep_scheme["type"] == ScaleType.ORDINAL_RUBRIC:
-                    result = await self._evaluate_ordinal_rubric(text, dep_scheme, llm_client)
+                    dependency_tasks.append(self._evaluate_ordinal_rubric(text, dep_scheme, llm_client, model))
                 elif dep_scheme["type"] == ScaleType.BINARY_GATE:
-                    result = await self._evaluate_binary_gate(text, dep_scheme, llm_client)
-                else:
-                    continue
-                    
-                dependency_results.append(result)
+                    dependency_tasks.append(self._evaluate_binary_gate(text, dep_scheme, llm_client, model, context_type))
+                elif dep_scheme["type"] == ScaleType.DERIVED:
+                    # Recursively evaluate nested derived schemas
+                    dependency_tasks.append(self._evaluate_derived(text, dep_scheme, llm_client, model, context_type))
+            
+            # Execute all dependency evaluations in parallel (with concurrency limit)
+            dependency_results = []
+            if dependency_tasks:
+                parallel_dep_results = await self._run_with_concurrency_limit(dependency_tasks)
+                
+                for i, result in enumerate(parallel_dep_results):
+                    if isinstance(result, Exception):
+                        logger.error(f"Dependency evaluation failed for {dependency_order[i]}: {result}")
+                        dependency_results.append({
+                            "scheme_id": dependency_order[i],
+                            "dimension": "unknown",
+                            "value": None,
+                            "na_reason": f"Dependency error: {str(result)}"
+                        })
+                    else:
+                        dependency_results.append(result)
             
             # Apply derivation rules
             rules = scheme.get("rules", [])
@@ -501,7 +573,60 @@ Erstellen Sie eine zusammenhängende, ausführliche Bewertung (2-3 Sätze), die 
                                     "value": dep.get("value"),
                                     "label": dep.get("label"),
                                     "weight": weights.get(dep.get("dimension"), 1.0),
-                                    "reasoning": dep.get("reasoning", "").split('\n')[0] if dep.get("reasoning") else "Keine Begründung verfügbar"
+                                    "confidence": dep.get("confidence"),
+                                    "reasoning": dep.get("reasoning"),
+                                    "criteria": dep.get("criteria"),
+                                    "scale_info": dep.get("scale_info")
+                                }
+                                for dep in dependency_results if dep.get("value") is not None
+                            }
+                        }
+                    elif rule["value"] == "sum":
+                        # Calculate sum of all dependency values (for split schemas)
+                        total_sum = 0
+                        count = 0
+                        
+                        for dep_result in dependency_results:
+                            value = dep_result.get("value")
+                            if value is not None and isinstance(value, (int, float)):
+                                total_sum += value
+                                count += 1
+                        
+                        # Build reasoning for sum aggregation
+                        reasoning_parts = [f"**Gesamtsumme:** {total_sum:.2f} (aus {count} Teilschemas)\n"]
+                        reasoning_parts.append("**Einzelbeiträge:**")
+                        for dep in dependency_results:
+                            if dep.get("value") is not None:
+                                scheme_id = dep.get("scheme_id", "unknown")
+                                value = dep.get("value")
+                                label = dep.get("label", "")
+                                reasoning_parts.append(f"- {scheme_id}: {value} ({label})")
+                        
+                        reasoning_parts.append(f"\n**Berechnung:** Summe aller Teilwerte = {total_sum:.2f}")
+                        detailed_reasoning = "\n".join(reasoning_parts)
+                        
+                        return {
+                            "scheme_id": scheme["id"],
+                            "dimension": scheme["dimension"],
+                            "value": round(total_sum, 2),
+                            "label": self._score_to_label(total_sum, scheme),
+                            "reasoning": detailed_reasoning,
+                            "confidence": rule.get("confidence", 0.9),
+                            "scale_info": {
+                                "type": "derived",
+                                "method": "sum",
+                                "dependencies": len(dependencies),
+                                "components": count
+                            },
+                            "criteria": {
+                                dep["scheme_id"]: {
+                                    "dimension": dep["dimension"],
+                                    "value": dep.get("value"),
+                                    "label": dep.get("label"),
+                                    "confidence": dep.get("confidence"),
+                                    "reasoning": dep.get("reasoning"),
+                                    "criteria": dep.get("criteria"),
+                                    "scale_info": dep.get("scale_info")
                                 }
                                 for dep in dependency_results if dep.get("value") is not None
                             }
@@ -529,7 +654,10 @@ Erstellen Sie eine zusammenhängende, ausführliche Bewertung (2-3 Sätze), die 
                                     "value": dep.get("value"),
                                     "label": dep.get("label"),
                                     "passed": dep.get("value") == 1 if isinstance(dep.get("value"), int) else True,
-                                    "reasoning": dep.get("reasoning", "").split('\n')[0] if dep.get("reasoning") else "Keine Begründung verfügbar"
+                                    "confidence": dep.get("confidence"),
+                                    "reasoning": dep.get("reasoning"),
+                                    "criteria": dep.get("criteria"),
+                                    "scale_info": dep.get("scale_info")
                                 }
                                 for dep in dependency_results if dep.get("value") is not None
                             }
@@ -558,7 +686,10 @@ Erstellen Sie eine zusammenhängende, ausführliche Bewertung (2-3 Sätze), die 
                         "value": dep.get("value"),
                         "label": dep.get("label"),
                         "passed": dep.get("value") == 1 if isinstance(dep.get("value"), int) else True,
-                        "reasoning": dep.get("reasoning", "").split('\n')[0] if dep.get("reasoning") else "Keine Begründung verfügbar"
+                        "confidence": dep.get("confidence"),
+                        "reasoning": dep.get("reasoning"),
+                        "criteria": dep.get("criteria"),
+                        "scale_info": dep.get("scale_info")
                     }
                     for dep in dependency_results if dep.get("value") is not None
                 }
@@ -594,97 +725,217 @@ Erstellen Sie eine zusammenhängende, ausführliche Bewertung (2-3 Sätze), die 
     def _build_compliance_reasoning(self, dependency_results, rule):
         """Build detailed reasoning for compliance-based derived schemas."""
         passed_count = 0
-        failed_gates = []
+        failed_count = 0
+        failed_gates_details = []
         
-        reasoning_parts = [f"**Rechtliche Compliance-Prüfung:**\n"]
-        
+        # Count passed/failed and collect details of failed gates
         for dep in dependency_results:
             gate_name = dep.get("scheme_id", "unknown")
             value = dep.get("value")
             label = dep.get("label", "")
+            reasoning = dep.get("reasoning", "")
+            criteria = dep.get("criteria", {})
+            scale_info = dep.get("scale_info", {})
             
             if value == 1:
                 passed_count += 1
-                reasoning_parts.append(f"✅ {gate_name}: BESTANDEN ({label})")
             else:
-                failed_gates.append(gate_name)
-                reasoning_parts.append(f"❌ {gate_name}: NICHT BESTANDEN ({label})")
+                failed_count += 1
+                
+                # Extract meaningful reasoning from gate
+                reasoning_lines = [line.strip() for line in reasoning.split('\n') if line.strip()]
+                # Get "Begründung:" section (usually after "**Ergebnis:**")
+                begründung_text = ""
+                for i, line in enumerate(reasoning_lines):
+                    if line.startswith('**Begründung:**'):
+                        # Take this line and the next few sentences (up to 3-4 lines)
+                        begründung_text = ' '.join(reasoning_lines[i:i+4])
+                        break
+                
+                if not begründung_text and len(reasoning_lines) > 1:
+                    # Fallback: take lines after first line
+                    begründung_text = ' '.join(reasoning_lines[1:4])
+                
+                # Clean up markdown formatting
+                begründung_text = begründung_text.replace('**Begründung:**', '').replace('**', '').strip()
+                
+                # Extract failed criteria details for binary gates
+                failed_aspects = []
+                if criteria and isinstance(criteria, dict):
+                    for aspect_key, aspect_data in criteria.items():
+                        if isinstance(aspect_data, dict) and not aspect_data.get('passed', True):
+                            aspect_reason = aspect_data.get('reasoning', '')
+                            if aspect_reason:
+                                failed_aspects.append(aspect_reason)
+                
+                # Extract legal violations from scale_info
+                legal_violations = scale_info.get('legal_violations', []) if scale_info else []
+                
+                # Build structured details
+                gate_details = {
+                    "name": gate_name,
+                    "label": label,
+                    "reasoning": begründung_text[:300] if begründung_text else "Keine Begründung verfügbar",
+                    "failed_aspects": failed_aspects[:3],  # Max 3 failed aspects
+                    "legal_violations": legal_violations,
+                    "type": scale_info.get("type", "unknown")
+                }
+                failed_gates_details.append(gate_details)
         
-        if failed_gates:
-            reasoning_parts.append(f"\n**Ergebnis:** NON_COMPLIANCE - {len(failed_gates)} von {len(dependency_results)} Prüfungen nicht bestanden")
-            reasoning_parts.append(f"**Fehlgeschlagene Gates:** {', '.join(failed_gates)}")
+        reasoning_parts = []
+        
+        # Summary
+        if failed_count > 0:
+            reasoning_parts.append(f"**Ergebnis:** {failed_count} von {len(dependency_results)} Prüfungen nicht bestanden")
+            reasoning_parts.append(f"\n**Kritische Verstöße:**\n")
+            
+            # List each failed gate with detailed reasoning
+            for gate in failed_gates_details:
+                reasoning_parts.append(f"❌ **{gate['name']}** ({gate['label']})")
+                reasoning_parts.append(f"   {gate['reasoning']}")
+                
+                # Add legal violations if available (for binary gates)
+                if gate.get('legal_violations'):
+                    for violation in gate['legal_violations']:
+                        reasoning_parts.append(f"\n   **Verstoß:** {violation.get('rule_id')} - {violation.get('description')}")
+                        if violation.get('legal_basis'):
+                            reasoning_parts.append(f"   **Rechtsgrundlage:** {violation.get('legal_basis')}")
+                        if violation.get('action'):
+                            reasoning_parts.append(f"   **Maßnahme:** {violation.get('action')}")
+                
+                # Add failed aspects if available (for binary gates without legal violations)
+                elif gate.get('failed_aspects'):
+                    reasoning_parts.append(f"\n   **Fehlgeschlagene Aspekte:**")
+                    for aspect in gate['failed_aspects']:
+                        reasoning_parts.append(f"   • {aspect}")
+                
+                reasoning_parts.append("")  # Empty line between gates
+            
+            reasoning_parts.append(f"**Fazit:** {rule.get('reasoning', 'Compliance nicht erfüllt')}")
         else:
-            reasoning_parts.append(f"\n**Ergebnis:** COMPLIANCE - Alle {len(dependency_results)} rechtlichen Prüfungen bestanden")
+            reasoning_parts.append(f"**Ergebnis:** Alle {len(dependency_results)} rechtlichen Prüfungen bestanden")
+            reasoning_parts.append(f"\n**Fazit:** {rule.get('reasoning', 'Volle Compliance erreicht')}")
         
-        reasoning_parts.append(f"\n**Fazit:** {rule.get('reasoning', 'Compliance-Prüfung abgeschlossen')}")
         return "\n".join(reasoning_parts)
     
-    def _build_gate_prompt(self, text: str, scheme: Dict[str, Any]) -> str:
-        """Build prompt for binary gate evaluation."""
-        # Extract gate rules for structured evaluation
-        gate_rules = scheme.get('gate_rules', [])
+    def _build_gate_prompt(self, text: str, scheme: Dict[str, Any], context_type: str = "content") -> str:
+        """Build prompt for binary gate evaluation.
+        
+        Args:
+            text: Text to evaluate
+            scheme: Schema definition
+            context_type: Evaluation context - "content" (default), "platform", or "both"
+                         "content": Only evaluate content-related rules (UGC, general content)
+                         "platform": Evaluate all rules including platform/metadata requirements
+                         "both": Evaluate all rules
+        """
+        # Extract and filter gate rules based on scope
+        all_gate_rules = scheme.get('gate_rules', [])
+        gate_rules = []
+        
+        for rule in all_gate_rules:
+            rule_scope = rule.get('scope', 'both')  # Default to 'both' if not specified
+            
+            # Filter rules based on context_type
+            if context_type == "content" and rule_scope in ["content", "both"]:
+                gate_rules.append(rule)
+            elif context_type == "platform":
+                gate_rules.append(rule)  # Include all rules for platform evaluation
+            elif context_type == "both":
+                gate_rules.append(rule)  # Include all rules
+        
         rules_text = ""
         if gate_rules:
-            rules_text = "\n\nPrüfen Sie jeden der folgenden Aspekte einzeln:\n"
+            rules_text = "\n\n**Prüfen Sie jeden der folgenden Aspekte einzeln:**\n"
             for i, rule in enumerate(gate_rules, 1):
-                rules_text += f"{i}. {rule.get('reason', rule.get('condition', 'Unbekannter Aspekt'))} (Schwere: {rule.get('severity', 'unbekannt')})\n"
-            rules_text += "\nGeben Sie für jeden Aspekt eine Bewertung ab:"
+                rule_desc = rule.get('description', 'Unbekannter Aspekt')
+                rule_id = rule.get('id', f'Regel-{i}')
+                legal_basis = rule.get('legal_basis', 'N/A')
+                rule_scope = rule.get('scope', 'both')
+                scope_note = f" [Scope: {rule_scope}]" if context_type == "both" else ""
+                rules_text += f"\nASPEKT {i} ({rule_id}){scope_note}:\n"
+                rules_text += f"  Beschreibung: {rule_desc}\n"
+                rules_text += f"  Rechtsgrundlage: {legal_basis}\n"
+            
+            context_note = ""
+            if context_type == "content":
+                context_note = "\n**Kontext:** Sie bewerten NUR den Inhalt selbst. Metadaten wie Alterskennzeichnungen, Plattform-Features sind NICHT relevant."
+            elif context_type == "platform":
+                context_note = "\n**Kontext:** Sie bewerten den Inhalt UND die Plattform/Metadaten (Kennzeichnungen, technische Maßnahmen)."
+            
+            rules_text += f"{context_note}\n**Bewertungslogik:** Antworten Sie mit NEIN, wenn der Text KEINEN Verstoß enthält (Gate bestanden). Antworten Sie mit JA, wenn ein Verstoß vorliegt (Gate nicht bestanden)."
         
         return f"""
-Prüfen Sie diesen Text für: {scheme['description']}
+Sie sind ein Experte für {scheme.get('dimension', 'Content Compliance')}.
 
-Text: {text}
+**Aufgabe:** {scheme['description']}
 
-Prüfkriterien: {scheme.get('criteria', 'Prüfen Sie, ob der Inhalt die Gate-Anforderungen erfüllt')}
+**Zu prüfender Text:**
+{text}
+
+**Prüfkriterien:**
+{scheme.get('criteria', 'Prüfen Sie, ob der Inhalt die Gate-Anforderungen erfüllt')}
 {rules_text}
 
-Geben Sie Ihre Bewertung in diesem Format an:
-RESULT: [JA/NEIN]
-REASONING: [Kurze Erklärung der Entscheidung auf Deutsch in maximal 4-5 Sätzen]
+**Antwortformat:**
 
-{f"Bewerten Sie jeden Aspekt einzeln mit ASPEKT_[NUMMER]: [JA/NEIN] - [Begründung]" if gate_rules else ""}
+RESULT: [JA/NEIN] (JA = alle Aspekte bestanden, NEIN = mind. ein Verstoß)
+REASONING: [Präzise Begründung in 2-3 Sätzen, die auf den konkreten Text Bezug nimmt]
 
-Beispiel:
+{f"\nFür jeden Aspekt:\nASPEKT_[NUMMER]: [NEIN/JA] - [Konkrete Begründung basierend auf dem Text]\n\n**Wichtig:** NEIN bedeutet 'kein Verstoß' (bestanden), JA bedeutet 'Verstoß festgestellt' (nicht bestanden)." if gate_rules else ""}
+
+**Beispiel:**
 RESULT: NEIN
-REASONING: Der Text enthält unangemessene Inhalte, die gegen Jugendschutzrichtlinien verstoßen.
-{f"ASPEKT_1: NEIN - Verstößt gegen § 130 StGB (Volksverhetzung)" if gate_rules else ""}
+REASONING: Der Text beschreibt eine brutale Kampfszene mit expliziter Gewaltdarstellung, die für die Zielgruppe ungeeignet ist.
+{f"ASPEKT_1: JA - Die dargestellte Gewalt überschreitet die Altersfreigabe-Grenzen gemäß JuSchG §14." if gate_rules else ""}
 """
     
     def _build_rubric_prompt(self, text: str, scheme: Dict[str, Any]) -> str:
         """Build prompt for ordinal rubric evaluation."""
+        anchors = scheme.get('anchors', [])
         anchors_text = "\n".join([
-            f"Level {anchor['value']}: {anchor['label']} - {anchor['description']}"
-            for anchor in scheme.get('anchors', [])
+            f"**Level {anchor['value']}:** {anchor['label']}\n  Beschreibung: {anchor['description']}"
+            for anchor in anchors
         ])
         
         return f"""
-Bewerten Sie diesen Text anhand der folgenden Rubrik für {scheme['dimension']}:
+Sie sind ein Experte für {scheme.get('dimension', 'Content Evaluation')}.
+
+**Aufgabe:** Bewerten Sie den Text anhand der folgenden Rubrik:
 
 {anchors_text}
 
-Text: {text}
+**Zu bewertender Text:**
+{text}
 
-Geben Sie Ihre Bewertung in diesem Format an:
+**Anweisungen:**
+1. Lesen Sie den Text sorgfältig
+2. Vergleichen Sie ihn mit allen Rubrik-Levels
+3. Wählen Sie das Level, das am besten passt
+4. Begründen Sie Ihre Wahl präzise mit Bezug zum Text
+
+**Antwortformat:**
 SCORE: [Level-Nummer]
 LABEL: [Level-Bezeichnung]
-REASONING: [Kurze Erklärung auf Deutsch in maximal 4-5 Sätzen, warum dieses Level gewählt wurde]
+REASONING: [Präzise Begründung in 2-3 Sätzen, die auf konkrete Textstellen Bezug nimmt]
 
-Beispiel:
+**Beispiel:**
 SCORE: 2
 LABEL: Ausreichend
-REASONING: Der Text zeigt einige Hinweise auf die Kriterien, aber es fehlt an Tiefe und Vollständigkeit.
+REASONING: Der Text zeigt einige relevante Aspekte, jedoch fehlt es an Detailtiefe und vollständiger Argumentation.
 """
     
     def _build_checklist_prompt(self, text: str, scheme: Dict[str, Any]) -> str:
         """Build prompt for checklist evaluation."""
         items_text = []
         for i, item in enumerate(scheme.get('items', []), 1):
-            item_text = f"{i}. {item['prompt']} (ID: {item['id']}, Weight: {item['weight']})\n"
+            item_text = f"\n**Kriterium {i}: {item['id']}** (Gewicht: {item['weight']})\n"
+            item_text += f"Frage: {item['prompt']}\n"
             
             # Add scale information from YAML
             values = item.get('values', {})
             if values:
-                item_text += "   Bewertungsskala:\n"
+                item_text += "\nBewertungsskala:\n"
                 # Filter and sort only numeric keys first
                 numeric_items = [(k, v) for k, v in values.items() if isinstance(k, int) and v is not None]
                 for level, value_data in sorted(numeric_items):
@@ -692,27 +943,35 @@ REASONING: Der Text zeigt einige Hinweise auf die Kriterien, aber es fehlt an Ti
                         # New format with score and description
                         score = value_data.get('score', 0)
                         description = value_data.get('description', f'Level {level}')
-                        item_text += f"   {level}: {score} - {description}\n"
+                        item_text += f"  Level {level} ({score} Punkte): {description}\n"
                     else:
                         # Old format with just numeric value
-                        item_text += f"   {level}: {value_data} - Level {level}\n"
+                        item_text += f"  Level {level}: {value_data} Punkte\n"
             items_text.append(item_text)
         
         return f"""
-Bewerten Sie diesen Text anhand der folgenden Checkliste für {scheme['dimension']}:
+Sie sind ein Experte für {scheme.get('dimension', 'Content Evaluation')}.
+
+**Aufgabe:** Bewerten Sie den Text systematisch anhand der folgenden Kriterien:
 
 {''.join(items_text)}
 
-Text: {text}
+**Zu bewertender Text:**
+{text}
 
-Für jedes Kriterium geben Sie Ihre Bewertung in diesem exakten Format an:
-[KRITERIUM_ID]: [LEVEL_NUMMER] - [Kurze Begründung auf Deutsch]
+**Anweisungen:**
+1. Bewerten Sie jedes Kriterium einzeln
+2. Wählen Sie das passende Level basierend auf dem Text
+3. Begründen Sie jede Bewertung präzise
 
-Beispiel:
-perspektivenvielfalt: 1 - Es wird nur eine Perspektive dargestellt
-neutrale_beschreibung: 2 - Enthält einige voreingenommene Elemente
+**Antwortformat (für jedes Kriterium):**
+[KRITERIUM_ID]: [LEVEL_NUMMER] - [Konkrete Begründung mit Textbezug]
 
-Nach der Bewertung aller Kriterien geben Sie eine kurze Zusammenfassung der Gesamtbewertung.
+**Beispiel:**
+perspektivenvielfalt: 1 - Der Text präsentiert ausschließlich die Regierungsperspektive, alternative Sichtweisen fehlen.
+neutrale_beschreibung: 2 - Weitgehend neutral, jedoch mit vereinzelten wertenden Adjektiven wie "umstritten".
+
+**Abschließend:** Geben Sie eine Zusammenfassung der Gesamtbewertung in 2-3 Sätzen.
 """
     
     def _match_first_anchor(self, content: str, scheme: Dict[str, Any]) -> Dict[str, Any]:
@@ -907,12 +1166,22 @@ Nach der Bewertung aller Kriterien geben Sie eine kurze Zusammenfassung der Gesa
                     "reasoning": "No evaluation found"
                 }
         
-        # Calculate base score (0-1 range)
-        base_score = weighted_score / total_weight if total_weight > 0 else 0
+        # Calculate weighted average score across all items
+        items = scheme.get('items', [])
+        total_weighted_score = 0
+        total_weight = 0
         
-        # Apply scale factor for normalization (e.g., 0-1 to 0-5)
+        for item in items:
+            item_id = item['id']
+            if item_id in criterion_results:
+                score = criterion_results[item_id]['normalized_score']
+                weight = item.get('weight', 1.0)
+                total_weighted_score += score * weight
+                total_weight += weight
+        
+        average_score = total_weighted_score / total_weight if total_weight > 0 else 0
         scale_factor = scheme.get('aggregator', {}).get('params', {}).get('scale_factor', 1.0)
-        final_score = base_score * scale_factor
+        final_score = average_score
         
         return final_score, criterion_results
     

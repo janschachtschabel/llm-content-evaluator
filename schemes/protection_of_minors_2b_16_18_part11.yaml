@@ -1,0 +1,51 @@
+id: protection_of_minors_2b_16_18_part11
+name: 'Jugendschutz 2B-16-18 - Teil 11: Zeitsteuerung & DSA'
+description: Prüfung von Zeitsteuerung und DSA-Anforderungen für Jugendliche 16-18
+  Jahre
+dimension: protection_of_minors_2b_16_18_timing_dsa
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 16-18
+age_label: Nicht geeignet für Jugendliche unter 18 Jahren
+gate_rules:
+- id: 2B-16-50
+  description: Fehlende/inkonsistente Plattform-Kennzeichnung/Altersdarstellung für
+    16–18-Inhalte
+  legal_basis: JuSchG §14a
+  action: Online-Kennzeichnung ergänzen (ab 16)
+  scope: platform
+- id: 2B-16-51
+  description: Medium nicht freigegeben/bewertet (FSK/USK/FSF) obwohl entwicklungsbeeinträchtigend
+    (16–18)
+  legal_basis: JuSchG §18 Abs.8
+  action: Prüfung durch FSK/USK/FSF durchführen lassen
+  scope: platform
+- id: 2B-16-52
+  description: Hauptparameter der Empfehlungssysteme nicht verständlich offengelegt
+    (U18-relevant)
+  legal_basis: DSA Art.27 Abs.1
+  action: Prüfen und bei Verstoß entfernen
+  scope: platform
+- id: 2B-16-53
+  description: Keine nutzerfreundlichen Optionen zur Modifikation der Empfehlungssysteme
+    (Profile U18)
+  legal_basis: DSA Art.27 Abs.3
+  action: Prüfen und bei Verstoß entfernen
+  scope: platform
+- id: 2B-16-54
+  description: Personalisierte Werbung an Minderjährige nicht wirksam unterbunden
+  legal_basis: DSA Art.28 Abs.2
+  action: Werbung kindgerecht gestalten (eindeutig kennzeichnen, kein Druck)
+  scope: platform
+default_action:
+  value: 1
+  label: PASS
+severity: medium
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 16-18 geeignet
+  '1': PASS - Geeignet für 16-18

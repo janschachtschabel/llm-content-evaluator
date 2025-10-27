@@ -1,0 +1,83 @@
+id: protection_of_minors_2b_16_18_part8
+name: 'Jugendschutz 2B-16-18 - Teil 8: Elternkontrollen & EU'
+description: Prüfung von Elternkontrollen und EU-Vorgaben für Jugendliche 16-18 Jahre
+dimension: protection_of_minors_2b_16_18_parental_eu
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 16-18
+age_label: Nicht geeignet für Jugendliche unter 18 Jahren
+gate_rules:
+- id: 2B-16-35
+  description: Fehlende geeignete/verhältnismäßige Minderjährigenschutz-Voreinstellungen
+    (Default-Sichtbarkeit/Autoplay/DMs) (16–18)
+  legal_basis: DSA Art.28 Abs.1
+  action: Kinderschutzmaßnahmen implementieren (Chats moderieren/sperren)
+  scope: platform
+  trigger_keywords:
+    - voreinstellung
+    - default
+    - autoplay
+    - sichtbarkeit
+    - standardmäßig aktiviert
+  not_trigger_keywords:
+    - gewalt
+    - kampf
+    - brutal
+    - kriegsbild
+    - katastrophe
+  evaluation_hint: Dieser Indikator prüft TECHNISCHE EINSTELLUNGEN der Plattform,
+    nicht den Inhalt selbst. Trigger nur wenn Autoplay, Default-Sichtbarkeit oder
+    DM-Einstellungen problematisch sind.
+- id: 2B-16-36
+  description: Keine elterlichen Kontroll-/Beschränkungsfunktionen trotz minderjähriger
+    Zielgruppe (16–18)
+  legal_basis: DSA Art.28 Abs.1
+  action: Elternkontrollfunktionen implementieren
+  scope: platform
+- id: 2B-16-37
+  description: Unzureichende Maßnahmen zum Schutz Minderjähriger in audiovisuellen
+    Diensten (16–18)
+  legal_basis: AVMD-RL Art.6a Abs.1
+  action: Meldesystem und Elternkontrollen implementieren
+  scope: platform
+- id: 2B-16-38
+  description: VSP ohne altersgerechte Meldesysteme/Elternkontrollen/Jugendprofile
+    (16–18)
+  legal_basis: AVMD-RL Art.28b Abs.3
+  action: Inhaltstrennung implementieren (Jugend-/Erwachsenenbereich)
+  scope: platform
+- id: 2B-16-39
+  description: Belastende Nachrichten/Dokus ohne altersangemessene Einordnung in U18-Umfeldern
+  legal_basis: MStV §19 i.V.m. JMStV §5
+  action: Warnhinweis ergänzen, Einordnung sicherstellen oder Zugangsbeschränkung
+    U18
+  scope: both
+  trigger_keywords:
+    - gewalt
+    - kampf
+    - brutal
+    - krieg
+    - katastrophe
+    - belastend
+    - nachricht
+    - doku
+  not_trigger_keywords:
+    - autoplay
+    - voreinstellung
+    - default
+    - sichtbarkeit
+  evaluation_hint: Dieser Indikator prüft INHALTLICHE BELASTUNG (Gewalt, Krieg,
+    Katastrophen etc.) ohne Einordnung. Trigger wenn der INHALT selbst belastend ist,
+    nicht wenn Platform-Einstellungen fehlen.
+default_action:
+  value: 1
+  label: PASS
+severity: medium
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 16-18 geeignet
+  '1': PASS - Geeignet für 16-18

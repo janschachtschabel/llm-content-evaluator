@@ -1,0 +1,46 @@
+id: protection_of_minors_2a_part3
+name: 'Jugendschutz 2A - Teil 3: Indizierung & Generalklausel'
+description: Prüfung auf schwer jugendgefährdende Inhalte
+dimension: protection_of_minors_2a_indexing_general
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_restriction: 18+ / AVS erforderlich
+gate_rules:
+- id: 2A-11
+  description: Verrohend wirkende Medien – Indizierungsfallgruppe erfüllt
+  legal_basis: JuSchG §18 Abs.1 S.2
+  action: Prüfen und AVS implementieren, ggf. Indizierungsverfahren
+  scope: both
+- id: 2A-12
+  description: Anreiz zu Gewalttätigkeit/Verbrechen/Rassenhass – Indizierungsfallgruppe
+    erfüllt
+  legal_basis: JuSchG §18 Abs.1 S.2
+  action: Prüfen und AVS implementieren, ggf. Indizierungsverfahren
+  scope: content
+- id: 2A-13
+  description: Mord-/Metzelszenen selbstzweckhaft und detailliert dargestellt
+  legal_basis: JuSchG §18 Abs.1 S.2
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 2A-14
+  description: Selbstjustiz als einzig bewährtes Mittel nahegelegt
+  legal_basis: JuSchG §18 Abs.1 S.2
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 2A-15
+  description: Offensichtlich schwer jugendgefährdend – Generalklausel erfüllt
+  legal_basis: JMStV §4 Abs.2 S.1 Nr.3
+  action: Prüfen und AVS implementieren oder entfernen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: critical
+compliance_type: youth_endangering_content
+labels:
+  '0': FAIL - Schwer jugendgefährdend
+  '1': PASS - Keine schwere Jugendgefährdung

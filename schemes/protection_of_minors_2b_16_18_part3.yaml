@@ -1,0 +1,51 @@
+id: protection_of_minors_2b_16_18_part3
+name: 'Jugendschutz 2B-16-18 - Teil 3: Altersfreigaben'
+description: Prüfung von Altersfreigaben und Kennzeichnungen für Jugendliche 16-18
+  Jahre
+dimension: protection_of_minors_2b_16_18_ratings
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 16-18
+age_label: Nicht geeignet für Jugendliche unter 18 Jahren
+gate_rules:
+- id: 2B-16-11
+  description: Fehlende/unzutreffende Altersfreigabe 'ab 16' bei Film/Spielprogramm
+  legal_basis: JuSchG §14 Abs.2 Nr.4
+  action: Korrekte Altersfreigabe einholen (FSK/USK)
+  scope: platform
+- id: 2B-16-12
+  description: Fehlende Deskriptoren/Begründungen (Gewalt/Angst/Sexualität/Interaktion/Käufe)
+    für 16–18
+  legal_basis: JuSchG §14 Abs.2a
+  action: Korrekte Altersfreigabe einholen (FSK/USK)
+  scope: platform
+- id: 2B-16-13
+  description: Keine Prüfung durch anerkannte Selbstkontrolle (FSK/USK/FSF) trotz
+    Kennzeichnungspflicht
+  legal_basis: JuSchG §14 Abs.6
+  action: Prüfung durch FSK/USK/FSF durchführen lassen
+  scope: platform
+- id: 2B-16-14
+  description: Fehlende/inkonsistente Online-Kennzeichnung (Streaming/Download) für
+    16–18
+  legal_basis: JuSchG §14 Abs.9
+  action: Online-Kennzeichnung ergänzen (ab 16)
+  scope: platform
+- id: 2B-16-15
+  description: Übermäßig ängstigende/psychisch belastende Inhalte ohne altersgerechte
+    Einordnung (16–18)
+  legal_basis: JuSchG §10b Abs.1
+  action: Inhalt anpassen oder Zugangsbeschränkung U18 implementieren
+  scope: content
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 16-18 geeignet
+  '1': PASS - Geeignet für 16-18

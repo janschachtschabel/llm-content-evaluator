@@ -1,0 +1,45 @@
+id: protection_of_minors_2b_u6_part8
+name: 'Jugendschutz 2B-U6 - Teil 8: EU-Vorgaben'
+description: Prüfung EU-rechtlicher Vorgaben für Kinder unter 6 Jahren
+dimension: protection_of_minors_2b_u6_eu
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 0-6
+age_label: Nicht geeignet für Kinder unter 6 Jahren
+gate_rules:
+- id: 2B-0-34
+  description: Unzureichende Maßnahmen zum Schutz Minderjähriger in audiovisuellen
+    (kindergerichteten) Diensten (U6)
+  legal_basis: AVMD-RL Art.6a Abs.1
+  action: Meldesystem und Elternkontrollen implementieren
+  scope: platform
+- id: 2B-0-35
+  description: VSP-Anbieter ohne altersgerechte Meldesysteme/Elternkontrollen für
+    kindgerichtete Bereiche (U6)
+  legal_basis: AVMD-RL Art.28b Abs.3
+  action: Meldesystem und Elternkontrollen implementieren
+  scope: platform
+- id: 2B-0-46
+  description: Fehlende/inkonsistente Plattform-Kennzeichnung 'für Kinder' bzw. 'ab
+    0/6' in Katalog/Store (U6)
+  legal_basis: JuSchG §14a
+  action: Kennzeichnung korrigieren/ergänzen (ab 0/ab 6)
+  scope: platform
+- id: 2B-0-47
+  description: Personalisierte Empfehlungen/Ads auf Basis von Profiling gegenüber
+    erkennbar minderjährigen U6-Nutzern nicht wirksam unterbunden
+  legal_basis: DSA Art.28 Abs.2
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: medium
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für U6 geeignet
+  '1': PASS - Geeignet für U6

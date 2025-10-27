@@ -1,0 +1,46 @@
+id: protection_of_minors_2a_part4
+name: 'Jugendschutz 2A - Teil 4: Verherrlichung'
+description: Prüfung auf Verherrlichung gefährlicher Verhaltensweisen
+dimension: protection_of_minors_2a_glorification
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_restriction: 18+ / AVS erforderlich
+gate_rules:
+- id: 2A-16
+  description: Krass gg. die Wertordnung des Grundgesetzes gerichtete Tendenz (z.
+    B. Rassismus, Menschenwürdemissachtung)
+  legal_basis: JMStV §4 Abs.2 S.1 Nr.3
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 2A-17
+  description: Verherrlichung/Verharmlosung von Drogenkonsum (inkl. Legal Highs)
+  legal_basis: JMStV §4 Abs.2 S.1 Nr.3
+  action: Prüfen und AVS implementieren oder entfernen
+  scope: content
+- id: 2A-18
+  description: Verherrlichung/Verharmlosung von Alkoholmissbrauch
+  legal_basis: JMStV §4 Abs.2 S.1 Nr.3
+  action: Prüfen und AVS implementieren oder entfernen
+  scope: content
+- id: 2A-19
+  description: Pro-Ana/Pro-Mia/Pro-ES-Inhalte (Essstörungen verherrlichend)
+  legal_basis: JMStV §4 Abs.2 S.1 Nr.3
+  action: Prüfen und AVS implementieren oder entfernen
+  scope: content
+- id: 2A-20
+  description: Suizid/Selbstschädigung verherrlicht oder als Problemlösung dargestellt
+  legal_basis: JMStV §4 Abs.2 S.1 Nr.3
+  action: Prüfen und AVS implementieren oder entfernen
+  scope: content
+default_action:
+  value: 1
+  label: PASS
+severity: critical
+compliance_type: youth_endangering_content
+labels:
+  '0': FAIL - Verherrlichung gefährlicher Verhaltensweisen
+  '1': PASS - Keine Verherrlichung

@@ -1,0 +1,45 @@
+id: data_privacy_4a_part4
+name: 'Datenschutz 4A - Teil 4: Sicherheit & Rechenschaft'
+description: Prüfung auf Sicherheitsmaßnahmen und Rechenschaftspflicht
+dimension: data_privacy_4a_security_accountability
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 4A-16
+  description: Datenschutzvorfälle nicht gemeldet
+  legal_basis: DSGVO Art. 33–34
+  action: Incident-Response-Prozess etablieren, Melde- und Informationspflicht erfüllen
+  scope: both
+- id: 4A-17
+  description: Keine DSFA trotz hohen Risikos
+  legal_basis: DSGVO Art. 35
+  action: Datenschutz-Folgenabschätzung durchführen, Maßnahmen umsetzen und dokumentieren
+  scope: platform
+- id: 4A-18
+  description: Fehlendes Verzeichnis von Verarbeitungstätigkeiten
+  legal_basis: DSGVO Art. 30
+  action: VVT erstellen/aktualisieren, insbesondere für Tracking/Profiling
+  scope: platform
+- id: 4A-19
+  description: Rechenschaftspflicht nicht nachweisbar
+  legal_basis: DSGVO Art. 24
+  action: Policies, Prüfpfade und Nachweise zur Kinder-Datenverarbeitung dokumentieren
+  scope: both
+- id: 4A-20
+  description: Auftragsverarbeitung ohne AVV/DPA
+  legal_basis: DSGVO Art. 28
+  action: Auftragsverarbeitungsverträge schließen/aktualisieren, Weisungsbindung &
+    TOMs prüfen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: critical
+compliance_type: data_protection
+labels:
+  '0': FAIL - Sicherheit/Rechenschaft unzureichend
+  '1': PASS - Sicherheit/Rechenschaft ausreichend

@@ -1,0 +1,57 @@
+id: protection_of_minors_2b_6_12_part8
+name: 'Jugendschutz 2B-6-12 - Teil 8: Werbung & EU'
+description: Prüfung von Werbung und EU-Vorgaben für Kinder 6-12 Jahre
+dimension: protection_of_minors_2b_6_12_ads_eu
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 6-12
+age_label: Nicht geeignet für Kinder unter 12 Jahren
+gate_rules:
+- id: 2B-6-35
+  description: Direkte Kaufappelle an Kinder ('Kauf jetzt', 'Hol dir...') (6–12)
+  legal_basis: JMStV §6 Abs.2 Nr.1
+  action: Werbung kindgerecht gestalten (eindeutig kennzeichnen, kein Druck)
+  scope: both
+- id: 2B-6-36
+  description: Unangemessener Druck/Angst in Werbung gegenüber Kindern (6–12)
+  legal_basis: JMStV §6 Abs.2 Nr.2
+  action: Werbung kindgerecht gestalten (eindeutig kennzeichnen, kein Druck)
+  scope: both
+- id: 2B-6-37
+  description: Ausnutzung kindlicher Unerfahrenheit/Leichtgläubigkeit in Werbung (6–12)
+  legal_basis: JMStV §6 Abs.2 Nr.3
+  action: Werbung kindgerecht gestalten (eindeutig kennzeichnen, kein Druck)
+  scope: both
+- id: 2B-6-39
+  description: Fehlende geeignete/verhältnismäßige Minderjährigenschutz-Voreinstellungen
+    (Default-Sichtbarkeit/Autoplay/DMs) für 6–12
+  legal_basis: DSA Art.28 Abs.1
+  action: Kinderschutzmaßnahmen implementieren (Chats moderieren/sperren)
+  scope: platform
+  trigger_keywords:
+    - voreinstellung
+    - default
+    - autoplay
+    - sichtbarkeit
+    - standardmäßig aktiviert
+  not_trigger_keywords:
+    - gewalt
+    - kampf
+    - brutal
+    - kriegsbild
+    - katastrophe
+  evaluation_hint: Dieser Indikator prüft TECHNISCHE EINSTELLUNGEN der Plattform,
+    nicht den Inhalt selbst. Trigger nur wenn Autoplay, Default-Sichtbarkeit oder
+    DM-Einstellungen problematisch sind.
+default_action:
+  value: 1
+  label: PASS
+severity: medium
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 6-12 geeignet
+  '1': PASS - Geeignet für 6-12

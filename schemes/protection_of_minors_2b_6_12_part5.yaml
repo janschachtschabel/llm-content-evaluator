@@ -1,0 +1,50 @@
+id: protection_of_minors_2b_6_12_part5
+name: 'Jugendschutz 2B-6-12 - Teil 5: Gewalt & Sexualisierung'
+description: Prüfung auf Gewalt und sexualisierte Inhalte für Kinder 6-12 Jahre
+dimension: protection_of_minors_2b_6_12_violence_sexual
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 6-12
+age_label: Nicht geeignet für Kinder unter 12 Jahren
+gate_rules:
+- id: 2B-6-20
+  description: Kurzprägnante Gewaltszenen ohne sichtbare Konsequenzen (6–12)
+  legal_basis: JMStV §5 Abs.1
+  action: Inhalt anpassen (Distanzierung/alternative Lösungen) oder Zugangsbeschränkung
+    U12
+  scope: content
+- id: 2B-6-21
+  description: Sexualisierte Anspielungen/anzügliche Gesten über beiläufiges Maß hinaus
+    (nicht pornografisch) (6–12)
+  legal_basis: JMStV §5 Abs.1
+  action: Inhalt anpassen oder Zugangsbeschränkung U12 implementieren
+  scope: content
+- id: 2B-6-22
+  description: Derbe/obszöne Sprache wiederkehrend in U12-zugänglichen Inhalten
+  legal_basis: JMStV §5 Abs.1
+  action: Sprache anpassen oder Zugangsbeschränkung U12 implementieren
+  scope: content
+- id: 2B-6-23
+  description: Riskante nachahmbare Handlungen/Challenges ohne Warnhinweis (z. B.
+    Rooftopping/Choking/Feuer) (6–12)
+  legal_basis: JMStV §5 Abs.1
+  action: Technische Schutzmaßnahmen implementieren (Alterslabel, Kids-Mode, PIN)
+  scope: both
+- id: 2B-6-24
+  description: Drogen-/Alkoholszenen teils verharmlost (ohne Anleitung) ohne kritische
+    Einordnung (6–12)
+  legal_basis: JMStV §5 Abs.1
+  action: Kritische Einordnung ergänzen oder Zugangsbeschränkung U12
+  scope: content
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 6-12 geeignet
+  '1': PASS - Geeignet für 6-12

@@ -1,0 +1,44 @@
+id: data_privacy_4b_part5
+name: 'Transparenz 4B - Teil 5: AVMD & KI-VO'
+description: Prüfung auf AVMD-RL und EU-KI-VO Transparenzpflichten
+dimension: data_privacy_4b_avmd_ai_act
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 4B-21
+  description: VSP ohne wirksames Beschwerdeverfahren
+  legal_basis: AVMD-RL Art. 28b Abs. 3 lit. i
+  action: Beschwerde-Workflow mit Status & Entscheidung etablieren
+  scope: both
+- id: 4B-22
+  description: Keine Hinweise auf Beratungs-/Hilfsangebote
+  legal_basis: AVMD-RL Art. 28b Abs. 3 lit. j
+  action: Hilfs-/Beratungslinks integrieren
+  scope: platform
+- id: 4B-23
+  description: Keine KI-Interaktionshinweise bei Chatbots
+  legal_basis: EU-KI-VO Art. 52 Abs. 1
+  action: Nutzer klar über KI-Interaktion informieren
+  scope: platform
+- id: 4B-24
+  description: Emotionserkennung/biometrische Kategorisierung ohne Transparenz
+  legal_basis: EU-KI-VO Art. 52 Abs. 2
+  action: Hinweis auf automatisierte Analyse einblenden
+  scope: both
+- id: 4B-25
+  description: Deepfakes/Synthetik nicht gekennzeichnet
+  legal_basis: EU-KI-VO Art. 52 Abs. 3
+  action: Synthetische Medien klar und dauerhaft kennzeichnen (Label, Wasserzeichen)
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: transparency
+labels:
+  '0': FAIL - AVMD/KI-VO intransparent
+  '1': PASS - AVMD/KI-VO transparent

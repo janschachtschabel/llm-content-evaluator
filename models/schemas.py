@@ -79,6 +79,11 @@ class EvaluationRequest(BaseModel):
         True,
         description="Whether to include detailed reasoning and criteria in the response. Set to false for faster evaluation without explanations."
     )
+    context_type: str = Field(
+        "content",
+        description="Evaluation context: 'content' (default, UGC/general content - only content rules), 'platform' (commercial platforms - all rules including metadata), or 'both' (full evaluation)",
+        example="content"
+    )
 
 
 class SchemeInfo(BaseModel):

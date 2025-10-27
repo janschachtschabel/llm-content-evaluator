@@ -1,0 +1,52 @@
+id: protection_of_minors_2b_16_18_part15
+name: 'Jugendschutz 2B-16-18 - Teil 15: Aufklärung & Dokus'
+description: Prüfung von Aufklärungs- und Dokumentationsinhalten für Jugendliche 16-18
+  Jahre
+dimension: protection_of_minors_2b_16_18_education_docs
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 16-18
+age_label: Nicht geeignet für Jugendliche unter 18 Jahren
+gate_rules:
+- id: 2B-16-70
+  description: Essstörungen thematisiert präventiv - Body-Image/Anorexie Aufklärung/Prävention
+    (16–18)
+  legal_basis: JMStV §5, JuSchG §10b
+  action: Hilfsangebote/Prävention ergänzen, keine Verherrlichung
+  scope: both
+- id: 2B-16-71
+  description: Drogenprävention/Sachinfo detailliert - Risiken, Harm-Reduction, Gesetzeslage
+    (16–18)
+  legal_basis: JMStV §5, JuSchG §10b
+  action: Kritische Einordnung ergänzen oder Zugangsbeschränkung U18
+  scope: content
+- id: 2B-16-72
+  description: Kriegs-/Katastrophen-Dokus eingeordnet - Nachrichten/Doku mit belastenden
+    Bildern, Einordnung (Frontaufnahmen) (16–18)
+  legal_basis: JMStV §5, JuSchG §10b
+  action: Altersgerechte Einordnung ergänzen oder Zugangsbeschränkung U18
+  scope: both
+- id: 2B-16-73
+  description: Tierquälerei berichtend - Doku/News über Tierleid, nicht sensationalistisch
+    (Misshandlung, Rettung) (16–18)
+  legal_basis: JMStV §5, JuSchG §10b
+  action: Warnhinweis ergänzen, Einordnung sicherstellen oder Zugangsbeschränkung
+    U18
+  scope: both
+- id: 2B-16-74
+  description: Tod/Trauer/Traumata vertieft - Verlust/PTBS, Therapie detailliert (16–18)
+  legal_basis: JMStV §5, JuSchG §10b
+  action: Kindgerechte Auflösung/Entlastung ergänzen oder Zugangsbeschränkung U18
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: medium
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 16-18 geeignet
+  '1': PASS - Geeignet für 16-18

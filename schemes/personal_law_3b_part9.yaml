@@ -1,0 +1,43 @@
+id: personal_law_3b_part9
+name: 'Strukturelle Vorsorge 3B - Teil 9: Privacy & Kompatibilität'
+description: Prüfung auf Datenschutz und Jugendschutzprogramm-Kompatibilität
+dimension: personal_law_3b_privacy_compatibility
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 3B-41
+  description: Fehlende datenminimierende Voreinstellungen für Minderjährige (Standort,
+    AdID, Kontakte)
+  legal_basis: DSGVO Art. 25 (Privacy by Design/Default)
+  action: Standort-/Kontaktdaten standardmäßig deaktivieren
+  scope: platform
+- id: 3B-42
+  description: Unklare Altersabsicherung/Nichtbeachtung Einwilligungserfordernis bei
+    Diensten der Informationsgesellschaft für Kinder
+  legal_basis: DSGVO Art. 8 i. V. m. nationalem Recht
+  action: Altersabsicherung und Einwilligungsverfahren implementieren
+  scope: both
+- id: 3B-43
+  description: Direkte Kaufappelle/unklar gekennzeichnete Werbung in für Minderjährige
+    zugänglichen Bereichen (Influencer Ads, Native Ads)
+  legal_basis: JMStV § 6 Abs. 1–2
+  action: Profiling-basierte Werbung für Minderjährige unterbinden
+  scope: both
+- id: 3B-44
+  description: Nicht mit anerkannten Jugendschutzprogrammen kompatibel (Labels/Metadaten
+    fehlen/falsch)
+  legal_basis: JMStV § 11 Abs. 1–3
+  action: Kompatibilität mit Jugendschutzprogrammen herstellen (Labels, Metadaten)
+  scope: platform
+default_action:
+  value: 1
+  label: PASS
+severity: medium
+compliance_type: structural_safety_measures
+labels:
+  '0': FAIL - Privacy/Kompatibilität unzureichend
+  '1': PASS - Privacy/Kompatibilität ausreichend

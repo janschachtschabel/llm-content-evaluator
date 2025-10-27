@@ -1,0 +1,45 @@
+id: data_privacy_4a_part1
+name: 'Datenschutz 4A - Teil 1: Rechtsgrundlagen & Einwilligung'
+description: Prüfung auf Rechtsgrundlagen und wirksame Einwilligung nach DSGVO Art.
+  6-8
+dimension: data_privacy_4a_legal_basis_consent
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 4A-01
+  description: Verarbeitung ohne einschlägige Rechtsgrundlage bzw. falsche Zweckzuordnung
+  legal_basis: DSGVO Art. 6 Abs. 1
+  action: Verarbeitung stoppen, Rechtsgrundlage dokumentieren, unzulässige Daten löschen
+  scope: both
+- id: 4A-02
+  description: Einwilligung fehlt oder ist nicht wirksam
+  legal_basis: DSGVO Art. 6 Abs. 1 lit. a
+  action: Einwilligung rechtskonform einholen oder alternative Rechtsgrundlage schaffen
+  scope: both
+- id: 4A-03
+  description: Einwilligung durch Kopplung/Dark Patterns erzwungen bzw. kein Widerrufspfad
+  legal_basis: DSGVO Art. 7
+  action: Consent-Flow überarbeiten, Dark Patterns entfernen, Widerruf vereinfachen
+  scope: platform
+- id: 4A-04
+  description: Verarbeitung Minderjähriger ohne elterliche Zustimmung/Altersabsicherung
+  legal_basis: DSGVO Art. 8
+  action: Robuste Alters-/Elternfreigaben einholen, Verarbeitung bis dahin aussetzen
+  scope: both
+- id: 4A-05
+  description: Ungeeignete Alters-/Eltern-Verifikation
+  legal_basis: DSGVO Art. 8 i.V.m. Art. 25
+  action: Verifizierungsprozess stärken und dokumentieren, regelmäßige Re-Checks etablieren
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: critical
+compliance_type: data_protection
+labels:
+  '0': FAIL - Rechtsgrundlage/Einwilligung fehlt
+  '1': PASS - Rechtsgrundlage/Einwilligung vorhanden

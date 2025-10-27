@@ -1,0 +1,115 @@
+id: criminal_law_1a_gate
+name: "Strafrecht GATE 1A - Per se illegal (Hard Illegal / AUA)"
+description: "Kombinierte Prüfung aller strafrechtlich relevanten Inhalte nach deutschem Recht (JMStV §4, StGB, JuSchG §15)"
+dimension: criminal_law_1a_compliance
+type: derived
+version: "1.0"
+
+output_range:
+  min: 0
+  max: 1
+  type: int
+  values: [0, 1]
+
+# Alle 10 Teilschemas als Dependencies
+dependencies:
+  - criminal_law_1a_part1   # Verfassungsfeindliche Symbole & Propaganda
+  - criminal_law_1a_part2   # Volksverhetzung & Hassrede
+  - criminal_law_1a_part3   # Gewaltdarstellungen & Anleitungen
+  - criminal_law_1a_part4   # Kriegsverherrlichung & Menschenwürde
+  - criminal_law_1a_part5   # Kinder- & Jugendpornografie
+  - criminal_law_1a_part6   # Schwere Pornografie & Indizierung
+  - criminal_law_1a_part7   # Terrorismus & Extremismus
+  - criminal_law_1a_part8   # Staatsschutz & Cybergrooming
+  - criminal_law_1a_part9   # Pornografie an Minderjährige & Bildrechte
+  - criminal_law_1a_part10  # Meldepflichten & Kooperation
+
+# UND-Verknüpfung: ALLE Teilprüfungen müssen bestanden werden
+rules:
+  - conditions:
+      - dimension: criminal_law_1a_constitutional
+        operator: "=="
+        value: 1
+      - dimension: criminal_law_1a_hate_speech
+        operator: "=="
+        value: 1
+      - dimension: criminal_law_1a_violence
+        operator: "=="
+        value: 1
+      - dimension: criminal_law_1a_dignity
+        operator: "=="
+        value: 1
+      - dimension: criminal_law_1a_csam
+        operator: "=="
+        value: 1
+      - dimension: criminal_law_1a_extreme_porn
+        operator: "=="
+        value: 1
+      - dimension: criminal_law_1a_terrorism
+        operator: "=="
+        value: 1
+      - dimension: criminal_law_1a_state_protection
+        operator: "=="
+        value: 1
+      - dimension: criminal_law_1a_minor_protection
+        operator: "=="
+        value: 1
+      - dimension: criminal_law_1a_reporting
+        operator: "=="
+        value: 1
+    value: 1
+    label: "LEGAL"
+    reasoning: "Alle strafrechtlichen Prüfungen bestanden - Inhalt ist rechtlich zulässig"
+    confidence: 0.95
+
+# Fallback: Bei einem einzigen Verstoß gilt ILLEGAL
+default:
+  value: 0
+  label: "ILLEGAL"
+  reasoning: "Mindestens eine strafrechtliche Prüfung nicht bestanden - Inhalt verstößt gegen deutsches Strafrecht"
+  confidence: 0.95
+
+labels:
+  "0": "ILLEGAL - Strafrechtsverstoß"
+  "1": "LEGAL - Kein Strafrechtsverstoß"
+
+# Metadaten
+metadata:
+  legal_framework: "StGB, JMStV §4, JuSchG §15, DSA Art. 18"
+  gate_type: "1A - Per se illegal (Hard Illegal / AUA)"
+  action_required: "Hard Delete & Report"
+  report_authority: "Strafverfolgungsbehörden, BKA (bei CSAM), Verfassungsschutz (bei Terrorismus)"
+  legal_basis_key:
+    - "JMStV §4 Abs. 1 - Unzulässige Angebote"
+    - "JuSchG §15 Abs. 2 - Absolut unzulässige Trägermedien"
+    - "StGB - Verschiedene Straftatbestände"
+    - "DSA Art. 18 - Meldepflicht bei Straftaten"
+  
+description_text: |
+  GATE 1A prüft auf absolut unzulässige bzw. strafbare Inhalte nach deutschem Recht.
+  
+  **Funktion:** Aussortierung illegal content (Hard Illegal / AUA)
+  **Aktion:** Sofortige Entfernung + Meldung an Strafverfolgungsbehörden
+  
+  **Geprüfte Bereiche (49 Indikatoren):**
+  1. Verfassungsfeindliche Symbole & Propaganda (§§86, 86a StGB)
+  2. Volksverhetzung & Hassrede (§130 StGB)
+  3. Gewaltdarstellungen & Anleitungen (§§130a, 131 StGB)
+  4. Kriegsverherrlichung & Menschenwürdeverletzungen
+  5. Kinder-/Jugendpornografie (§§184b, 184c StGB) - CSAM
+  6. Schwere Pornografie (§184a StGB) & Indizierung
+  7. Terrorismus & Extremismus (§§129, 89a StGB)
+  8. Staatsschutz & Cybergrooming (§§90a, 176b StGB)
+  9. Pornografie an Minderjährige (§§184d-f StGB)
+  10. Meldepflichten (DSA Art. 18, CSAM-RL)
+  
+  **Folge bei Verstoß:**
+  - Sofortige Entfernung des Inhalts
+  - Meldung an zuständige Strafverfolgungsbehörden
+  - Bei CSAM: Meldung an BKA
+  - Bei Terrorismus: Meldung an Verfassungsschutz
+  - Dokumentation für rechtliche Nachvollziehbarkeit
+  
+  **Performance:**
+  Alle 10 Teilprüfungen werden **parallel** ausgeführt für maximale Geschwindigkeit.
+  Jede Teilprüfung evaluiert 4-7 Indikatoren gleichzeitig.

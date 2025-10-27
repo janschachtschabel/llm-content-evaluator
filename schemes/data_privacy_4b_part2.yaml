@@ -1,0 +1,44 @@
+id: data_privacy_4b_part2
+name: 'Transparenz 4B - Teil 2: Empfehlungssysteme'
+description: Prüfung auf Transparenz von Empfehlungssystemen nach DSA Art. 27
+dimension: data_privacy_4b_recommender_systems
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 4B-06
+  description: Recommender-Parameter nicht verständlich beschrieben
+  legal_basis: DSA Art. 27 Abs. 1
+  action: Erläuterungen in klarer Sprache bereitstellen
+  scope: both
+- id: 4B-07
+  description: Kein leicht auffindbarer Zugang zur Recommender-Erklärung
+  legal_basis: DSA Art. 27 Abs. 2
+  action: Zugriff über UI deutlich platzieren (max. zwei Klicks)
+  scope: platform
+- id: 4B-08
+  description: Kein Profiling-freier Empfehlungskanal
+  legal_basis: DSA Art. 27 Abs. 3
+  action: Option für kontextbasierte Empfehlungen ohne Profiling anbieten
+  scope: platform
+- id: 4B-09
+  description: AGB/Regeln nicht altersgerecht aufbereitet
+  legal_basis: DSA Art. 14 Abs. 3
+  action: Regeln verständlich, altersgerecht, barrierearm neu gestalten
+  scope: both
+- id: 4B-10
+  description: Notice-and-Action-Funktion für rechtswidrige Inhalte unklar
+  legal_basis: DSA Art. 16
+  action: Meldeformular verbessern (erreichbar, klar, kindgerecht)
+  scope: content
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: transparency
+labels:
+  '0': FAIL - Empfehlungssysteme intransparent
+  '1': PASS - Empfehlungssysteme transparent

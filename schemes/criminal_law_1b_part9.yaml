@@ -1,0 +1,38 @@
+id: criminal_law_1b_part9
+name: 'Strafrecht 1B - Teil 9: Wahlmanipulation & Stalking'
+description: Prüfung auf Wählertäuschung und Stalking nach StGB §§108a, 238
+dimension: criminal_law_1b_election_stalking
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 1B-37
+  description: Falsche Wahltermine/-modalitäten
+  legal_basis: StGB §108a
+  definition: Verbreitung falscher Informationen zu Wahlterminen oder Wahlmodalitäten
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1B-38
+  description: Hartnäckige unerwünschte Kontaktaufnahmen
+  legal_basis: StGB §238
+  definition: Überwachung/Tracking trotz Ablehnung, wiederholte Kontaktversuche
+  action: Prüfen und bei Verstoß entfernen, ggf. Meldung
+  scope: both
+- id: 1B-39
+  description: Stalking mit Nähe-/Standortnennung
+  legal_basis: StGB §238
+  definition: Drohender Ton mit häufigen Nähe-/Standortnennungen zur Angsterzeugung
+  action: Prüfen und bei Verstoß entfernen, ggf. Meldung
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: critical
+compliance_type: criminal_law_contextual
+report_required: true
+labels:
+  '0': FAIL
+  '1': PASS

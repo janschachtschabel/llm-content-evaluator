@@ -1,0 +1,49 @@
+id: protection_of_minors_2a_part6
+name: 'Jugendschutz 2A - Teil 6: AVS Technik & Werbung'
+description: Prüfung technischer AVS-Anforderungen und Werbebeschränkungen
+dimension: protection_of_minors_2a_avs_technical
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_restriction: 18+ / AVS erforderlich
+gate_rules:
+- id: 2A-26
+  description: AVS stützt sich nur auf Ausweis-/Passnummer ohne zusätzliche Identprüfung
+    (Perso-Check unzureichend)
+  legal_basis: JMStV §4 Abs.2 S.2
+  action: Prüfen und bei Verstoß entfernen
+  scope: platform
+- id: 2A-27
+  description: AVS ohne positive KJM-Bewertung/ohne Stand-der-Technik-Sicherungen
+    eingesetzt
+  legal_basis: JMStV §4 Abs.2 S.2 i.V.m. KJM-Praxis
+  action: AVS-System durch KJM-anerkanntes System ersetzen
+  scope: both
+- id: 2A-28
+  description: Fehlende/fehlerhafte Alterskennzeichnung für Jugendschutzprogramme
+    bei 18+-Angeboten
+  legal_basis: JMStV §5 Abs.3 i.V.m. §11
+  action: Alterskennzeichnung/Jugendschutzprogramm-Signalisierung implementieren
+  scope: platform
+- id: 2A-29
+  description: Werbung für 18+-Inhalte außerhalb geschlossener Benutzergruppe platziert
+  legal_basis: JMStV §6 Abs.2
+  action: Werbung auf AVS-geschützten Bereich beschränken
+  scope: content
+- id: 2A-30
+  description: Werbliche Anreize/Platzierungen, die Minderjährige direkt ansprechen
+    (18+-Angebot)
+  legal_basis: JMStV §6 Abs.1
+  action: Werbung auf AVS-geschützten Bereich beschränken
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_endangering_content
+labels:
+  '0': FAIL - AVS-Technik unzureichend / Werbung problematisch
+  '1': PASS - AVS-Technik ausreichend / Werbung konform

@@ -1,0 +1,46 @@
+id: protection_of_minors_2a_part2
+name: 'Jugendschutz 2A - Teil 2: BzKJ-Liste & Indizierung'
+description: Prüfung auf indizierte und jugendgefährdende Medien
+dimension: protection_of_minors_2a_bzkj_indexing
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_restriction: 18+ / AVS erforderlich
+gate_rules:
+- id: 2A-06
+  description: Zugänglichmachen pornografischer Inhalte an Minderjährige ohne wirksames
+    AVS
+  legal_basis: StGB §184d
+  action: AVS-System implementieren
+  scope: content
+- id: 2A-07
+  description: Angebot in Teil A der Liste jugendgefährdender Medien (BzKJ) geführt
+  legal_basis: JMStV §4 Abs.2 S.1 Nr.2
+  action: Mit BPjM/BzKJ-Liste abgleichen, AVS implementieren
+  scope: both
+- id: 2A-08
+  description: Angebot in Teil C der Liste jugendgefährdender Medien (BzKJ) geführt
+  legal_basis: JMStV §4 Abs.2 S.1 Nr.2
+  action: Mit BPjM/BzKJ-Liste abgleichen, AVS implementieren
+  scope: both
+- id: 2A-09
+  description: Medium ist ganz/weitgehend inhaltsgleich mit Eintrag in Teil A/C (Wesensgleichheit)
+  legal_basis: JMStV §4 Abs.2 S.1 Nr.2
+  action: Mit BPjM/BzKJ-Liste abgleichen, AVS implementieren
+  scope: content
+- id: 2A-10
+  description: Unsittliche Medien – Indizierungsfallgruppe erfüllt
+  legal_basis: JuSchG §18 Abs.1 S.2
+  action: Prüfen und AVS implementieren, ggf. Indizierungsverfahren
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: critical
+compliance_type: youth_endangering_content
+labels:
+  '0': FAIL - Indizierter/jugendgefährdender Inhalt
+  '1': PASS - Kein indizierter Inhalt

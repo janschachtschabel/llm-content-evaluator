@@ -1,0 +1,245 @@
+id: personal_law_gate
+name: "Persönlichkeitsrechte MASTER-GATE - Alle Persönlichkeitsrechtsprüfungen"
+description: "Kombinierte Prüfung aller Persönlichkeitsrechtsanforderungen (3A: Individuelle Verletzungen + 3B: Strukturelle Vorsorge)"
+dimension: personal_law_compliance
+type: derived
+version: "1.0"
+
+output_range:
+  min: 0
+  max: 3
+  type: int
+  values: [0, 1, 2, 3]
+
+# Dependencies: 3A (Individuelle Verletzungen) und 3B (Strukturelle Vorsorge)
+dependencies:
+  - personal_law_3a_gate  # Individuelle Persönlichkeitsrechtsverletzungen
+  - personal_law_3b_gate  # Strukturelle Vorsorge & Interaktionsrisiken
+
+# Bewertungslogik: Beide Dimensionen unabhängig bewerten
+rules:
+  # VOLLSTÄNDIG COMPLIANT: Beide Gates bestanden
+  - conditions:
+      - dimension: personal_law_3a_compliance
+        operator: "=="
+        value: 1
+      - dimension: personal_law_3b_compliance
+        operator: "=="
+        value: 1
+    value: 3
+    label: "COMPLIANT - Keine Verstöße"
+    reasoning: "Sowohl individuelle Rechtsverletzungen als auch strukturelle Schutzmaßnahmen compliant"
+    confidence: 0.88
+
+  # NUR STRUKTURELL: 3A failed, 3B bestanden
+  - conditions:
+      - dimension: personal_law_3a_compliance
+        operator: "=="
+        value: 0
+      - dimension: personal_law_3b_compliance
+        operator: "=="
+        value: 1
+    value: 2
+    label: "CONTENT-VERSTOSS - Strukturell OK"
+    reasoning: "Individuelle Persönlichkeitsrechtsverletzung erkannt (Takedown erforderlich), aber strukturelle Schutzmaßnahmen vorhanden"
+    confidence: 0.85
+
+  # NUR INHALTLICH: 3A bestanden, 3B failed
+  - conditions:
+      - dimension: personal_law_3a_compliance
+        operator: "=="
+        value: 1
+      - dimension: personal_law_3b_compliance
+        operator: "=="
+        value: 0
+    value: 1
+    label: "STRUKTURELL UNZUREICHEND - Content OK"
+    reasoning: "Keine konkreten Rechtsverletzungen, aber unzureichende strukturelle Schutzmaßnahmen (Safety Features erforderlich)"
+    confidence: 0.85
+
+# Fallback: BEIDE failed
+default:
+  value: 0
+  label: "KRITISCH - Beides unzureichend"
+  reasoning: "Sowohl individuelle Rechtsverletzungen als auch unzureichende strukturelle Schutzmaßnahmen erkannt"
+  confidence: 0.90
+
+labels:
+  "0": "KRITISCH - Content-Verstoß UND strukturell unzureichend"
+  "1": "STRUKTURELL UNZUREICHEND - Safety Features erforderlich"
+  "2": "CONTENT-VERSTOSS - Takedown erforderlich"
+  "3": "COMPLIANT - Keine Verstöße"
+
+metadata:
+  legal_framework: "GG Art. 1, 2, 5; BGB §§ 12, 823, 824, 1004; KUG; StGB §§ 185-189, 201; JuSchG §10a-b, §24a; DSA Art. 14-21, 25, 28, 34-35; AVMD-RL Art. 28b; DSGVO Art. 8, 25"
+  gate_type: "Master - Persönlichkeitsrechte (3A + 3B)"
+  action_required:
+    critical: "Takedown + Risk Assessment + Safety Features + Meldesystem"
+    structural_only: "Risk Assessment + Safety Features + Meldesystem + Elternkontrollen"
+    content_only: "Takedown / Moderation / Anonymisierung / Notice & Action"
+    compliant: "Keine Aktion erforderlich"
+  total_indicators_3a: 44
+  total_indicators_3b: 44
+  total_indicators: 88
+
+description_text: |
+  Das Persönlichkeitsrechte MASTER-GATE prüft umfassend auf individuelle 
+  Rechtsverletzungen und strukturelle Schutzmaßnahmen.
+  
+  **Funktion:** Vollständige Persönlichkeitsrechts-Compliance-Prüfung
+  **Output:** 4-stufige Bewertung (KRITISCH / STRUKTURELL / CONTENT / COMPLIANT)
+  
+  **Struktur (88 Indikatoren gesamt):**
+  
+  **3A - Individuelle Persönlichkeitsrechtsverletzungen - 44 Indikatoren:**
+  
+  **APR & Ehrverletzungen:**
+  - Allgemeines Persönlichkeitsrecht (Bloßstellung, Schmähung)
+  - Beleidigung, üble Nachrede, Verleumdung (StGB §§ 185-189)
+  - Unwahre Tatsachenbehauptungen
+  - Schmähkritik ohne Sachbezug
+  
+  **Bildrechte (KUG §§ 22-24):**
+  - Recht am eigenen Bild
+  - Unbefugte Veröffentlichung von Bildnissen
+  - Postmortaler Bildnisschutz
+  - Ausnahmetatbestände (§ 23 KUG)
+  
+  **Sphärenschutz:**
+  - Privatsphäre (Wohn-/Familien-/Gesundheitsdaten)
+  - Intimsphäre (Sexual-/Gesundheitsgeheimnisse)
+  - Vertraulichkeit des Wortes (§ 201 StGB)
+  - Bildaufnahmen aus höchstpersönlichem Lebensbereich
+  
+  **Moderne Phänomene:**
+  - Deepfakes/Face-Swaps ohne Kennzeichnung
+  - Doxing/Online-Pranger
+  - Sexting (unerlaubte Weiterleitung)
+  - Sharenting (unangemessenes Teilen von Kinderfotos)
+  - Identitätsdiebstahl/Impersonation
+  
+  **DSA-Compliance:**
+  - Notice-and-Action-Verfahren (Art. 16 DSA)
+  - Begründungspflicht (Art. 17 DSA)
+  - Beschwerdesystem (Art. 20-21 DSA)
+  - Transparenzpflichten
+  
+  **3B - Strukturelle Vorsorge & Interaktionsrisiken - 44 Indikatoren:**
+  
+  **Vorsorgemaßnahmen (JuSchG §24a Abs. 1):**
+  - Risk Assessment gegen Integritätsrisiken
+  - Schutz persönlicher Integrität Minderjähriger
+  - Vorsorge gegen Kommunikationsrisiken (Grooming, Mobbing)
+  - Vorsorge gegen Kaufrisiken (Lootboxen, Kostenfallen)
+  - Vorsorge gegen exzessive Nutzung
+  
+  **Meldesystem (JuSchG §24a Abs. 2 Nr. 1-2, 4):**
+  - Kind-/jugendgerechtes Melde- und Abhilfeverfahren
+  - Leicht erkennbar, max. 2 Klicks erreichbar
+  - Altersgerechtes Meldeformular
+  - Hinweise auf externe Hilfe-/Beratungsstellen
+  
+  **Elternkontrollen (JuSchG §24a Abs. 2 Nr. 5):**
+  - Parental Controls (Zeit-/Ausgabenlimits)
+  - Kommunikationsfreigaben
+  - Kontakt-/DM-Freigabelisten
+  
+  **Safety by Default (JuSchG §24a Abs. 2 Nr. 6-7):**
+  - Sichere Voreinstellungen für Minderjährige
+  - Profile standardmäßig nicht öffentlich
+  - Standort-/Kontaktdaten deaktiviert
+  - Option für anonyme/pseudonyme Nutzung
+  
+  **DSA-Compliance:**
+  - Geeignete Minderjährigenschutz-Maßnahmen (Art. 28)
+  - Profiling-basierte Werbung unterbunden
+  - Risikoanalyse für VLOPs (Art. 34)
+  - Keine Dark Patterns (Art. 25)
+  
+  **Moderne Safety Features:**
+  - Schutz gegen KI-gestütztes Grooming
+  - Altersdifferenzierte Defaults
+  - Safety-Center
+  - Rate-Limiting gegen Massen-Kontaktanfragen
+  - Sensitivitätsfilter/Blur-Preview
+  
+  **Bewertungslogik (2x2 Matrix):**
+  
+  ```
+                      3B PASS           3B FAIL
+  3A PASS    │ COMPLIANT (3)    │ STRUKTURELL (1) │
+  3A FAIL    │ CONTENT (2)      │ KRITISCH (0)    │
+  ```
+  
+  **Aktionen je Kategorie:**
+  
+  **KRITISCH (0) - Beides unzureichend:**
+  - Sofortiger Takedown rechtsverletzender Inhalte
+  - Pflicht-Risk-Assessment durchführen
+  - Safety Features implementieren (Meldesystem, Elternkontrollen)
+  - Safety by Default aktivieren
+  - Notice-and-Action-Verfahren etablieren
+  - DSA-Compliance herstellen
+  - Mögliche Bußgelder und Enforcement-Actions
+  
+  **STRUKTURELL UNZUREICHEND (1) - Safety Features fehlen:**
+  - Keine sofortigen Content-Actions
+  - Risk Assessment durchführen (JuSchG §24a Abs. 1)
+  - Meldesystem implementieren (kindgerecht, max. 2 Klicks)
+  - Elternkontrollen bereitstellen
+  - Sichere Voreinstellungen aktivieren
+  - DSA-Compliance herstellen (Art. 28, 34, 35)
+  - Altersdifferenzierte Defaults (0-6, 6-12, 12-16, 16-18)
+  - Externe Hilfsangebote einbinden
+  
+  **CONTENT-VERSTOSS (2) - Rechtsverletzung:**
+  - Takedown rechtsverletzender Inhalte
+  - Moderation/Review durch Notice-and-Action
+  - Anonymisierung sensibler Daten
+  - Ggf. Gegendarstellung ermöglichen
+  - Recht auf Vergessen gewähren
+  - Staydown (Verhinderung erneuter Uploads)
+  - Strukturelle Schutzmaßnahmen bereits vorhanden ✓
+  
+  **COMPLIANT (3) - Keine Verstöße:**
+  - Keine Aktion erforderlich
+  - Content bleibt online
+  - Strukturelle Schutzmaßnahmen vorhanden ✓
+  - Keine individuellen Rechtsverletzungen ✓
+  - Best-Practice-Beispiel
+  
+  **Unterschied zwischen 3A und 3B:**
+  
+  **3A (Individuelle Verletzungen):**
+  - Prüft **konkreten Inhalt** auf Rechtsverletzungen
+  - Reaktiv: "Ist dieser spezifische Post rechtsverletzend?"
+  - Aktion: Takedown, Moderation, Anonymisierung
+  - Beispiel: "Doxing-Post mit privater Adresse"
+  
+  **3B (Strukturelle Vorsorge):**
+  - Prüft **Systemdesign** auf Schutzmaßnahmen
+  - Präventiv: "Hat die Plattform Safety Features?"
+  - Aktion: Risk Assessment, Safety by Design, Meldesystem
+  - Beispiel: "Gibt es ein Meldesystem für Cybergrooming?"
+  
+  **Wichtiger Hinweis:**
+  Eine Plattform kann compliant sein (1 oder 3), auch wenn gelegentlich
+  rechtsverletzende Inhalte auftreten (Notice-and-Action-Prinzip).
+  Kritisch wird es nur, wenn Inhalte nicht entfernt werden oder
+  strukturelle Schutzmaßnahmen komplett fehlen.
+  
+  **Performance:**
+  Beide Gates (3A + 3B) werden parallel evaluiert.
+  - 3A: 9 Teilschemas parallel
+  - 3B: 9 Teilschemas parallel
+  - Gesamtlaufzeit: ~Max(3A-Zeit, 3B-Zeit) ≈ 10-15 Sekunden
+  
+  **Rechtsabwägung:**
+  Viele Fälle erfordern Einzelfallabwägung zwischen:
+  - Persönlichkeitsrecht (Art. 1, 2 GG)
+  - Meinungsfreiheit (Art. 5 GG)
+  - Pressefreiheit (Art. 5 Abs. 1 S. 2 GG)
+  - Kunstfreiheit (Art. 5 Abs. 3 GG)
+  
+  Bei Schmähkritik/Formalbeleidigung überwiegt APR.
+  Bei sachlicher Kritik/Satire/Berichterstattung überwiegt Meinungsfreiheit.

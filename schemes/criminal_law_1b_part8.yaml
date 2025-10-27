@@ -1,0 +1,56 @@
+id: criminal_law_1b_part8
+name: 'Strafrecht 1B - Teil 8: Urkundenfälschung & Betrug'
+description: Prüfung auf Urkundenfälschung und Betrugsdelikte nach StGB §§263, 263a,
+  269, 270
+dimension: criminal_law_1b_fraud
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 1B-31
+  description: Gefälschte Atteste/Impfpässe/Belege
+  legal_basis: StGB §269
+  definition: Gefälschte beweiserhebliche Dateien (Atteste, Impfpässe)
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1B-32
+  description: Manipulierte eSignaturen/Logs
+  legal_basis: StGB §270
+  definition: Manipulation von elektronischen Signaturen zur Täuschung im Rechtsverkehr
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1B-33
+  description: Vortäuschung Tatsachen zur Vermögensverfügung
+  legal_basis: StGB §263
+  definition: Vorkasse-Betrug, Fake-Gewinne, falsche Tatsachen
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1B-34
+  description: Ponzi-/Investment-Scam
+  legal_basis: StGB §263
+  definition: Schneeballsystem, unrealistische Renditeversprechen
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1B-35
+  description: Fake-Shop/Payment-Manipulation
+  legal_basis: StGB §263a
+  definition: Computerbetrug durch Fake-Shop oder Script-basierte Buchungen
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1B-36
+  description: Missbrauch gespeicherter Programme
+  legal_basis: StGB §263a
+  definition: Manipulation von Eingabe-/Ablaufdaten in EDV-Systemen
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: criminal_law_contextual
+labels:
+  '0': FAIL
+  '1': PASS

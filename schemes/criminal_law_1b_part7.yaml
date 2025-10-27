@@ -1,0 +1,45 @@
+id: criminal_law_1b_part7
+name: 'Strafrecht 1B - Teil 7: Cybercrime & Doxing'
+description: Prüfung auf Ausspähen von Daten, Hacker-Tools und Doxing nach StGB §§126a,
+  202a-c
+dimension: criminal_law_1b_cybercrime
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 1B-27
+  description: Unbefugter Datenzugriff/Abfangen von Daten
+  legal_basis: StGB §§202a–202b
+  definition: Credentials-Dump, Sniffing, unbefugter Zugriff auf Daten
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1B-28
+  description: Bereitstellen von Hacker-Tools
+  legal_basis: StGB §202c
+  definition: Bereitstellung von Hacker-Tools, Passwortlisten, Exploit-Kits
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1B-29
+  description: Doxing mit Feindmarkierung
+  legal_basis: StGB §126a
+  definition: Veröffentlichung von Wohnadresse/Telefon/Arbeitsweg mit Anstiftung
+  action: Sofort entfernen, an Strafverfolgung melden
+  scope: both
+- id: 1B-30
+  description: Datenlisten mit Zielpersonen
+  legal_basis: StGB §126a
+  definition: Listen mit 'Zielpersonen' kombiniert mit Bedroh-/Hasskontext
+  action: Sofort entfernen, an Strafverfolgung melden
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: critical
+compliance_type: criminal_law_contextual
+report_required: true
+labels:
+  '0': FAIL
+  '1': PASS

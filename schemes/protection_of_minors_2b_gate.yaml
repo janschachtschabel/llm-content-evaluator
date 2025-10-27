@@ -1,0 +1,170 @@
+id: protection_of_minors_2b_gate
+name: "Jugendschutz GATE 2B - Entwicklungsbeeinträchtigend (Altersgestuft)"
+description: "Master-Gate für altersgestufte Bewertung entwicklungsbeeinträchtigender Inhalte nach JMStV §5 und JuSchG §14"
+dimension: protection_of_minors_2b_compliance
+type: derived
+version: "1.0"
+
+output_range:
+  min: 0
+  max: 18
+  type: int
+  values: [0, 6, 12, 16, 18]
+
+# 4 Altersgruppen-Gates als Dependencies
+dependencies:
+  - protection_of_minors_2b_u6_gate      # 0-6 Jahre (47 Indikatoren, 10 Teilschemas)
+  - protection_of_minors_2b_6_12_gate    # 6-12 Jahre (47 Indikatoren, 10 Teilschemas)
+  - protection_of_minors_2b_12_16_gate   # 12-16 Jahre (67 Indikatoren, 14 Teilschemas)
+  - protection_of_minors_2b_16_18_gate   # 16-18 Jahre (80 Indikatoren, 16 Teilschemas)
+
+# Logik: Bestimme jüngste Altersgruppe die NICHT beeinträchtigt wird
+rules:
+  # Für alle Altersgruppen geeignet (FSK 0)
+  - conditions:
+      - dimension: protection_of_minors_2b_u6
+        operator: "=="
+        value: 1
+    value: 0
+    label: "FSK 0 / ab 0 Jahren"
+    reasoning: "Inhalt ist für alle Altersgruppen geeignet - keine Entwicklungsbeeinträchtigung festgestellt"
+    confidence: 0.90
+
+  # Geeignet ab 6 Jahren (FSK 6)
+  - conditions:
+      - dimension: protection_of_minors_2b_u6
+        operator: "=="
+        value: 0
+      - dimension: protection_of_minors_2b_6_12
+        operator: "=="
+        value: 1
+    value: 6
+    label: "FSK 6 / ab 6 Jahren"
+    reasoning: "Inhalt entwicklungsbeeinträchtigend für Kinder unter 6 Jahren - ab 6 geeignet"
+    confidence: 0.88
+
+  # Geeignet ab 12 Jahren (FSK 12)
+  - conditions:
+      - dimension: protection_of_minors_2b_6_12
+        operator: "=="
+        value: 0
+      - dimension: protection_of_minors_2b_12_16
+        operator: "=="
+        value: 1
+    value: 12
+    label: "FSK 12 / ab 12 Jahren"
+    reasoning: "Inhalt entwicklungsbeeinträchtigend für Kinder unter 12 Jahren - ab 12 geeignet"
+    confidence: 0.86
+
+  # Geeignet ab 16 Jahren (FSK 16)
+  - conditions:
+      - dimension: protection_of_minors_2b_12_16
+        operator: "=="
+        value: 0
+      - dimension: protection_of_minors_2b_16_18
+        operator: "=="
+        value: 1
+    value: 16
+    label: "FSK 16 / ab 16 Jahren"
+    reasoning: "Inhalt entwicklungsbeeinträchtigend für Jugendliche unter 16 Jahren - ab 16 geeignet"
+    confidence: 0.84
+
+# Fallback: Entwicklungsbeeinträchtigend für alle Minderjährigen (18+)
+default:
+  value: 18
+  label: "Keine Jugendfreigabe / ab 18 Jahren"
+  reasoning: "Inhalt entwicklungsbeeinträchtigend für alle Minderjährigen - nur für Erwachsene geeignet"
+  confidence: 0.82
+
+labels:
+  "0": "FSK 0 - Freigegeben ohne Altersbeschränkung"
+  "6": "FSK 6 - Freigegeben ab 6 Jahren"
+  "12": "FSK 12 - Freigegeben ab 12 Jahren"
+  "16": "FSK 16 - Freigegeben ab 16 Jahren"
+  "18": "Keine Jugendfreigabe - Nur für Erwachsene"
+
+# Metadaten
+metadata:
+  legal_framework: "JMStV §5, JuSchG §10b, §14, §14a, DSA Art.28, AVMD-RL Art.6a"
+  gate_type: "2B - Entwicklungsbeeinträchtigend (altersgestuft)"
+  action_required: "Alterskennzeichnung / Technische Schutzmaßnahmen / Sendezeit"
+  total_indicators: 241
+  age_ratings:
+    - "FSK 0: Keine Beeinträchtigung für alle Altersgruppen"
+    - "FSK 6: Beeinträchtigung für Kinder unter 6 Jahren"
+    - "FSK 12: Beeinträchtigung für Kinder unter 12 Jahren"
+    - "FSK 16: Beeinträchtigung für Jugendliche unter 16 Jahren"
+    - "FSK 18/Keine Jugendfreigabe: Beeinträchtigung für Minderjährige unter 18 Jahren"
+  
+description_text: |
+  GATE 2B prüft auf entwicklungsbeeinträchtigende Inhalte nach deutschem Jugendschutzrecht.
+  
+  **Funktion:** Altersgestufte Bewertung von Inhalten (FSK/USK-Logik)
+  **Aktion:** Alterskennzeichnung / Technische Schutzmaßnahmen / Zeitsteuerung
+  **Output:** Empfohlenes Mindestalter (0, 6, 12, 16, 18)
+  
+  **4 Altersgruppen (241 Indikatoren gesamt):**
+  
+  **Ab 0 Jahre / Unter 6 (47 Indikatoren):**
+  - Übermäßig ängstigende Inhalte (Dauerstress/Bedrohung)
+  - Gewalt ohne Distanzierung (auch comic-haft)
+  - Bedrohliche Figuren/Jumpscares/Schockeffekte
+  - Sexualisierung/obszöne Sprache
+  - Gefährliche nachahmbare Handlungen ohne Warnhinweise
+  - Ungeeignete Werbung (Kaufappelle, Druck)
+  - Fehlende Kinderschutzmaßnahmen (Chats, In-App-Käufe)
+  - Fehlende technische Schutzmaßnahmen (Kids-Mode, PIN)
+  
+  **Ab 6 Jahre / Unter 12 (47 Indikatoren):**
+  - Intensive Bedrohung/Horror ohne blutige Details
+  - Comic-/Fantasy-Gewalt ohne Einordnung
+  - Derbe Sprache wiederkehrend
+  - Riskante Challenges ohne Warnhinweise
+  - Drogen-/Alkoholverharmlosung ohne Einordnung
+  - Suizid/Selbstverletzung erwähnt ohne Hilfsverweise
+  - In-App-Käufe/Glücksspiel ohne Schutz
+  - Zeitsteuerung 20:00-06:00 erforderlich
+  
+  **Ab 12 Jahre / Unter 16 (67 Indikatoren):**
+  - Intensive Gewalt mit suggestiver Wirkung
+  - Sexualthemen mit Erwachsenenperspektive
+  - Diskriminierung ohne Einordnung
+  - Glücksspielähnliche Mechaniken (Lootboxen/Gacha)
+  - Exzessives Nutzungsdesign (Endlos-Feed/Streaks)
+  - Essstörungen/Selbstverletzung ohne Prävention
+  - Körperbild-Druck/Body-Image ohne Hilfsangebote
+  - Zeitsteuerung 20:00-06:00 (ab 12) / 22:00-06:00 (ab 16)
+  
+  **Ab 16 Jahre / Unter 18 (80 Indikatoren):**
+  - Realistische harte Gewalt mit Leidfolgen
+  - Psychologischer Horror/anhaltender Terror
+  - Sexualität als Erzählmotiv (nicht pornografisch)
+  - Drogen detailliert ohne Verharmlosung
+  - Kriegs-/Katastrophen-Dokus mit belastenden Bildern
+  - Finanz-/Krypto-Bildung mit Risikohinweisen
+  - Desinformation/Verschwörungsmythen kritisch behandelt
+  - Zeitsteuerung 22:00-06:00 erforderlich
+  
+  **Folge bei Verstoß:**
+  - **Alterskennzeichnung:** FSK/USK 0/6/12/16/18 Pflicht
+  - **Technische Schutzmaßnahmen:** Kids-Mode, PIN, Profiltrennung
+  - **Zeitsteuerung:** Sendezeit 20:00-06:00 (ab 12), 22:00-06:00 (ab 16)
+  - **Jugendschutzprogramme:** age-de.xml Signalisierung, Whitelisting
+  - **Deskriptoren:** Angst, Gewalt, Sexualität, Interaktion, Käufe
+  - **Inhaltstrennung:** Kinder-/Jugend-/Erwachsenenbereiche
+  
+  **Bewertungslogik:**
+  Das System prüft alle 4 Altersgruppen parallel und ermittelt das jüngste Alter,
+  ab dem der Inhalt NICHT mehr beeinträchtigend ist:
+  
+  - U6 PASS → FSK 0 (für alle geeignet)
+  - U6 FAIL, 6-12 PASS → FSK 6 (ab 6 geeignet)
+  - 6-12 FAIL, 12-16 PASS → FSK 12 (ab 12 geeignet)
+  - 12-16 FAIL, 16-18 PASS → FSK 16 (ab 16 geeignet)
+  - 16-18 FAIL → FSK 18/Keine Jugendfreigabe (nur Erwachsene)
+  
+  **Performance:**
+  - Alle 4 Altersgruppen werden **parallel** evaluiert
+  - Jede Altersgruppe hat 10-16 Teilschemas, die ebenfalls parallel laufen
+  - Gesamt: ~50 Teilschemas parallel (begrenzt durch MAX_CONCURRENT_LLM_CALLS)
+  - Bei 20 parallelen Calls: ~3 Wellen à 5 Sekunden = ~15 Sekunden Gesamtzeit

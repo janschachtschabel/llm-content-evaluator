@@ -1,0 +1,53 @@
+id: protection_of_minors_2b_12_16_part4
+name: 'Jugendschutz 2B-12-16 - Teil 4: Gewalt & Desorientierung'
+description: Prüfung auf Gewalt und sozialethische Desorientierung für Jugendliche
+  12-16 Jahre
+dimension: protection_of_minors_2b_12_16_violence_disorientation
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 12-16
+age_label: Nicht geeignet für Jugendliche unter 16 Jahren
+gate_rules:
+- id: 2B-12-16
+  description: Fehlende/inkonsistente Online-Kennzeichnung (Streaming/Download) für
+    12–16
+  legal_basis: JuSchG §14 Abs.9
+  action: Online-Kennzeichnung ergänzen (ab 12/ab 16)
+  scope: platform
+- id: 2B-12-17
+  description: Übermäßig ängstigende Inhalte (intensiver Horror, dauerhafte Bedrohung)
+    ohne altersgerechte Einordnung (12–16)
+  legal_basis: JuSchG §10b Abs.1
+  action: Inhalt anpassen oder Zugangsbeschränkung U16 implementieren
+  scope: content
+- id: 2B-12-18
+  description: Gewalt wird befürwortet/bagatellisiert/angemessen legitimiert ohne
+    Distanzierung (12–16)
+  legal_basis: JuSchG §10b Abs.1
+  action: Inhalt anpassen (Distanzierung/alternative Lösungen) oder Zugangsbeschränkung
+    U16
+  scope: content
+- id: 2B-12-19
+  description: Sozialethische Desorientierung (Mobbing, Intoleranz, Herabwürdigung)
+    ohne kritische Einordnung (12–16)
+  legal_basis: JuSchG §10b Abs.1
+  action: Inhalt anpassen (Einordnung) oder Zugangsbeschränkung U16
+  scope: content
+- id: 2B-12-20
+  description: Riskante nachahmbare Handlungen/Challenges ohne Warn-/Präventionshinweis
+    (12–16)
+  legal_basis: JuSchG §10b Abs.1
+  action: Warnhinweise ergänzen oder Zugangsbeschränkung U16
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 12-16 geeignet
+  '1': PASS - Geeignet für 12-16

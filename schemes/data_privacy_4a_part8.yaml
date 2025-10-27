@@ -1,0 +1,44 @@
+id: data_privacy_4a_part8
+name: 'Datenschutz 4A - Teil 8: Minderjährigenschutz'
+description: Prüfung auf Minderjährigenschutz-Maßnahmen
+dimension: data_privacy_4a_minor_protection
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 4A-36
+  description: Keine anonyme/pseudonyme Nutzung möglich
+  legal_basis: JuSchG § 24a Abs. 2 Nr. 7 d
+  action: Pseudonyme Nutzung als Default ermöglichen
+  scope: platform
+- id: 4A-37
+  description: Elternbegleitungs-/Steuerungstools fehlen
+  legal_basis: JuSchG § 24a Abs. 2 Nr. 5
+  action: Zeit-/Ausgabenlimits, Kontaktfreigaben und Kontrollfunktionen implementieren
+  scope: both
+- id: 4A-38
+  description: Nicht altersgerechte Kaufappelle/Tracking-Ads
+  legal_basis: JuSchG § 10b Abs. 3
+  action: Werbung anpassen (keine Kaufappelle, Tracking deaktivieren)
+  scope: both
+- id: 4A-39
+  description: Personenbezogene Daten Minderjähriger für Direktwerbung/Profiling genutzt
+  legal_basis: AVMD-RL Art. 28b Abs. 3 UAbs. 4
+  action: Direktwerbung deaktivieren, Verarbeitungszwecke anpassen
+  scope: both
+- id: 4A-40
+  description: Unzulässiges berechtigtes Interesse für Minderjährigen-Tracking
+  legal_basis: DSGVO Art. 6 Abs. 1 lit. f
+  action: Verarbeitung stoppen, alternative Grundlage (Einwilligung) oder Zweck streichen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: data_protection
+labels:
+  '0': FAIL - Minderjährigenschutz unzureichend
+  '1': PASS - Minderjährigenschutz ausreichend

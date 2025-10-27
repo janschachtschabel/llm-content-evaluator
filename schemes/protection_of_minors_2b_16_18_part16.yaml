@@ -1,0 +1,59 @@
+id: protection_of_minors_2b_16_18_part16
+name: 'Jugendschutz 2B-16-18 - Teil 16: Finanz & Desinformation'
+description: Prüfung von Finanzinhalten und Desinformation für Jugendliche 16-18 Jahre
+dimension: protection_of_minors_2b_16_18_finance_disinfo
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 16-18
+age_label: Nicht geeignet für Jugendliche unter 18 Jahren
+gate_rules:
+- id: 2B-16-75
+  description: Körperbild/Body-Pressure - Unrealistische Ideale kritisch thematisiert
+    (16–18)
+  legal_basis: JMStV §5, JuSchG §10b
+  action: Kritische Einordnung ergänzen, Hilfsangebote bereitstellen
+  scope: content
+- id: 2B-16-76
+  description: Finanz-/Krypto-Inhalte Bildung - Erklärvideos mit Risikohinweisen,
+    keine Renditeversprechen (Volatilität, Disclaimer) (16–18)
+  legal_basis: JMStV §5
+  action: Risikohinweise/Prävention bereitstellen, keine Konsumtipps
+  scope: platform
+- id: 2B-16-77
+  description: Desinformation/Verschwörungsmythen kritisch - Aufarbeitung/Faktencheck,
+    kein Push (Gegenüberstellung, Quellen) (16–18)
+  legal_basis: JMStV §5
+  action: Faktencheck-Links bereitstellen, kein Push von Fehlinformationen
+  scope: platform
+- id: 2B-16-78
+  description: Politische Konflikte/Protest berichtend - Gewalt bei Demos im Nachrichtenkontext
+    (Ausschreitungsbilder mit Einordnung) (16–18)
+  legal_basis: JMStV §5
+  action: Inhalt anpassen (Distanzierung/alternative Lösungen) oder Zugangsbeschränkung
+    U18
+  scope: content
+- id: 2B-16-79
+  description: Historische NS-/Gewaltbilder eingeordnet - Dokumente im Lehr-/Wissenschaftskontext
+    (Archivfotos, Zeitzeugen) (16–18)
+  legal_basis: JMStV §5, JuSchG §18 Abs.3
+  action: Inhalt anpassen (Distanzierung/alternative Lösungen) oder Zugangsbeschränkung
+    U18
+  scope: content
+- id: 2B-16-80
+  description: Realitätsnahe Waffendarstellung ohne How-to - Funktions-/Historienkontext,
+    Sicherheit (Zerlegen/Benennen ohne Bauanleitung) (16–18)
+  legal_basis: JMStV §5
+  action: Lehr-/Wissenschaftskontext klar dokumentieren, Einordnung sicherstellen
+  scope: content
+default_action:
+  value: 1
+  label: PASS
+severity: medium
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 16-18 geeignet
+  '1': PASS - Geeignet für 16-18

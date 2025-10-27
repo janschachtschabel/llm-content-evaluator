@@ -1,0 +1,139 @@
+id: protection_of_minors_2a_gate
+name: "Jugendschutz GATE 2A - Jugendgefährdend (18+)"
+description: "Prüfung auf jugendgefährdende Inhalte nach JMStV §4 Abs.2 und StGB §184 - erfordert Altersverifikation (AVS)"
+dimension: protection_of_minors_2a_compliance
+type: derived
+version: "1.0"
+
+output_range:
+  min: 0
+  max: 1
+  type: int
+
+# 11 Teilschemas als Dependencies
+dependencies:
+  - protection_of_minors_2a_part1    # Pornografie & StGB (2A-01 bis 05)
+  - protection_of_minors_2a_part2    # BzKJ-Liste & Indizierung (2A-06 bis 10)
+  - protection_of_minors_2a_part3    # Indizierung & Generalklausel (2A-11 bis 15)
+  - protection_of_minors_2a_part4    # Verherrlichung (2A-16 bis 20)
+  - protection_of_minors_2a_part5    # AVS Grundlagen (2A-21 bis 25)
+  - protection_of_minors_2a_part6    # AVS Technik & Werbung (2A-26 bis 30)
+  - protection_of_minors_2a_part7    # EU & JuSchG (2A-31 bis 35)
+  - protection_of_minors_2a_part8    # Kennzeichnung & KJM (2A-36 bis 40)
+  - protection_of_minors_2a_part9    # KJM & Beispiele (2A-41 bis 45)
+  - protection_of_minors_2a_part10   # Beispielkonstellationen (2A-46 bis 50)
+  - protection_of_minors_2a_part11   # Umgehung & DSA (2A-51 bis 55)
+
+# UND-Verknüpfung: ALLE Teilprüfungen müssen bestanden werden
+rules:
+  - conditions:
+      - dimension: protection_of_minors_2a_pornography
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2a_bzkj_indexing
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2a_indexing_general
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2a_glorification
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2a_avs_basics
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2a_avs_technical
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2a_eu_juschg
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2a_labeling_kjm
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2a_kjm_examples
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2a_example_cases
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2a_circumvention_dsa
+        operator: "=="
+        value: 1
+    value: 1
+    label: "PASS - Kein jugendgefährdender Inhalt"
+    reasoning: "Alle Prüfungen bestanden - keine jugendgefährdenden Inhalte gemäß JMStV §4 Abs.2 festgestellt"
+    confidence: 0.95
+
+default:
+  value: 0
+  label: "FAIL - Jugendgefährdend (18+ / AVS erforderlich)"
+  reasoning: "Mindestens eine Prüfung nicht bestanden - Inhalt ist jugendgefährdend und erfordert Altersverifikationssystem (AVS)"
+  confidence: 0.95
+
+labels:
+  "0": "FAIL - Jugendgefährdend / 18+ / AVS erforderlich"
+  "1": "PASS - Kein jugendgefährdender Inhalt"
+
+metadata:
+  legal_framework: "JMStV §4 Abs.2, StGB §184, JuSchG §18, §24a, DSA Art.28, AVMD-RL Art.6a, GlüStV"
+  gate_type: "2A - Jugendgefährdend (18+)"
+  action_required: "Altersverifikationssystem (AVS) / geschlossene Benutzergruppe / Entfernung"
+  total_indicators: 55
+  severity: "CRITICAL"
+  
+description_text: |
+  GATE 2A prüft auf jugendgefährdende Inhalte nach deutschem Jugendschutzrecht.
+  
+  **Funktion:** Identifikation von Inhalten, die nur Erwachsenen (18+) zugänglich sein dürfen
+  **Aktion:** Altersverifikationssystem (AVS) implementieren / Inhalte entfernen
+  
+  **Prüfkategorien (55 Indikatoren):**
+  
+  **1. Pornografie (§184 StGB, JMStV §4 Abs.2 S.1 Nr.1):**
+  - Einfache Pornografie ohne AVS zugänglich
+  - Sexuelle Vorgänge grob aufdringlich in Vordergrund
+  - Gesamttendenz auf sexuelle Stimulation ausgerichtet
+  
+  **2. BzKJ-Indizierung (JMStV §4 Abs.2 S.1 Nr.2):**
+  - Inhalte in Teil A/C der BzKJ-Liste
+  - Wesensgleichheit mit indizierten Medien
+  - Indizierungsfallgruppen erfüllt
+  
+  **3. Schwere Jugendgefährdung (JMStV §4 Abs.2 S.1 Nr.3):**
+  - Verherrlichung von Drogen/Alkoholmissbrauch
+  - Pro-Ana/Pro-Mia (Essstörungen verherrlichend)
+  - Suizid als Problemlösung dargestellt
+  - Krass gegen Grundgesetz gerichtete Tendenzen
+  
+  **4. Altersverifikationssystem (AVS):**
+  - Fehlende/unzureichende Altersprüfung
+  - Nicht KJM-anerkanntes AVS
+  - Umgehungsmöglichkeiten
+  - Fehlende Session-Bindung/2FA
+  
+  **5. EU-Vorgaben & DSA:**
+  - Fehlende Schutzmaßnahmen (DSA Art.28)
+  - Personalisierte 18+-Empfehlungen an Minderjährige
+  - VLOP-Risikobewertung unzureichend
+  
+  **6. Beispielkonstellationen:**
+  - Pornografische Live-Streams ohne AVS
+  - Sexualisierte Audio-Inhalte frei zugänglich
+  - UGC-Pornografie ohne Volljährigkeitsnachweis
+  - KI-generierte Sexualinhalte ohne Zugangsschutz
+  
+  **Folge bei Verstoß:**
+  - **AVS implementieren:** KJM-anerkanntes Altersverifikationssystem
+  - **Geschlossene Benutzergruppe:** Zugang nur für verifizierte Erwachsene
+  - **Entfernung:** Bei schwersten Verstößen (z.B. gegen §184 StGB)
+  - **BzKJ-Abgleich:** Regelmäßiger Listenabgleich erforderlich
+  - **Re-Verifikation:** Periodische Überprüfung der Nutzerzugänge
+  
+  **Rechtsfolgen:**
+  - Bußgeld bis 500.000 EUR (JMStV §24)
+  - Strafbarkeit nach §184 StGB (Freiheitsstrafe bis 1 Jahr)
+  - Sperrung durch Aufsichtsbehörden
+  
+  **Performance:**
+  11 Teilschemas werden parallel evaluiert (begrenzt durch MAX_CONCURRENT_LLM_CALLS)

@@ -1,6 +1,6 @@
 """Schemes endpoint for listing available evaluation schemes."""
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from typing import List, Dict, Any
 from core.evaluation import EvaluationEngine
 from models.schemas import SchemesResponse
@@ -11,7 +11,12 @@ router = APIRouter(prefix="/schemes", tags=["schemes"])
 
 @router.get("/", response_model=SchemesResponse,
          summary="List Available Schemes")
-async def list_schemes():
+async def list_schemes(
+    include_parts: bool = Query(
+        False,
+        description="Include part schemas (e.g., *_part1, *_part2). Default: False (only master and gate schemas)"
+    )
+):
     """List all available evaluation schemes with detailed information.
     
     Returns comprehensive information about all loaded evaluation schemes including:
@@ -41,9 +46,20 @@ async def list_schemes():
       - `strafrecht_gate`: Criminal law compliance
       - `persoenlichkeitsrechte_gate`: Privacy rights compliance
     
+    - **Master Gates**: Combined assessments (a + b catalogs)
+      - `criminal_law_gate`: Strafrecht (1A + 1B)
+      - `protection_of_minors_gate`: Jugendschutz (2A + 2B)
+      - `personal_law_gate`: Persönlichkeitsrechte (3A + 3B)
+      - `data_privacy_gate`: Datenschutz (4A + 4B)
+    
     - **Derived Evaluations**: Combined assessments
       - `rechtliche_compliance`: Overall legal compliance
       - `overall_quality`: Weighted quality combination
+    
+    **Query Parameters:**
+      - `include_parts`: Include part schemas (default: False)
+        - False: Only master/gate schemas (e.g., criminal_law_gate)
+        - True: All schemas including parts (e.g., criminal_law_1a_part1)
     
     **Example Response:**
     ```json
@@ -68,6 +84,13 @@ async def list_schemes():
     try:
         engine = EvaluationEngine("schemes")
         schemes_data = engine.get_schemes()
+        
+        # Filter out part schemas unless explicitly requested
+        if not include_parts:
+            schemes_data = [
+                scheme for scheme in schemes_data
+                if "_part" not in scheme.get("id", "")
+            ]
         
         # Simple response without complex Pydantic models
         response = {

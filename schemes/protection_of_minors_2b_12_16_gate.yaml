@@ -1,0 +1,98 @@
+id: protection_of_minors_2b_12_16_gate
+name: "Jugendschutz 2B - 12 bis 16 Jahre Gate"
+description: "Prüfung auf entwicklungsbeeinträchtigende Inhalte für Jugendliche von 12 bis 16 Jahren"
+dimension: protection_of_minors_2b_12_16
+type: derived
+version: "1.0"
+
+output_range:
+  min: 0
+  max: 1
+  type: int
+
+age_group: "12-16"
+age_restriction: "Nicht für Jugendliche unter 16 Jahren geeignet"
+
+# 14 Teilschemas (67 Indikatoren, max. 5 pro Teil)
+dependencies:
+  - protection_of_minors_2b_12_16_part1     # Grundlagen (2B-12-01 bis 05)
+  - protection_of_minors_2b_12_16_part2     # Technische Schutzmaßnahmen (2B-12-06 bis 10)
+  - protection_of_minors_2b_12_16_part3     # Altersfreigaben (2B-12-11 bis 15)
+  - protection_of_minors_2b_12_16_part4     # Gewalt & Desorientierung (2B-12-16 bis 20)
+  - protection_of_minors_2b_12_16_part5     # Suizid & Rollenbilder (2B-12-21 bis 25)
+  - protection_of_minors_2b_12_16_part6     # FSF & Werbung (2B-12-26 bis 30)
+  - protection_of_minors_2b_12_16_part7     # Werbung & Interaktion (2B-12-31 bis 35)
+  - protection_of_minors_2b_12_16_part8     # Jugendschutzprogramme & DSA (2B-12-36 bis 40)
+  - protection_of_minors_2b_12_16_part9     # Medien & Gewalt (2B-12-41 bis 45)
+  - protection_of_minors_2b_12_16_part10    # Sprache & Diskriminierung (2B-12-46 bis 50)
+  - protection_of_minors_2b_12_16_part11    # Zeitsteuerung & Kennzeichnung (2B-12-51 bis 55)
+  - protection_of_minors_2b_12_16_part12    # Phänomene (2B-12-56 bis 60)
+  - protection_of_minors_2b_12_16_part13    # Sachinfo & Aufklärung (2B-12-61 bis 65)
+  - protection_of_minors_2b_12_16_part14    # Empfehlungssysteme & Ads (2B-12-66, 67)
+
+# UND-Verknüpfung: ALLE Teilprüfungen müssen bestanden werden
+rules:
+  - conditions:
+      - dimension: protection_of_minors_2b_12_16_basics
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_12_16_technical
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_12_16_ratings
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_12_16_violence_disorientation
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_12_16_suicide_roles
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_12_16_fsf_ads
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_12_16_ads_interaction
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_12_16_programs_dsa
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_12_16_media_violence
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_12_16_language_discrimination
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_12_16_timing_labeling
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_12_16_phenomena
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_12_16_education
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_12_16_recommendations
+        operator: "=="
+        value: 1
+    value: 1
+    label: "GEEIGNET für 12-16"
+    reasoning: "Alle Prüfungen für Jugendliche 12-16 Jahre bestanden - keine Entwicklungsbeeinträchtigung festgestellt"
+    confidence: 0.86
+
+default:
+  value: 0
+  label: "NICHT GEEIGNET für 12-16"
+  reasoning: "Mindestens eine Prüfung für Jugendliche 12-16 Jahre nicht bestanden - Inhalt entwicklungsbeeinträchtigend"
+  confidence: 0.86
+
+labels:
+  "0": "NICHT GEEIGNET - Entwicklungsbeeinträchtigung für 12-16"
+  "1": "GEEIGNET - Keine Beeinträchtigung für 12-16"
+
+metadata:
+  legal_framework: "JMStV §5, JuSchG §10b, §14, DSA Art.28, AVMD-RL Art.6a, FSF-Richtlinien"
+  age_group: "12-16 Jahre"
+  total_indicators: 67
+  parts_count: 14
+  action_required: "Zugangsbeschränkung U16 / Zeitsteuerung 20:00-06:00 (ab 12), 22:00-06:00 (ab 16) / Alterskennzeichnung FSK 16"

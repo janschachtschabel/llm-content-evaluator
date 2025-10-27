@@ -1,0 +1,46 @@
+id: protection_of_minors_2a_part5
+name: 'Jugendschutz 2A - Teil 5: AVS Grundlagen'
+description: Prüfung auf Altersverifikationssystem (AVS) - Grundlegende Anforderungen
+dimension: protection_of_minors_2a_avs_basics
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_restriction: 18+ / AVS erforderlich
+gate_rules:
+- id: 2A-21
+  description: Kein Zugang ausschließlich für Erwachsene (keine geschlossene Benutzergruppe)
+  legal_basis: JMStV §4 Abs.2 S.2
+  action: AVS-System implementieren (geschlossene Benutzergruppe)
+  scope: platform
+- id: 2A-22
+  description: Altersverifikationssystem (AVS) fehlt oder ist nicht implementiert
+  legal_basis: JMStV §4 Abs.2 S.2
+  action: AVS-System implementieren
+  scope: both
+- id: 2A-23
+  description: AVS lässt einfache/naheliegende Umgehung zu (Unzuverlässigkeit)
+  legal_basis: JMStV §4 Abs.2 S.2
+  action: AVS-System verbessern/ersetzen (KJM-konform)
+  scope: both
+- id: 2A-24
+  description: AVS gewährleistet keine mindestens einmalige Identifizierung und Altersprüfung
+  legal_basis: JMStV §4 Abs.2 S.2
+  action: Prüfen und bei Verstoß entfernen
+  scope: platform
+- id: 2A-25
+  description: AVS gewährleistet keine verlässliche Authentifizierung je Nutzungsvorgang
+    (Weitergabe von Zugangsdaten möglich)
+  legal_basis: JMStV §4 Abs.2 S.2
+  action: Prüfen und bei Verstoß entfernen
+  scope: platform
+default_action:
+  value: 1
+  label: PASS
+severity: critical
+compliance_type: youth_endangering_content
+labels:
+  '0': FAIL - AVS fehlt/unzureichend
+  '1': PASS - AVS vorhanden und ausreichend

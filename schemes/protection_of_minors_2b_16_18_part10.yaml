@@ -1,0 +1,52 @@
+id: protection_of_minors_2b_16_18_part10
+name: 'Jugendschutz 2B-16-18 - Teil 10: Sprache & Diskriminierung'
+description: Prüfung auf problematische Sprache und Diskriminierung für Jugendliche
+  16-18 Jahre
+dimension: protection_of_minors_2b_16_18_language_discrimination
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 16-18
+age_label: Nicht geeignet für Jugendliche unter 18 Jahren
+gate_rules:
+- id: 2B-16-45
+  description: Wiederholte diskriminierende Sprache/Bilder (unterhalb §130 StGB) ohne
+    Einordnung (16–18)
+  legal_basis: JMStV §5 Abs.1
+  action: Sprache anpassen oder Zugangsbeschränkung U18 implementieren
+  scope: both
+- id: 2B-16-46
+  description: Medizin/Operation/Ekel-Darstellungen ohne Lehrkontext/Triggerhinweis
+    (16–18)
+  legal_basis: JMStV §5 Abs.1
+  action: Lehrkontext/Triggerhinweis ergänzen oder Zugangsbeschränkung U18
+  scope: content
+- id: 2B-16-47
+  description: Drogen-/Alkoholszenen mit partieller Verharmlosung ohne kritische Einordnung
+    (16–18)
+  legal_basis: JMStV §5 Abs.1
+  action: Kritische Einordnung ergänzen oder Zugangsbeschränkung U18
+  scope: content
+- id: 2B-16-48
+  description: Suizid/Selbstverletzung vertieft ohne Hilfsverweise (ohne Methodik)
+    (16–18)
+  legal_basis: JMStV §5 Abs.1
+  action: Inhalt anpassen oder Zugangsbeschränkung U18 implementieren
+  scope: content
+- id: 2B-16-49
+  description: Fehlende Zeit-/Zugangssteuerung → Inhalte 'ab 16' üblicherweise für
+    Jüngere wahrnehmbar
+  legal_basis: JMStV §5 Abs.3 S.1 Nr.2
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 16-18 geeignet
+  '1': PASS - Geeignet für 16-18

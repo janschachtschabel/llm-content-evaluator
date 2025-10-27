@@ -1,0 +1,50 @@
+id: protection_of_minors_2a_part11
+name: 'Jugendschutz 2A - Teil 11: Umgehung & DSA'
+description: Prüfung von AVS-Umgehung und DSA-Vorgaben
+dimension: protection_of_minors_2a_circumvention_dsa
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_restriction: 18+ / AVS erforderlich
+gate_rules:
+- id: 2A-51
+  description: Explizite 'How-to' zur Umgehung von AVS/Mirrors/Proxies (faktisches
+    Zugänglichmachen U18)
+  legal_basis: JMStV §4 Abs.2
+  action: AVS-System verbessern/ersetzen (KJM-konform)
+  scope: both
+- id: 2A-52
+  description: VLOP-Risikobewertung berücksichtigt Wirkung von 18+-Inhalten auf Minderjährige
+    nicht/ungenügend
+  legal_basis: DSA Art.34 Abs.1 lit. b
+  action: Prüfen und bei Verstoß entfernen
+  scope: content
+- id: 2A-53
+  description: Fehlen sicherer Voreinstellungen/öffentliche Sichtbarkeit von 18+-Profilen/Inhalten
+    für U18
+  legal_basis: JuSchG §24a Abs.2 Nr.6–7
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 2A-54
+  description: Fehlende Elternbegleitungs-/Steuerungsfunktionen zur Begrenzung von
+    18+-Risiken
+  legal_basis: JuSchG §24a Abs.2 Nr.5
+  action: Prüfen und bei Verstoß entfernen
+  scope: platform
+- id: 2A-55
+  description: Tracking/Access-Gate zu 18+-Bereichen ohne vorherige, wirksame Einwilligung
+    (technische Jugendschutzfunktionen beeinträchtigt)
+  legal_basis: TDDDG §25
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_endangering_content
+labels:
+  '0': FAIL - Umgehung möglich / DSA-Verstöße
+  '1': PASS - Umgehung verhindert / DSA-konform

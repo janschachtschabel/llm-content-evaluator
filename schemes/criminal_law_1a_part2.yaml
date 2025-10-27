@@ -1,0 +1,67 @@
+id: criminal_law_1a_part2
+name: 'Strafrecht 1A - Teil 2: Volksverhetzung & Hassrede'
+description: Prüfung auf Volksverhetzung, Hassrede und Leugnung von NS-Verbrechen
+  nach StGB §130 und JMStV §4
+dimension: criminal_law_1a_hate_speech
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+  values:
+  - 0
+  - 1
+gate_rules:
+- id: 1A-06
+  description: Aufstacheln zum Hass gegen Teile der Bevölkerung
+  legal_basis: JMStV §4 Abs. 1 Nr. 3
+  definition: Inhalte, die zum Hass gegen ethnische, religiöse oder andere Bevölkerungsgruppen
+    aufstacheln
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1A-07
+  description: Volksverhetzung
+  legal_basis: StGB §130
+  definition: Aufstacheln zum Hass, Aufforderung zu Gewalt oder Willkür gegen Bevölkerungsteile
+  action: Sofort entfernen, prüfen ob Ausnahmetatbestand (Kunst, Wissenschaft)
+  scope: both
+- id: 1A-08
+  description: Angriff auf die Menschenwürde
+  legal_basis: JMStV §4 Abs. 1 Nr. 3
+  definition: Angriff auf Menschenwürde durch Beschimpfen, böswilliges Verächtlichmachen
+    oder Verleumden
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1A-09
+  description: Leugnung oder Verharmlosung von NS-Verbrechen
+  legal_basis: JMStV §4 Abs. 1 Nr. 4
+  definition: Leugnung, Billigung oder Verharmlosung von NS-Völkermord und NS-Gewalt-
+    und Willkürherrschaft
+  action: Prüfen und bei Verstoß entfernen
+  scope: content
+- id: 1A-10
+  description: Leugnung/Verharmlosung von Völkermord
+  legal_basis: StGB §130 Abs. 3
+  definition: Öffentliche Billigung, Leugnung oder Verharmlosung von Völkermord oder
+    NS-Verbrechen
+  action: Prüfen und entfernen, ggf. Altersverifikation erwägen
+  scope: content
+- id: 1A-11
+  description: Leugnung von Verbrechen gegen die Menschlichkeit
+  legal_basis: VStGB §6
+  definition: Leugnung oder Verharmlosung von Verbrechen gegen die Menschlichkeit
+    nach Völkerstrafgesetzbuch
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+  reasoning: Keine Volksverhetzung oder Hassrede erkannt
+severity: critical
+compliance_type: criminal_law
+report_required: true
+report_authority: Strafverfolgungsbehörden
+labels:
+  '0': FAIL - Verstoß erkannt
+  '1': PASS - Kein Verstoß

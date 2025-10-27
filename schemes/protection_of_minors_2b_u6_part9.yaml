@@ -1,0 +1,63 @@
+id: protection_of_minors_2b_u6_part9
+name: 'Jugendschutz 2B-U6 - Teil 9: KJM-Kriterien'
+description: Prüfung nach KJM-Kriterien für Kinder unter 6 Jahren
+dimension: protection_of_minors_2b_u6_kjm
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 0-6
+age_label: Nicht geeignet für Kinder unter 6 Jahren
+gate_rules:
+- id: 2B-0-36
+  description: Identifikationsfiguren vermitteln Rollenmuster/Haltungen entgegen Eigenverantwortlichkeit/Gemeinschaftsfähigkeit
+    (U6)
+  legal_basis: KJM-Kriterien B.3.9
+  action: Inhalte prüfen und ggf. anpassen (positive Rollenmodelle, Einordnung)
+  scope: both
+- id: 2B-0-37
+  description: Diskriminierende Darstellungen ohne Einordnung (Behinderung/Alter/äußere
+    Merkmale) (U6)
+  legal_basis: KJM-Kriterien B.5.3
+  action: Inhalte prüfen und ggf. anpassen (positive Rollenmodelle, Einordnung)
+  scope: content
+- id: 2B-0-38
+  description: Sexualdarstellungen setzen Erwachsenenperspektive/Erfahrungsfundus
+    voraus (Überforderung U6)
+  legal_basis: KJM-Kriterien B.4.4
+  action: Inhalt anpassen oder Zugangsbeschränkung U6 implementieren
+  scope: content
+- id: 2B-0-39
+  description: Belastende Nachrichten/Dokus ohne altersangemessene Einordnung/Didaktik
+    in kindgerichteten Umfeldern (U6)
+  legal_basis: MStV §19 i. V. m. JMStV §5
+  action: Warnhinweis ergänzen, Einordnung sicherstellen oder Zugangsbeschränkung
+    U6
+  scope: both
+  trigger_keywords:
+    - gewalt
+    - kampf
+    - brutal
+    - krieg
+    - katastrophe
+    - belastend
+    - nachricht
+    - doku
+  not_trigger_keywords:
+    - autoplay
+    - voreinstellung
+    - default
+    - sichtbarkeit
+  evaluation_hint: Dieser Indikator prüft INHALTLICHE BELASTUNG (Gewalt, Krieg,
+    Katastrophen etc.) ohne Einordnung. Trigger wenn der INHALT selbst belastend ist,
+    nicht wenn Platform-Einstellungen fehlen.
+default_action:
+  value: 1
+  label: PASS
+severity: medium
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für U6 geeignet
+  '1': PASS - Geeignet für U6

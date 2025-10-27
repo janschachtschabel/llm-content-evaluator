@@ -1,0 +1,51 @@
+id: protection_of_minors_2b_6_12_part6
+name: 'Jugendschutz 2B-6-12 - Teil 6: Suizid & KJM'
+description: Prüfung auf Suizid, Medizin und KJM-Kriterien für Kinder 6-12 Jahre
+dimension: protection_of_minors_2b_6_12_suicide_kjm
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 6-12
+age_label: Nicht geeignet für Kinder unter 12 Jahren
+gate_rules:
+- id: 2B-6-25
+  description: Suizid/Selbstverletzung erwähnt/angedeutet ohne Hilfsverweise (ohne
+    Methodik) (6–12)
+  legal_basis: JMStV §5 Abs.1
+  action: Inhalt anpassen oder Zugangsbeschränkung U12 implementieren
+  scope: content
+- id: 2B-6-26
+  description: Medizin/Operation/Ekel-Darstellungen ohne klaren Lehrkontext/Triggerhinweis
+    (6–12)
+  legal_basis: JMStV §5 Abs.1
+  action: Lehrkontext/Triggerhinweis ergänzen oder Zugangsbeschränkung U12
+  scope: content
+- id: 2B-6-27
+  description: Identifikationsfiguren vermitteln antisoziale Rollenbilder/Haltungen
+    (6–12)
+  legal_basis: KJM-Kriterien B.3.9
+  action: Inhalte prüfen und ggf. anpassen (positive Rollenmodelle, Einordnung)
+  scope: content
+- id: 2B-6-28
+  description: Diskriminierende Darstellungen (Herkunft/Religion/Behinderung/Körperbild)
+    ohne Einordnung (6–12)
+  legal_basis: KJM-Kriterien B.5.3
+  action: Inhalte prüfen und ggf. anpassen (positive Rollenmodelle, Einordnung)
+  scope: content
+- id: 2B-6-29
+  description: Sexualdarstellungen setzen jugendferne Perspektive/Erfahrungswissen
+    voraus (Überforderung 6–12)
+  legal_basis: KJM-Kriterien B.4.4
+  action: Inhaltstrennung implementieren (Kinder-/Erwachsenenbereich)
+  scope: content
+default_action:
+  value: 1
+  label: PASS
+severity: medium
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 6-12 geeignet
+  '1': PASS - Geeignet für 6-12

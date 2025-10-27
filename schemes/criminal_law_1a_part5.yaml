@@ -1,0 +1,57 @@
+id: criminal_law_1a_part5
+name: 'Strafrecht 1A - Teil 5: Kinder- & Jugendpornografie'
+description: Prüfung auf kinder- und jugendpornografische Inhalte nach StGB §§184b,
+  184c und JMStV §4
+dimension: criminal_law_1a_csam
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 1A-22
+  description: Kinder/Jugendliche in geschlechtsbetonter Körperhaltung
+  legal_basis: JMStV §4 Abs. 1 Nr. 9
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1A-23
+  description: Kinder/Jugendliche in unnatürlich geschlechtsbetonter Pose
+  legal_basis: JuSchG §15 Abs. 2 Nr. 4
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1A-24
+  description: Kinderpornografische Inhalte (auch virtuell)
+  legal_basis: JMStV §4 Abs. 1 Nr. 10
+  action: Sofort entfernen, an Strafverfolgung melden (§ 15 NetzDG)
+  scope: content
+- id: 1A-25
+  description: Kinderpornografie (Besitz, Verbreitung, Herstellung)
+  legal_basis: StGB §184b
+  action: Sofort entfernen, an Strafverfolgung melden (§ 15 NetzDG)
+  scope: both
+- id: 1A-26
+  description: Jugendpornografische Inhalte
+  legal_basis: JMStV §4 Abs. 1 Nr. 10
+  action: Sofort entfernen, an Strafverfolgung melden (§ 15 NetzDG)
+  scope: content
+- id: 1A-27
+  description: Jugendpornografische Inhalte
+  legal_basis: StGB §184c
+  action: Sofort entfernen, an Strafverfolgung melden (§ 15 NetzDG)
+  scope: content
+- id: 1A-28
+  description: Pornografie mit Gewalttätigkeiten
+  legal_basis: JMStV §4 Abs. 1 Nr. 10
+  action: Altersverifikation sicherstellen, ggf. entfernen
+  scope: content
+default_action:
+  value: 1
+  label: PASS
+severity: critical
+compliance_type: criminal_law
+report_required: true
+report_authority: Strafverfolgungsbehörden, BKA (CSAM)
+labels:
+  '0': FAIL - CSAM erkannt
+  '1': PASS - Kein CSAM

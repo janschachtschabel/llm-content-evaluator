@@ -1,0 +1,144 @@
+id: personal_law_3a_gate
+name: "GATE 3A - Individuelle Persönlichkeitsrechtsverletzungen"
+description: "Prüfung auf Verletzungen persönlicher Rechte nach GG, BGB, KUG und DSA"
+dimension: personal_law_3a_compliance
+type: derived
+version: "1.0"
+
+output_range:
+  min: 0
+  max: 1
+  type: int
+
+# 9 Teilschemas als Dependencies
+dependencies:
+  - personal_law_3a_part1    # APR & Ehrverletzungen (3A-01 bis 05)
+  - personal_law_3a_part2    # Strafrecht Ehre (3A-06 bis 10)
+  - personal_law_3a_part3    # Bildrechte KUG (3A-11 bis 15)
+  - personal_law_3a_part4    # Sphären & Deepfakes (3A-16 bis 20)
+  - personal_law_3a_part5    # Unternehmen & Schutzgesetze (3A-21 bis 25)
+  - personal_law_3a_part6    # Kontextrahmung & Anonymisierung (3A-26 bis 30)
+  - personal_law_3a_part7    # Phänomene (3A-31 bis 35)
+  - personal_law_3a_part8    # Urheberrecht & DSA (3A-36 bis 40)
+  - personal_law_3a_part9    # DSA & Haftung (3A-41 bis 3A-44)
+
+# UND-Verknüpfung: ALLE Teilprüfungen müssen bestanden werden
+rules:
+  - conditions:
+      - dimension: personal_law_3a_apr_defamation
+        operator: "=="
+        value: 1
+      - dimension: personal_law_3a_criminal_honor
+        operator: "=="
+        value: 1
+      - dimension: personal_law_3a_image_rights
+        operator: "=="
+        value: 1
+      - dimension: personal_law_3a_spheres_deepfakes
+        operator: "=="
+        value: 1
+      - dimension: personal_law_3a_business_protection
+        operator: "=="
+        value: 1
+      - dimension: personal_law_3a_context_anonymization
+        operator: "=="
+        value: 1
+      - dimension: personal_law_3a_phenomena
+        operator: "=="
+        value: 1
+      - dimension: personal_law_3a_copyright_dsa
+        operator: "=="
+        value: 1
+      - dimension: personal_law_3a_dsa_liability
+        operator: "=="
+        value: 1
+    value: 1
+    label: "PASS - Keine Persönlichkeitsrechtsverletzung"
+    reasoning: "Alle Prüfungen bestanden - keine Verletzung persönlicher Rechte festgestellt"
+    confidence: 0.90
+
+default:
+  value: 0
+  label: "FAIL - Persönlichkeitsrechtsverletzung"
+  reasoning: "Mindestens eine Prüfung nicht bestanden - Inhalt verletzt persönliche Rechte (Takedown/Moderation erforderlich)"
+  confidence: 0.90
+
+labels:
+  "0": "FAIL - Persönlichkeitsrechtsverletzung / Takedown erforderlich"
+  "1": "PASS - Keine Persönlichkeitsrechtsverletzung"
+
+metadata:
+  legal_framework: "GG Art. 1, 2, 5; BGB §§ 12, 823, 824, 1004; KUG §§ 22-24, 33; StGB §§ 185-189, 201, 201a; UrhG; DSA Art. 16-21"
+  gate_type: "3A - Persönlichkeitsrechte"
+  action_required: "Takedown / Redaktion / Anonymisierung / Notice & Action"
+  total_indicators: 44
+  severity: "HIGH"
+  
+description_text: |
+  GATE 3A prüft auf Verletzungen individueller Persönlichkeitsrechte.
+  
+  **Funktion:** Schutz persönlicher Integrität und Identität
+  **Aktion:** Takedown / Moderation / Anonymisierung / Beschwerdemanagement
+  
+  **Prüfkategorien (44 Indikatoren):**
+  
+  **1. Allgemeines Persönlichkeitsrecht (APR):**
+  - Bloßstellung/Schmähung identifizierbarer Personen
+  - Unwahre rufschädigende Tatsachenbehauptungen
+  - Unterlassungs-/Entfernungsansprüche
+  - Schmähkritik ohne Sachbezug
+  
+  **2. Ehrverletzungen (StGB §§ 185-189):**
+  - Beleidigung
+  - Üble Nachrede
+  - Verleumdung
+  - Verunglimpfung Verstorbener
+  
+  **3. Bildrechte (KUG §§ 22-24):**
+  - Recht am eigenen Bild
+  - Unbefugte Veröffentlichung von Bildnissen
+  - Postmortaler Bildnisschutz
+  - Ausnahmetatbestände (§ 23 KUG)
+  
+  **4. Sphärenschutz:**
+  - Privatsphäre (Wohn-/Familien-/Gesundheitsdaten)
+  - Intimsphäre (Sexual-/Gesundheitsgeheimnisse)
+  - Vertraulichkeit des Wortes (§ 201 StGB)
+  - Bildaufnahmen aus höchstpersönlichem Lebensbereich
+  
+  **5. Moderne Phänomene:**
+  - Deepfakes/Face-Swaps ohne Kennzeichnung
+  - Doxing/Online-Pranger
+  - Sexting (unerlaubte Weiterleitung)
+  - Sharenting (unangemessenes Teilen von Kinderfotos)
+  - Identitätsdiebstahl/Impersonation
+  
+  **6. Unternehmenspersönlichkeitsrecht:**
+  - Diffamierung von Unternehmen
+  - Kreditgefährdung (§ 824 BGB)
+  - Berufsehre
+  
+  **7. Urheberrecht:**
+  - Unbefugte Nutzung geschützter Werke
+  - Verletzung des Urheberbenennungsrechts
+  
+  **8. DSA-Compliance:**
+  - Notice-and-Action-Verfahren (Art. 16 DSA)
+  - Begründungspflicht (Art. 17 DSA)
+  - Beschwerdesystem (Art. 20-21 DSA)
+  - Transparenzpflichten
+  
+  **Folge bei Verstoß:**
+  - **Takedown:** Sofortige Entfernung rechtsverletzender Inhalte
+  - **Redaktion:** Schwärzung/Unkenntlichmachung sensibler Daten
+  - **Anonymisierung:** Entfernung identifizierender Merkmale
+  - **Gegendarstellung:** Verfahren zur Richtigstellung
+  - **Recht auf Vergessen:** Entfernung alter Verfehlungen
+  - **Staydown:** Verhinderung erneuter Uploads
+  
+  **Abwägung:**
+  Viele Fälle erfordern Einzelfallabwägung zwischen Persönlichkeitsrecht (Art. 1, 2 GG)
+  und Meinungsfreiheit (Art. 5 GG). Bei Schmähkritik/Formalbeleidigung überwiegt APR.
+  
+  **Performance:**
+  9 Teilschemas werden parallel evaluiert (begrenzt durch MAX_CONCURRENT_LLM_CALLS)

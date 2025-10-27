@@ -1,0 +1,48 @@
+id: personal_law_3b_part7
+name: 'Strukturelle Vorsorge 3B - Teil 7: AVMD-RL & KI-Risiken'
+description: Prüfung auf AVMD-RL und KI-spezifische Risiken
+dimension: personal_law_3b_avmd_ai
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 3B-31
+  description: VSP ohne Hinweise auf externe Beratungs-/Beschwerdestellen
+  legal_basis: AVMD-RL Art. 28b Abs. 3 j
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 3B-32
+  description: Keine Vorkehrungen gegen KI-gestützte Grooming/Imitation (Deepfake-Stimmen/Avatare)
+    in DMs/Calls
+  legal_basis: JuSchG § 24a Abs. 1 i. V. m. KI-Risiken
+  action: Kommunikation standardmäßig auf gewählten Kreis beschränken
+  scope: platform
+- id: 3B-33
+  description: Keine alters-/risikodifferenzierten Defaults (0–6/6–12/12–16/16–18)
+    für Sichtbarkeit, Kontakt, Empfehlungen
+  legal_basis: JuSchG § 24a Abs. 2 Nr. 6 i. V. m. DSA Art. 28
+  action: Altersdifferenzierte Defaults implementieren (0-6, 6-12, 12-16, 16-18)
+  scope: platform
+- id: 3B-34
+  description: Fehlendes Safety-Center (Hilfen, Selbstschutz-Anleitungen, Melde-FAQs)
+    direkt im Produkt
+  legal_basis: JuSchG § 10b Abs. 3
+  action: Altersgerechtes Melde- und Abhilfeverfahren implementieren
+  scope: platform
+- id: 3B-35
+  description: Kein 'Minor Mode'/Kinderprofil mit gehärteten Limits (DM-Opt-in, Kontaktanfragen-Gate,
+    Rate-Limiter)
+  legal_basis: JuSchG § 10b Abs. 3
+  action: Kommunikation standardmäßig auf gewählten Kreis beschränken
+  scope: platform
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: structural_safety_measures
+labels:
+  '0': FAIL - AVMD-RL/KI-Risiken unzureichend
+  '1': PASS - AVMD-RL/KI-Risiken ausreichend

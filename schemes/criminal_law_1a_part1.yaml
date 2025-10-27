@@ -1,0 +1,60 @@
+id: criminal_law_1a_part1
+name: 'Strafrecht 1A - Teil 1: Verfassungsfeindliche Symbole & Propaganda'
+description: Prüfung auf verfassungsfeindliche Inhalte, Propagandamittel und verbotene
+  Kennzeichen nach StGB §§86, 86a und JMStV §4
+dimension: criminal_law_1a_constitutional
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+  values:
+  - 0
+  - 1
+gate_rules:
+- id: 1A-01
+  description: Propagandamittel verfassungswidriger Organisationen
+  legal_basis: JMStV §4 Abs. 1 Nr. 1
+  definition: Verbreitung von Propagandamaterial verfassungsfeindlicher Organisationen
+    ohne Ausnahmetatbestand
+  action: Sofort entfernen, prüfen ob Ausnahmetatbestand (Kunst, Wissenschaft)
+  scope: both
+- id: 1A-02
+  description: Verbreiten von Propagandamitteln verfassungswidriger Organisationen
+  legal_basis: StGB §86
+  definition: Verbreitung, Herstellung oder Lagerung von Propagandamitteln verfassungswidriger
+    Organisationen
+  action: Sofort entfernen, prüfen ob Ausnahmetatbestand (Kunst, Wissenschaft)
+  scope: both
+- id: 1A-03
+  description: Inhalt gegen die freiheitliche demokratische Grundordnung
+  legal_basis: JMStV §4 Abs. 1 Nr. 1
+  definition: Inhalte, die sich gegen die freiheitliche demokratische Grundordnung
+    richten
+  action: Prüfen und bei Verstoß entfernen
+  scope: content
+- id: 1A-04
+  description: Verwenden von Kennzeichen verfassungswidriger Organisationen
+  legal_basis: JMStV §4 Abs. 1 Nr. 2
+  definition: Nutzung verbotener Symbole verfassungswidriger Organisationen
+  action: Sofort entfernen, prüfen ob Ausnahmetatbestand (Kunst, Wissenschaft)
+  scope: both
+- id: 1A-05
+  description: Verwenden/Zeigen verbotener Kennzeichen
+  legal_basis: StGB §86a
+  definition: Verwendung oder Zeigen verbotener Kennzeichen wie Hakenkreuz, SS-Runen
+    ohne zulässigen Kontext
+  action: Sofort entfernen, prüfen ob Ausnahmetatbestand (Kunst, Wissenschaft)
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+  reasoning: Keine verfassungsfeindlichen Symbole oder Propaganda erkannt
+severity: critical
+compliance_type: criminal_law
+report_required: true
+report_authority: Strafverfolgungsbehörden
+labels:
+  '0': FAIL - Verstoß erkannt
+  '1': PASS - Kein Verstoß

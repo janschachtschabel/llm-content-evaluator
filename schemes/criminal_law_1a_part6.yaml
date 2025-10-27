@@ -1,0 +1,40 @@
+id: criminal_law_1a_part6
+name: 'Strafrecht 1A - Teil 6: Schwere Pornografie & Indizierung'
+description: Prüfung auf Gewalt-/Tierpornografie und indizierte Medien nach StGB §184a
+  und JuSchG §18
+dimension: criminal_law_1a_extreme_porn
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 1A-29
+  description: Gewalt- oder Tierpornografie
+  legal_basis: StGB §184a
+  action: Altersverifikation sicherstellen, ggf. entfernen
+  scope: content
+- id: 1A-30
+  description: Pornografie mit sexuellen Handlungen von Menschen mit Tieren
+  legal_basis: JMStV §4 Abs. 1 Nr. 10
+  action: Altersverifikation sicherstellen, ggf. entfernen
+  scope: both
+- id: 1A-31
+  description: Aufnahme in Teil B oder D der Liste jugendgefährdender Medien
+  legal_basis: JMStV §4 Abs. 1 Nr. 11
+  action: Mit BPjM-Liste abgleichen, indizierte Inhalte entfernen
+  scope: both
+- id: 1A-32
+  description: Selbstzweckhafte und detaillierte Mord- und Metzelszenen
+  legal_basis: JuSchG §18 Abs. 1 S. 2
+  action: Prüfen und entfernen, ggf. Altersverifikation erwägen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: criminal_law
+labels:
+  '0': FAIL
+  '1': PASS

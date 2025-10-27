@@ -1,0 +1,52 @@
+id: protection_of_minors_2b_6_12_part4
+name: 'Jugendschutz 2B-6-12 - Teil 4: Angst & Gewalt'
+description: Prüfung auf ängstigende und gewalthaltige Inhalte für Kinder 6-12 Jahre
+dimension: protection_of_minors_2b_6_12_fear_violence
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 6-12
+age_label: Nicht geeignet für Kinder unter 12 Jahren
+gate_rules:
+- id: 2B-6-15
+  description: Übermäßig ängstigende Inhalte (intensive Bedrohung/Jumpscares) für
+    6–12
+  legal_basis: JuSchG §10b Abs.1
+  action: Inhalt anpassen oder Zugangsbeschränkung U12 implementieren
+  scope: content
+- id: 2B-6-16
+  description: Gewalt wird befürwortet/legitimiert (auch comic-/fantasyhaft) ohne
+    Distanzierung (6–12)
+  legal_basis: JuSchG §10b Abs.1
+  action: Inhalt anpassen (Distanzierung/alternative Lösungen) oder Zugangsbeschränkung
+    U12
+  scope: content
+- id: 2B-6-17
+  description: Sozialethisch desorientierende Inhalte (Mobbing/Intoleranz/Herabwürdigung)
+    ohne Einordnung (6–12)
+  legal_basis: JuSchG §10b Abs.1
+  action: Inhalt anpassen (Einordnung) oder Zugangsbeschränkung U12
+  scope: content
+- id: 2B-6-18
+  description: Belastende Realdarstellungen (Unfall/Katastrophe/Krieg) ohne altersangemessene
+    Einordnung (6–12)
+  legal_basis: JMStV §5 Abs.1
+  action: Altersgerechte Einordnung ergänzen oder Zugangsbeschränkung U12
+  scope: content
+- id: 2B-6-19
+  description: Realistisch wirkende Monster/Bedrohungen mit anhaltender Spannung ohne
+    Entlastung (6–12)
+  legal_basis: JMStV §5 Abs.1
+  action: Inhalt anpassen oder Zugangsbeschränkung U12 implementieren
+  scope: content
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 6-12 geeignet
+  '1': PASS - Geeignet für 6-12

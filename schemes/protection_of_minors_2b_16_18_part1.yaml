@@ -1,0 +1,50 @@
+id: protection_of_minors_2b_16_18_part1
+name: 'Jugendschutz 2B-16-18 - Teil 1: Grundlagen'
+description: Grundlegende Entwicklungsbeeinträchtigungs-Prüfungen für Jugendliche
+  16-18 Jahre
+dimension: protection_of_minors_2b_16_18_basics
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 16-18
+age_label: Nicht geeignet für Jugendliche unter 18 Jahren
+gate_rules:
+- id: 2B-16-01
+  description: Angebot geeignet die Entwicklung von Jugendlichen 16–18 zu beeinträchtigen
+  legal_basis: JMStV §5 Abs.1
+  action: Inhaltstrennung implementieren (Jugend-/Erwachsenenbereich)
+  scope: both
+- id: 2B-16-02
+  description: Anbieter stellt nicht sicher dass 16–18 das Angebot üblicherweise nicht
+    wahrnehmen
+  legal_basis: JMStV §5 Abs.1
+  action: Technische Schutzmaßnahmen implementieren (Alterslabel, Kids-Mode, PIN)
+  scope: both
+- id: 2B-16-03
+  description: Keine Altersfreigabe nach JuSchG vorhanden – Beeinträchtigung wird
+    vermutet (16–18)
+  legal_basis: JMStV §5 Abs.2
+  action: Korrekte Altersfreigabe einholen (FSK/USK)
+  scope: platform
+- id: 2B-16-04
+  description: Angebot ist wesensgleich mit nicht freigegebenem/beeinträchtigendem
+    Angebot (16–18)
+  legal_basis: JMStV §5 Abs.2
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 2B-16-05
+  description: Fehlen wirksamer Zugangsbeschränkungen für U18 (Profil-PIN/Jugendschutzschalter)
+  legal_basis: JMStV §5 Abs.3 S.1 Nr.1
+  action: Technische Schutzmaßnahmen implementieren (Alterslabel, Kids-Mode, PIN)
+  scope: platform
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 16-18 geeignet
+  '1': PASS - Geeignet für 16-18

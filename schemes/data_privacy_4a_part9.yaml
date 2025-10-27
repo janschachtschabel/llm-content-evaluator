@@ -1,0 +1,44 @@
+id: data_privacy_4a_part9
+name: 'Datenschutz 4A - Teil 9: Transparenz & Defaults'
+description: Prüfung auf Transparenz und Privacy by Default
+dimension: data_privacy_4a_transparency_defaults
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 4A-41
+  description: Keine Offenlegung von Tracking-/Profiling-Zwecken, Empfängern
+  legal_basis: DSGVO Art. 13–14
+  action: Informationspflichten erfüllen, AdTech-Kette offenlegen
+  scope: platform
+- id: 4A-42
+  description: Kinder-Defaults erlauben Werbung/Tracking ohne Opt-in
+  legal_basis: DSGVO Art. 25 i.V.m. Art. 8
+  action: Kinder-Defaults auf nicht personalisierte Nutzung stellen, Opt-in nachweisen
+  scope: platform
+- id: 4A-43
+  description: Opt-out gegen Direktwerbung ignoriert
+  legal_basis: DSGVO Art. 5 Abs. 1 lit. a, Art. 21
+  action: Widerspruchsprozesse verbessern, sofortige Umsetzung sicherstellen
+  scope: both
+- id: 4A-44
+  description: Profildaten unrichtig, keine Korrektur
+  legal_basis: DSGVO Art. 5 Abs. 1 lit. d
+  action: Qualitätssicherung einführen, Profilkorrekturen zeitnah durchführen
+  scope: platform
+- id: 4A-45
+  description: Unterauftragsverhältnisse/Transfers nicht geregelt
+  legal_basis: DSGVO Art. 28 Abs. 3
+  action: Sublieferanten vertraglich binden, Prüfrechte & Transparenz sicherstellen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: data_protection
+labels:
+  '0': FAIL - Transparenz/Defaults unzureichend
+  '1': PASS - Transparenz/Defaults ausreichend

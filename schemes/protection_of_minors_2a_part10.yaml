@@ -1,0 +1,46 @@
+id: protection_of_minors_2a_part10
+name: 'Jugendschutz 2A - Teil 10: Beispielkonstellationen'
+description: Prüfung weiterer pornografischer Beispielkonstellationen
+dimension: protection_of_minors_2a_example_cases
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_restriction: 18+ / AVS erforderlich
+gate_rules:
+- id: 2A-46
+  description: Sexualisierte Audio-Inhalte (Audioporn) frei zugänglich
+  legal_basis: JMStV §4 Abs.2 (Beispielkonstellation)
+  action: Altersverifikation sicherstellen (AVS implementieren)
+  scope: content
+- id: 2A-47
+  description: Pornografische Comics/Animation (Erwachsene) frei zugänglich
+  legal_basis: JMStV §4 Abs.2 (Beispielkonstellation)
+  action: Altersverifikation sicherstellen (AVS implementieren)
+  scope: both
+- id: 2A-48
+  description: Explizite Sex-Toy-Tutorials ohne medizinisch-aufklärerischen Kontext
+    frei zugänglich
+  legal_basis: JMStV §4 Abs.2 (Beispielkonstellation)
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 2A-49
+  description: UGC-Pornografie ohne dokumentierte Volljährigkeit der Darstellenden
+  legal_basis: JMStV §4 Abs.2 (Beispielkonstellation)
+  action: Altersverifikation sicherstellen (AVS implementieren)
+  scope: both
+- id: 2A-50
+  description: Sexualisierte KI-Bilder/Deepfakes (Erwachsene) ohne 18+-Zugangskontrolle
+  legal_basis: JMStV §4 Abs.2 (Beispielkonstellation)
+  action: Altersverifikation sicherstellen (AVS implementieren)
+  scope: content
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_endangering_content
+labels:
+  '0': FAIL - Pornografie ohne AVS
+  '1': PASS - Keine Pornografie oder AVS vorhanden

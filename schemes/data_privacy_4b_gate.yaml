@@ -1,0 +1,151 @@
+id: data_privacy_4b_gate
+name: "GATE 4B - Transparenz (KI-/Bot-Kennzeichnung, altersgerechte Infos, Einspruchsrecht)"
+description: "Prüfung auf Transparenzpflichten bei KI, Empfehlungssystemen und Moderation"
+dimension: data_privacy_4b_compliance
+type: derived
+version: "1.0"
+
+output_range:
+  min: 0
+  max: 1
+  type: int
+
+# 7 Teilschemas als Dependencies
+dependencies:
+  - data_privacy_4b_part1     # KI/Bot-Kennzeichnung (4B-01 bis 05)
+  - data_privacy_4b_part2     # Empfehlungssysteme (4B-06 bis 10)
+  - data_privacy_4b_part3     # Moderation & Beschwerde (4B-11 bis 15)
+  - data_privacy_4b_part4     # VLOP & Audit (4B-16 bis 20)
+  - data_privacy_4b_part5     # AVMD & KI-VO (4B-21 bis 25)
+  - data_privacy_4b_part6     # Vielfalt & Kinder (4B-26 bis 30)
+  - data_privacy_4b_part7     # Barrierefreiheit & Defaults (4B-31 bis 37)
+
+# UND-Verknüpfung: ALLE Teilprüfungen müssen bestanden werden
+rules:
+  - conditions:
+      - dimension: data_privacy_4b_ai_bot_labeling
+        operator: "=="
+        value: 1
+      - dimension: data_privacy_4b_recommender_systems
+        operator: "=="
+        value: 1
+      - dimension: data_privacy_4b_moderation_complaints
+        operator: "=="
+        value: 1
+      - dimension: data_privacy_4b_vlop_audit
+        operator: "=="
+        value: 1
+      - dimension: data_privacy_4b_avmd_ai_act
+        operator: "=="
+        value: 1
+      - dimension: data_privacy_4b_diversity_children
+        operator: "=="
+        value: 1
+      - dimension: data_privacy_4b_accessibility_defaults
+        operator: "=="
+        value: 1
+    value: 1
+    label: "PASS - Transparenz ausreichend"
+    reasoning: "Alle Prüfungen bestanden - ausreichende Transparenz bei KI, Empfehlungssystemen und Moderation"
+    confidence: 0.88
+
+default:
+  value: 0
+  label: "FAIL - Transparenz unzureichend"
+  reasoning: "Mindestens eine Prüfung nicht bestanden - unzureichende Transparenz festgestellt"
+  confidence: 0.88
+
+labels:
+  "0": "FAIL - Transparenz unzureichend"
+  "1": "PASS - Transparenz ausreichend"
+
+metadata:
+  legal_framework: "MStV §8, §18, §19, §70, §74; DSA Art. 14, 16-17, 20-21, 23-27, 30, 34-35, 38, 40, 42; AVMD-RL Art. 28b; EU-KI-VO Art. 52; JuSchG §24a; VN-KRK Art. 12, 17"
+  gate_type: "4B - Transparenz"
+  action_required: "KI-Kennzeichnung / Recommender-Offenlegung / Altersgerechte Info / Beschwerdesystem"
+  total_indicators: 37
+  severity: "HIGH"
+  
+description_text: |
+  GATE 4B prüft auf Transparenzpflichten bei KI, Empfehlungssystemen und Moderation.
+  
+  **Funktion:** Transparenz und Nachvollziehbarkeit algorithmischer Systeme
+  **Aktion:** KI-Kennzeichnung / Recommender-Offenlegung / Beschwerdesystem
+  
+  **Prüfkategorien (37 Indikatoren):**
+  
+  **1. KI/Bot-Kennzeichnung (MStV §18, EU-KI-VO Art. 52):**
+  - Automatisierte Inhalte/Bot-Accounts kennzeichnen
+  - Kennzeichnung altersgerecht für Minderjährige
+  - Chatbots: KI-Interaktionshinweise
+  - Emotionserkennung/biometrische Kategorisierung offenlegen
+  - Deepfakes/synthetische Medien kennzeichnen (Label, Wasserzeichen)
+  - KI-generierte Inhalte nicht als redaktionell präsentieren
+  
+  **2. Empfehlungssysteme (MStV §8, §74, DSA Art. 27):**
+  - Hauptparameter von Empfehlungssystemen offenlegen
+  - Ranking-/Auswahlkriterien bei Medienintermediären transparent
+  - Parameter verständlich beschreiben (klare Sprache)
+  - Leicht auffindbarer Zugang (max. 2 Klicks)
+  - Profiling-freier Empfehlungskanal (kontextbasierte Alternative)
+  - Einfluss vergüteter Inhalte auf Ranking offenlegen
+  - Kriterien für prominente Platzierungen dokumentieren
+  
+  **3. Werbe-Transparenz (DSA Art. 26, 30):**
+  - "Warum diese Anzeige?" mit Hauptparametern und Zahler
+  - Werbebibliothek vollständig mit Such-/Filterfunktionen
+  
+  **4. Altersgerechte Informationen (DSA Art. 14, JuSchG §24a):**
+  - AGB/Regeln altersgerecht aufbereitet
+  - Wesentliche Infos mit Icons, Beispielen, einfacher Sprache
+  - Kindgerechte Erklärungen zu Recommender/Melde/Complaint
+  - Safety-by-Default-Einstellungen transparent erläutern
+  - Privatsphäre-/Kontakt-Defaults klar kommunizieren
+  
+  **5. Moderation & Beschwerde (DSA Art. 16-17, 20-21, 23):**
+  - Notice-and-Action-Funktion klar und kindgerecht
+  - Begründungen für Moderationsmaßnahmen konkret
+  - Internes Beschwerdemanagement mit Fristen/Tracking
+  - Außergerichtliche Streitbeilegung zugänglich
+  - Schutz vor missbräuchlichen Meldungen
+  
+  **6. VLOP-Pflichten (DSA Art. 34-35, 40, 42):**
+  - Risikoanalyse für Recommender-Systeme
+  - Risikominderungsplan implementiert
+  - Audit-Vorgaben umgesetzt, Kooperation sichergestellt
+  - Datenzugang für Forschende etabliert
+  
+  **7. Transparenzberichte (DSA Art. 24):**
+  - Periodische Veröffentlichung
+  - Verständlich mit Kennzahlen
+  
+  **8. VSP-Anforderungen (AVMD-RL Art. 28b):**
+  - Transparentes Meldesystem
+  - Wirksames Beschwerdeverfahren
+  - Hinweise auf Beratungs-/Hilfsangebote
+  
+  **9. Vielfalt & Partizipation (VN-KRK Art. 12, 17):**
+  - Filterblasen-Signale bei jungen Zielgruppen
+  - Feedback-/Mitwirkungsmechanismen für Kinder
+  
+  **10. Barrierefreiheit (DSA Art. 38):**
+  - Hilfecenter klar und barrierefrei
+  
+  **11. Profiling-Kontrolle (DSA Art. 27, 28):**
+  - Prominenter "ohne Profiling"-Schalter für Kinderprofile
+  
+  **Folge bei Verstoß:**
+  - **KI-Kennzeichnung:** Klare, dauerhafte Labels implementieren
+  - **Recommender-Offenlegung:** Hauptparameter dokumentieren und veröffentlichen
+  - **Altersgerechte Info:** Texte und Design für Minderjährige anpassen
+  - **Beschwerdesystem:** Workflow mit Status & Entscheidung etablieren
+  - **Transparenzberichte:** Periodisch mit Kennzahlen veröffentlichen
+  - **DSFA:** Bei hohem Risiko durchführen
+  - **Barrierefreiheit:** Hilfeseiten überarbeiten
+  
+  **Unterschied zu Gate 4A:**
+  Gate 4A prüft **Datenschutz-Compliance** (Einwilligung, Rechtsgrundlagen).
+  Gate 4B prüft **Transparenz** (Offenlegung, Erklärbarkeit, Nachvollziehbarkeit).
+  
+  **Performance:**
+  7 Teilschemas werden parallel evaluiert (begrenzt durch MAX_CONCURRENT_LLM_CALLS)

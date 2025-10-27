@@ -1,0 +1,45 @@
+id: data_privacy_4a_part3
+name: 'Datenschutz 4A - Teil 3: Betroffenenrechte'
+description: Prüfung auf Betroffenenrechte nach DSGVO Art. 15-22
+dimension: data_privacy_4a_data_subject_rights
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 4A-11
+  description: Betroffenenrechte nicht fristgerecht bedient
+  legal_basis: DSGVO Art. 15–22
+  action: Prozesse & SLAs für Rechteanträge etablieren, Erfüllung dokumentieren
+  scope: both
+- id: 4A-12
+  description: Widerspruch gegen Direktwerbung ignoriert
+  legal_basis: DSGVO Art. 21
+  action: Wirksamen Opt-out implementieren, Werbeprofiling bei Widerspruch stoppen
+  scope: both
+- id: 4A-13
+  description: Datenportabilität nicht umgesetzt
+  legal_basis: DSGVO Art. 20
+  action: Portabilitätsfunktion bereitstellen, Exportformat und Prozesse definieren
+  scope: both
+- id: 4A-14
+  description: Privacy by Design/Default fehlt
+  legal_basis: DSGVO Art. 25
+  action: Datenschutzfreundliche Standard-Einstellungen implementieren und nachweisen
+  scope: platform
+- id: 4A-15
+  description: TOMs unzureichend
+  legal_basis: DSGVO Art. 32
+  action: Sicherheitsmaßnahmen (Verschlüsselung, Zugriffskontrolle, Logging) stärken
+    und dokumentieren
+  scope: platform
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: data_protection
+labels:
+  '0': FAIL - Betroffenenrechte nicht gewährt
+  '1': PASS - Betroffenenrechte gewährt

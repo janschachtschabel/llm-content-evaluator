@@ -1,0 +1,50 @@
+id: criminal_law_1b_part1
+name: 'Strafrecht 1B - Teil 1: Beleidigung & Ehrverletzung'
+description: Prüfung auf Beleidigung, üble Nachrede und Verleumdung nach StGB §§185-189
+dimension: criminal_law_1b_defamation
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 1B-01
+  description: Schmähung/Herabsetzung gegen identifizierbare Person
+  legal_basis: StGB §185
+  definition: Direkte Anrede oder Verwendung von Beleidigungswörtern gegenüber identifizierbarer
+    Person
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1B-02
+  description: Schmähkritik ohne Sachbezug
+  legal_basis: StGB §185
+  definition: Reine Diffamierung ohne sachlichen Bezug zur Kritik
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1B-03
+  description: Beleidigung durch wahre Tatsachen
+  legal_basis: StGB §192
+  definition: Beleidigung durch wahre Tatsachen in herabwürdigender Form
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1B-04
+  description: Ehrrührige Tatsachenbehauptung ohne Beleg
+  legal_basis: StGB §186
+  definition: Ehrrührige Behauptung (z.B. 'X ist Dieb') gegenüber Dritten ohne Beweis
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 1B-05
+  description: Konjunktiv-/Gerüchtsprache mit Rufschädigung
+  legal_basis: StGB §186
+  definition: Verwendung von 'angeblich', 'man sagt' mit rufschädigender Wirkung
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: criminal_law_contextual
+labels:
+  '0': FAIL
+  '1': PASS

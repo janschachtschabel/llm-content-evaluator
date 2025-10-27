@@ -1,0 +1,42 @@
+id: protection_of_minors_2b_16_18_part6
+name: 'Jugendschutz 2B-16-18 - Teil 6: Werbung'
+description: Prüfung von Werbung für Jugendliche 16-18 Jahre
+dimension: protection_of_minors_2b_16_18_advertising
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 16-18
+age_label: Nicht geeignet für Jugendliche unter 18 Jahren
+gate_rules:
+- id: 2B-16-26
+  description: Werbung nicht klar als solche gekennzeichnet in U18-zugänglichen Bereichen
+  legal_basis: JMStV §6 Abs.1
+  action: Werbung kindgerecht gestalten (eindeutig kennzeichnen, kein Druck)
+  scope: both
+- id: 2B-16-27
+  description: Direkte Kaufappelle an Minderjährige in U18-Umfeldern
+  legal_basis: JMStV §6 Abs.2 Nr.1
+  action: Werbung kindgerecht gestalten (eindeutig kennzeichnen, kein Druck)
+  scope: both
+- id: 2B-16-28
+  description: Werbung mit unangemessenem Druck/Angst gegenüber Minderjährigen (16–18)
+  legal_basis: JMStV §6 Abs.2 Nr.2
+  action: Werbung kindgerecht gestalten (eindeutig kennzeichnen, kein Druck)
+  scope: both
+- id: 2B-16-29
+  description: Ausnutzung jugendlicher Unerfahrenheit/Leichtgläubigkeit in Werbung
+    (16–18)
+  legal_basis: JMStV §6 Abs.2 Nr.3
+  action: Inhaltstrennung implementieren (Jugend-/Erwachsenenbereich)
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: medium
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 16-18 geeignet
+  '1': PASS - Geeignet für 16-18

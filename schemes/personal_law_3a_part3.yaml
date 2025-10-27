@@ -1,0 +1,48 @@
+id: personal_law_3a_part3
+name: 'Persönlichkeitsrechte 3A - Teil 3: Bildrechte KUG'
+description: Prüfung auf Verletzungen des Rechts am eigenen Bild
+dimension: personal_law_3a_image_rights
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 3A-11
+  description: Unbefugte Verbreitung/Herstellung von Bildaufnahmen aus dem höchstpersönlichen
+    Lebensbereich
+  legal_basis: § 201a StGB
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 3A-12
+  description: Veröffentlichung von Bildnissen ohne Einwilligung; keine Ausnahme nach
+    § 23 Abs. 1 Nr. 1–4 KUG
+  legal_basis: §§ 22, 23 KUG
+  action: Prüfen und bei Verstoß entfernen (Einwilligung prüfen)
+  scope: platform
+- id: 3A-13
+  description: Berechtigte Interessen des Abgebildeten überwiegen trotz Ausnahmetatbestand
+    (z. B. Zeitgeschehen)
+  legal_basis: § 23 Abs. 2 KUG
+  action: Prüfen und bei Verstoß entfernen (Einwilligung prüfen)
+  scope: both
+- id: 3A-14
+  description: Unbefugte Veröffentlichung von Bildnissen Verstorbener (postmortaler
+    Bildnisschutz)
+  legal_basis: §§ 22–24 KUG (postmortal)
+  action: Prüfen und bei Verstoß entfernen (Einwilligung prüfen)
+  scope: both
+- id: 3A-15
+  description: Strafbarkeit der unbefugten Verbreitung/Zur-Schau-Stellung eines Bildnisses
+  legal_basis: § 33 KUG
+  action: Prüfen und bei Verstoß entfernen (Einwilligung prüfen)
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: personal_rights_violation
+labels:
+  '0': FAIL - Bildrechtsverletzung
+  '1': PASS - Keine Bildrechtsverletzung

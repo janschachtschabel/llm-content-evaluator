@@ -1,0 +1,50 @@
+id: protection_of_minors_2b_12_16_part12
+name: 'Jugendschutz 2B-12-16 - Teil 12: Phänomene'
+description: Prüfung spezifischer Phänomene für Jugendliche 12-16 Jahre
+dimension: protection_of_minors_2b_12_16_phenomena
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 12-16
+age_label: Nicht geeignet für Jugendliche unter 16 Jahren
+gate_rules:
+- id: 2B-12-56
+  description: Drogen-/Alkoholverharmlosung oder Gruppendruck ohne Distanzierung (12–16)
+  legal_basis: Phänomen/JuSchG §10b Abs.1
+  action: Werbung kindgerecht gestalten (eindeutig kennzeichnen, kein Druck)
+  scope: content
+- id: 2B-12-57
+  description: Sexualaufklärung/Pädagogik - Sachliche Aufklärung (Körper, Consent,
+    Verhütung) Lehrfilm/Infografik (12–16)
+  legal_basis: JMStV §5, JuSchG §10b, §14
+  action: Lehrkontext dokumentieren, altersgerechte Aufklärung sicherstellen
+  scope: both
+- id: 2B-12-58
+  description: Horror/Angst intensiv (Bedrohliche Atmosphäre, Jumpscares) ohne Splatter
+    (12–16)
+  legal_basis: JMStV §5, JuSchG §10b
+  action: Inhalt anpassen oder Zugangsbeschränkung U16 implementieren
+  scope: content
+- id: 2B-12-59
+  description: Erotik/Nacktheit nicht pornografisch - Romantik, Aktkunst, beiläufige
+    Nacktheit (Küsse, Teilnacktheit) (12–16)
+  legal_basis: JMStV §5, JuSchG §14/14a
+  action: Inhalt anpassen oder Zugangsbeschränkung U16 implementieren
+  scope: content
+- id: 2B-12-60
+  description: Cybermobbing-Darstellungen - Thematisiert Mobbing ohne Anstiftung (Chat-Screens,
+    Plot) (12–16)
+  legal_basis: JMStV §5, JuSchG §10b
+  action: Inhalt anpassen (Einordnung) oder Zugangsbeschränkung U16
+  scope: content
+default_action:
+  value: 1
+  label: PASS
+severity: medium
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 12-16 geeignet
+  '1': PASS - Geeignet für 12-16

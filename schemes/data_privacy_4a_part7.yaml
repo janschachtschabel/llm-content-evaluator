@@ -1,0 +1,44 @@
+id: data_privacy_4a_part7
+name: 'Datenschutz 4A - Teil 7: DSA & JuSchG'
+description: Prüfung auf DSA und JuSchG Anforderungen für Minderjährige
+dimension: data_privacy_4a_dsa_juschg
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 4A-31
+  description: Privatsphäre-Maßnahmen für Minderjährige fehlen
+  legal_basis: DSA Art. 28 Abs. 1
+  action: Defaults zu Sichtbarkeit/Kontakt/Empfehlungen verbessern, Maßnahmen dokumentieren
+  scope: both
+- id: 4A-32
+  description: VLOP ohne Risikoanalyse/Risikominderung Kinder-Daten
+  legal_basis: DSA Art. 34–35
+  action: Risikoanalyse durchführen, Minderungsplan implementieren und berichten
+  scope: both
+- id: 4A-33
+  description: Kinderprofile standardmäßig öffentlich
+  legal_basis: JuSchG § 24a Abs. 2 Nr. 7 a
+  action: Profile standardmäßig privat setzen, Auffindbarkeit begrenzen
+  scope: both
+- id: 4A-34
+  description: Standort-/Kontaktdaten Minderjähriger sichtbar
+  legal_basis: JuSchG § 24a Abs. 2 Nr. 7 b
+  action: Standort- und Kontaktdaten standardmäßig deaktivieren
+  scope: both
+- id: 4A-35
+  description: Kommunikationskanäle unbeschränkt geöffnet
+  legal_basis: JuSchG § 24a Abs. 2 Nr. 7 c
+  action: Kontaktfunktionen auf freigegebenen Kreis begrenzen, Opt-in nutzen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: data_protection
+labels:
+  '0': FAIL - DSA/JuSchG unzureichend
+  '1': PASS - DSA/JuSchG ausreichend

@@ -1,0 +1,63 @@
+id: criminal_law_1b_part11
+name: 'Strafrecht 1B - Teil 11: DSA-Pflichten & Phänomene'
+description: Prüfung auf DSA-Meldepflichten und grenzwertige Phänomene nach DSA Art.
+  16-18
+dimension: criminal_law_1b_dsa_phenomena
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 1B-45
+  description: Nutzerbeschwerde zu rechtswidrigen 1B-Inhalten
+  legal_basis: DSA Art. 16
+  definition: Hinreichend genaue Beschwerde als Notice-&-Action-Trigger
+  action: Verfahren zur Begründungsmitteilung implementieren
+  scope: content
+- id: 1B-46
+  description: Begründungspflicht nach Maßnahme
+  legal_basis: DSA Art. 17
+  definition: Klare und spezifische Mitteilung an Betroffene nach Moderation
+  action: Verfahren zur Begründungsmitteilung implementieren
+  scope: both
+- id: 1B-47
+  description: Gefahr für Leben/Sicherheit - Behördenmeldung
+  legal_basis: DSA Art. 18
+  definition: Ernsthafte Drohung oder Stalking-Eskalation mit Gefahr
+  action: Sofort entfernen, an Strafverfolgung melden
+  scope: both
+- id: 1B-48
+  description: Hate Speech unterhalb §130-Schwelle
+  legal_basis: Phänomen
+  definition: Ehrverletzende/entwürdigende Äußerungen ohne Volksverhetzung
+  action: Prüfen nach Community Standards, ggf. entfernen
+  scope: both
+- id: 1B-49
+  description: Online-Pranger
+  legal_basis: Phänomen
+  definition: Öffentliche Bloßstellung einzelner Personen
+  action: Prüfen nach Community Standards, ggf. entfernen
+  scope: both
+- id: 1B-50
+  description: Identitätsdiebstahl/Fake-Accounts
+  legal_basis: Phänomen
+  definition: Profile/Accounts im Namen Dritter zur Rufschädigung
+  action: Prüfen nach Community Standards, ggf. entfernen
+  scope: both
+- id: 1B-51
+  description: Sexting-Leaks (NCI)
+  legal_basis: Phänomen
+  definition: Veröffentlichung intimer Inhalte ohne Einwilligung (Non-Consensual Intimacy)
+  action: Prüfen nach Community Standards, ggf. entfernen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: criminal_law_contextual
+report_required: true
+labels:
+  '0': FAIL
+  '1': PASS

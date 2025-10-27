@@ -1,0 +1,46 @@
+id: personal_law_3b_part6
+name: 'Strukturelle Vorsorge 3B - Teil 6: DSA & AVMD-RL'
+description: Prüfung auf DSA und AVMD-RL Anforderungen für Video-Sharing-Plattformen
+dimension: personal_law_3b_dsa_avmd
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 3B-26
+  description: Kein Zugang zur außergerichtlichen Streitbeilegung für Minderjährige/Eltern
+    (fehlende Information/Links)
+  legal_basis: DSA Art. 21
+  action: Profiling-basierte Werbung für Minderjährige unterbinden
+  scope: platform
+- id: 3B-27
+  description: Manipulative/destabilisierende Interface-Gestaltungen (Dark Patterns)
+    auch in Kinder-/Jugendbereichen verfügbar
+  legal_basis: DSA Art. 25
+  action: Dark Patterns in Kinder-/Jugendbereichen entfernen
+  scope: both
+- id: 3B-28
+  description: VSP ohne angemessene Maßnahmen zum Minderjährigenschutz (Videos/Kommunikation)
+  legal_basis: AVMD-RL Art. 28b Abs. 1 a
+  action: Kommunikation standardmäßig auf gewählten Kreis beschränken
+  scope: both
+- id: 3B-29
+  description: VSP ohne transparente/nutzerfreundliche Meldemechanismen (inkl. Missbrauch/UGC-Kontakt)
+  legal_basis: AVMD-RL Art. 28b Abs. 3 d
+  action: Altersgerechtes Melde- und Abhilfeverfahren implementieren
+  scope: both
+- id: 3B-30
+  description: VSP ohne elterlich steuerbare Kontrollsysteme
+  legal_basis: AVMD-RL Art. 28b Abs. 3 h
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: structural_safety_measures
+labels:
+  '0': FAIL - DSA/AVMD-RL unzureichend
+  '1': PASS - DSA/AVMD-RL ausreichend

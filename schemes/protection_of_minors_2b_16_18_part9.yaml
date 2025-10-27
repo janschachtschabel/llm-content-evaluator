@@ -1,0 +1,50 @@
+id: protection_of_minors_2b_16_18_part9
+name: 'Jugendschutz 2B-16-18 - Teil 9: Gewalt & Sexualität'
+description: Prüfung auf Gewalt und Sexualitätsdarstellungen für Jugendliche 16-18
+  Jahre
+dimension: protection_of_minors_2b_16_18_violence_sexuality
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 16-18
+age_label: Nicht geeignet für Jugendliche unter 18 Jahren
+gate_rules:
+- id: 2B-16-40
+  description: Realistische teils harte Gewalt mit Leidfolgen ohne ausreichende Kontextualisierung
+    (16–18)
+  legal_basis: JMStV §5 Abs.1
+  action: Inhalt anpassen (Distanzierung/alternative Lösungen) oder Zugangsbeschränkung
+    U18
+  scope: content
+- id: 2B-16-41
+  description: Deutlich bedrohliche Situationen mit anhaltendem Terror/psychologischem
+    Horror ohne Entlastung (16–18)
+  legal_basis: JMStV §5 Abs.1
+  action: Inhalt anpassen oder Zugangsbeschränkung U18 implementieren
+  scope: content
+- id: 2B-16-42
+  description: Sexualität als Erzählmotiv (nicht pornografisch) ohne Einordnung (16–18)
+  legal_basis: JMStV §5 Abs.1
+  action: Altersgerechte Einordnung/Aufbereitung ergänzen
+  scope: both
+- id: 2B-16-43
+  description: Derbe/obszöne Sprache wiederkehrend ohne Kontextualisierung (16–18)
+  legal_basis: JMStV §5 Abs.1
+  action: Sprache anpassen oder Zugangsbeschränkung U18 implementieren
+  scope: content
+- id: 2B-16-44
+  description: Kriminalität als Problemlösemuster ohne klare Konsequenzen (16–18)
+  legal_basis: JMStV §5 Abs.1
+  action: Konsequenzen darstellen oder Zugangsbeschränkung U18
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 16-18 geeignet
+  '1': PASS - Geeignet für 16-18

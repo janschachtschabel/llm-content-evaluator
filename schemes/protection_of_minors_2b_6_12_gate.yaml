@@ -1,0 +1,82 @@
+id: protection_of_minors_2b_6_12_gate
+name: "Jugendschutz 2B - 6 bis 12 Jahre Gate"
+description: "Prüfung auf entwicklungsbeeinträchtigende Inhalte für Kinder von 6 bis 12 Jahren"
+dimension: protection_of_minors_2b_6_12
+type: derived
+version: "1.0"
+
+output_range:
+  min: 0
+  max: 1
+  type: int
+
+age_group: "6-12"
+age_restriction: "Nicht für Kinder unter 12 Jahren geeignet"
+
+# 10 Teilschemas (47 Indikatoren, max. 5 pro Teil)
+dependencies:
+  - protection_of_minors_2b_6_12_part1    # Grundlagen (2B-6-01 bis 05)
+  - protection_of_minors_2b_6_12_part2    # Technische Schutzmaßnahmen (2B-6-06 bis 09, 38)
+  - protection_of_minors_2b_6_12_part3    # Altersfreigaben (2B-6-10 bis 14)
+  - protection_of_minors_2b_6_12_part4    # Angst & Gewalt (2B-6-15 bis 19)
+  - protection_of_minors_2b_6_12_part5    # Gewalt & Sexualisierung (2B-6-20 bis 24)
+  - protection_of_minors_2b_6_12_part6    # Suizid & KJM (2B-6-25 bis 29)
+  - protection_of_minors_2b_6_12_part7    # Interaktion & Nutzung (2B-6-30 bis 34)
+  - protection_of_minors_2b_6_12_part8    # Werbung & EU (2B-6-35 bis 39)
+  - protection_of_minors_2b_6_12_part9    # EU & Medien (2B-6-40 bis 43)
+  - protection_of_minors_2b_6_12_part10   # Phänomene (2B-6-44 bis 47)
+
+# UND-Verknüpfung: ALLE Teilprüfungen müssen bestanden werden
+rules:
+  - conditions:
+      - dimension: protection_of_minors_2b_6_12_basics
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_6_12_technical
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_6_12_ratings
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_6_12_fear_violence
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_6_12_violence_sexual
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_6_12_suicide_kjm
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_6_12_interaction
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_6_12_ads_eu
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_6_12_eu_media
+        operator: "=="
+        value: 1
+      - dimension: protection_of_minors_2b_6_12_phenomena
+        operator: "=="
+        value: 1
+    value: 1
+    label: "GEEIGNET für 6-12"
+    reasoning: "Alle Prüfungen für Kinder 6-12 Jahre bestanden - keine Entwicklungsbeeinträchtigung festgestellt"
+    confidence: 0.88
+
+default:
+  value: 0
+  label: "NICHT GEEIGNET für 6-12"
+  reasoning: "Mindestens eine Prüfung für Kinder 6-12 Jahre nicht bestanden - Inhalt entwicklungsbeeinträchtigend"
+  confidence: 0.88
+
+labels:
+  "0": "NICHT GEEIGNET - Entwicklungsbeeinträchtigung für 6-12"
+  "1": "GEEIGNET - Keine Beeinträchtigung für 6-12"
+
+metadata:
+  legal_framework: "JMStV §5, JuSchG §10b, §14, DSA Art.28, AVMD-RL Art.6a"
+  age_group: "6-12 Jahre"
+  total_indicators: 47
+  parts_count: 10
+  action_required: "Zugangsbeschränkung U12 / Zeitsteuerung 20:00-06:00 / Alterskennzeichnung FSK 12"

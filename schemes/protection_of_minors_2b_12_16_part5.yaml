@@ -1,0 +1,52 @@
+id: protection_of_minors_2b_12_16_part5
+name: 'Jugendschutz 2B-12-16 - Teil 5: Suizid & Rollenbilder'
+description: Prüfung auf Suizid und problematische Rollenbilder für Jugendliche 12-16
+  Jahre
+dimension: protection_of_minors_2b_12_16_suicide_roles
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 12-16
+age_label: Nicht geeignet für Jugendliche unter 16 Jahren
+gate_rules:
+- id: 2B-12-21
+  description: Drogen-/Alkoholverharmlosung ohne erkennbare Risiken/Distanzierung
+    (12–16)
+  legal_basis: JuSchG §10b Abs.1
+  action: Kritische Einordnung ergänzen oder Zugangsbeschränkung U16
+  scope: content
+- id: 2B-12-22
+  description: Selbstverletzung/Suizid thematisiert ohne Präventionskontext/Hotlines
+    (12–16)
+  legal_basis: JuSchG §10b Abs.1
+  action: Inhalt anpassen oder Zugangsbeschränkung U16 implementieren
+  scope: content
+- id: 2B-12-23
+  description: Identifikationsfiguren vermitteln problematische Rollenbilder/Haltungen
+    (Dominanz, Misogynie, Rassismus) (12–16)
+  legal_basis: KJM-Kriterien B.3.9
+  action: Inhalte prüfen und ggf. anpassen (positive Rollenmodelle, Einordnung)
+  scope: content
+- id: 2B-12-24
+  description: Diskriminierende Darstellungen (Herkunft/Religion/Behinderung/Körperbild)
+    ohne Einordnung (12–16)
+  legal_basis: KJM-Kriterien B.5.3
+  action: Inhalte prüfen und ggf. anpassen (positive Rollenmodelle, Einordnung)
+  scope: content
+- id: 2B-12-25
+  description: Sexualdarstellungen erfordern Erwachsenenperspektive/Erfahrungswissen
+    (Überforderung 12–16)
+  legal_basis: KJM-Kriterien B.4.4
+  action: Inhalt anpassen oder Zugangsbeschränkung U16 implementieren
+  scope: content
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 12-16 geeignet
+  '1': PASS - Geeignet für 12-16

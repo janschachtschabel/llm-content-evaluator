@@ -1,0 +1,52 @@
+id: protection_of_minors_2b_12_16_part13
+name: 'Jugendschutz 2B-12-16 - Teil 13: Sachinfo & Aufklärung'
+description: Prüfung von Aufklärungs- und Informationsinhalten für Jugendliche 12-16
+  Jahre
+dimension: protection_of_minors_2b_12_16_education
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 12-16
+age_label: Nicht geeignet für Jugendliche unter 16 Jahren
+gate_rules:
+- id: 2B-12-61
+  description: Essstörungen thematisiert ohne Verherrlichung - Body-Image/Anorexie
+    im Aufklärungskontext (Betroffenenerzählung) (12–16)
+  legal_basis: JMStV §5, JuSchG §10b
+  action: Hilfsangebote/Prävention ergänzen, keine Verherrlichung
+  scope: both
+- id: 2B-12-62
+  description: Drogenprävention/Sachinfo - Risiken, Gesetzeslage, Harm-Reduction (Erklärvideo,
+    Ratgeber) (12–16)
+  legal_basis: JMStV §5, JuSchG §10b
+  action: Kritische Einordnung ergänzen oder Zugangsbeschränkung U16
+  scope: content
+- id: 2B-12-63
+  description: Tod/Trauer/Traumata - Verlust/PTBS sensibel behandelt (Trauerprozess,
+    Therapie) (12–16)
+  legal_basis: JMStV §5, JuSchG §10b
+  action: Kindgerechte Auflösung/Entlastung ergänzen oder Zugangsbeschränkung U16
+  scope: both
+- id: 2B-12-64
+  description: Körperbild/Body-Pressure - Thematisierung unrealistischer Ideale ('Perfect
+    body' Kritik) (12–16)
+  legal_basis: JMStV §5, JuSchG §10b
+  action: Kritische Einordnung ergänzen, Hilfsangebote bereitstellen
+  scope: content
+- id: 2B-12-65
+  description: Parasoziale Bindungen/Creator-Druck - Übermäßige Bindung, monetäre
+    Anreize (Paywall-Nudging) (12–16)
+  legal_basis: JuSchG §10b Abs.3, DSA Art.28
+  action: Werbung kindgerecht gestalten (eindeutig kennzeichnen, kein Druck)
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: medium
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 12-16 geeignet
+  '1': PASS - Geeignet für 12-16

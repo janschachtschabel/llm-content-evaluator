@@ -1,0 +1,45 @@
+id: data_privacy_4a_part10
+name: 'Datenschutz 4A - Teil 10: Sonderfälle'
+description: Prüfung auf Sonderfälle (Videoüberwachung, Forschung, KI-Training)
+dimension: data_privacy_4a_special_cases
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 4A-46
+  description: Schutzbedarf von Kinder-Daten nicht gesondert berücksichtigt
+  legal_basis: DSGVO Art. 32 i.V.m. Art. 25
+  action: Risikobasierte TOMs für Kinder-Daten implementieren und überprüfen
+  scope: both
+- id: 4A-47
+  description: Videoüberwachung ohne Rechtsgrundlage/Hinweise
+  legal_basis: BDSG § 4, DSGVO Art. 6
+  action: Erforderlichkeit prüfen, Bereich begrenzen, Hinweisschilder & Löschfristen
+    umsetzen
+  scope: both
+- id: 4A-48
+  description: Forschung/Statistik ohne Garantien (keine Pseudonymisierung)
+  legal_basis: DSGVO Art. 89, BDSG
+  action: Daten pseudonymisieren/anonymisieren, Garantien & Zweckbindung dokumentieren
+  scope: platform
+- id: 4A-49
+  description: Medienprivileg unzutreffend in Anspruch genommen
+  legal_basis: DSGVO Art. 85 (Medienprivileg)
+  action: Prüfen ob Privileg greift, ansonsten volle DSGVO-Pflichten anwenden
+  scope: both
+- id: 4A-50
+  description: KI-Training mit Nutzerdaten ohne Rechtsbasis/Transparenz
+  legal_basis: DSGVO Art. 5, 6, 13–14
+  action: Verarbeitung stoppen bis Rechtsgrundlage/Transparenz geschaffen, Daten minimieren
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: data_protection
+labels:
+  '0': FAIL - Sonderfälle unzureichend
+  '1': PASS - Sonderfälle ausreichend

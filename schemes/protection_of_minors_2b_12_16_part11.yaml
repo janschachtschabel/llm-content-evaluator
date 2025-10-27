@@ -1,0 +1,49 @@
+id: protection_of_minors_2b_12_16_part11
+name: 'Jugendschutz 2B-12-16 - Teil 11: Zeitsteuerung & Kennzeichnung'
+description: Prüfung von Zeitsteuerung und Kennzeichnungen für Jugendliche 12-16 Jahre
+dimension: protection_of_minors_2b_12_16_timing_labeling
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 12-16
+age_label: Nicht geeignet für Jugendliche unter 16 Jahren
+gate_rules:
+- id: 2B-12-51
+  description: Keine Sendezeit-/Zugangssteuerung → Inhalte 'ab 12/16' üblicherweise
+    für Jüngere wahrnehmbar
+  legal_basis: JMStV §5 Abs.3 S.1 Nr.2
+  action: Zeitsteuerung implementieren (20:00-06:00) oder Zugangsbeschränkung
+  scope: platform
+- id: 2B-12-52
+  description: Fehlende/inkonsistente Plattform-Kennzeichnung/Altersdarstellung für
+    12–16-Inhalte
+  legal_basis: JuSchG §14a
+  action: Online-Kennzeichnung ergänzen (ab 12/ab 16)
+  scope: platform
+- id: 2B-12-53
+  description: Medium nicht freigegeben/bewertet (FSK/USK/FSF) obwohl entwicklungsbeeinträchtigend
+    (12–16)
+  legal_basis: JuSchG §18 Abs.8
+  action: Prüfung durch FSK/USK/FSF durchführen lassen
+  scope: platform
+- id: 2B-12-54
+  description: Körperbild-/Essstörungsinhalte ohne klare Ablehnung/Hilfsangebote (12–16)
+  legal_basis: Phänomen/JuSchG §10b Abs.1
+  action: Hilfsangebote/Prävention ergänzen, keine Verherrlichung
+  scope: content
+- id: 2B-12-55
+  description: Selbstverletzung/Suizid thematisiert ohne Präventionsrahmen (12–16)
+  legal_basis: Phänomen/JuSchG §10b Abs.1
+  action: Inhalt anpassen oder Zugangsbeschränkung U16 implementieren
+  scope: content
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 12-16 geeignet
+  '1': PASS - Geeignet für 12-16

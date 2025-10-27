@@ -1,0 +1,34 @@
+id: protection_of_minors_2b_12_16_part14
+name: 'Jugendschutz 2B-12-16 - Teil 14: Empfehlungssysteme & Ads'
+description: Prüfung von Empfehlungssystemen und Produktplatzierung für Jugendliche
+  12-16 Jahre
+dimension: protection_of_minors_2b_12_16_recommendations
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+age_group: 12-16
+age_label: Nicht geeignet für Jugendliche unter 16 Jahren
+gate_rules:
+- id: 2B-12-66
+  description: Empfehlungssysteme/Filterblasen - Personalisierung kumuliert belastende
+    Inhalte (12–16)
+  legal_basis: DSA Art.28, JMStV §5
+  action: No-recommend oberhalb Profilalter, Vielfalt-Kontrollen implementieren
+  scope: both
+- id: 2B-12-67
+  description: Produktplatzierung/Influencer-Ads - Werbung nicht eindeutig gekennzeichnet
+    (#ad fehlt) (12–16)
+  legal_basis: JMStV §6, §14a
+  action: Online-Kennzeichnung ergänzen (ab 12/ab 16)
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: medium
+compliance_type: youth_protection_age_restricted
+labels:
+  '0': FAIL - Nicht für 12-16 geeignet
+  '1': PASS - Geeignet für 12-16

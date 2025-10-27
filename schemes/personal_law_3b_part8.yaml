@@ -1,0 +1,49 @@
+id: personal_law_3b_part8
+name: 'Strukturelle Vorsorge 3B - Teil 8: Safety Features'
+description: Prüfung auf technische Safety Features
+dimension: personal_law_3b_safety_features
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 3B-36
+  description: Keine proaktive Erkennung/Rate-Limiting von massenhaften Kontaktanfragen
+    an Minderjährige (Spam/Grooming-Vektor)
+  legal_basis: JuSchG § 10b Abs. 3
+  action: Kommunikation standardmäßig auf gewählten Kreis beschränken
+  scope: platform
+- id: 3B-37
+  description: Fehlende Eskalationslogik gegen Wiederholungstäter (Warnen, Stummschalten,
+    Shadowban/Temporär-Sperre, De-Plattforming)
+  legal_basis: JuSchG § 10b Abs. 3
+  action: Eskalationslogik gegen Wiederholungstäter implementieren
+  scope: platform
+- id: 3B-38
+  description: Keine Sensitivitätsfilter/Blur-Preview für potentiell sensible Medien
+    in UGC (Nacktheit, Gewalt, Ekel – ohne Pornografie/G1)
+  legal_basis: JuSchG § 10b Abs. 3
+  action: Sensitivitätsfilter/Blur-Preview für sensible Medien implementieren
+  scope: both
+- id: 3B-39
+  description: Keine sichere Medienweiterleitung (Forward-Friction/'Are-you-sure'
+    bei heiklen Inhalten, z. B. intime Bilder)
+  legal_basis: JuSchG § 10b Abs. 3
+  action: Sichere Medienweiterleitung implementieren (Forward-Friction, Warnungen)
+  scope: platform
+- id: 3B-40
+  description: Fehlende Geo-/Proximity-Kontrollen (z. B. 'Leute in deiner Nähe') für
+    Minderjährige standardmäßig deaktiviert
+  legal_basis: JuSchG § 10b Abs. 3
+  action: Safety by Default implementieren
+  scope: platform
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: structural_safety_measures
+labels:
+  '0': FAIL - Safety Features unzureichend
+  '1': PASS - Safety Features ausreichend

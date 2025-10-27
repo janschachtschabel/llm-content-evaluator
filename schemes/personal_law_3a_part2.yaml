@@ -1,0 +1,45 @@
+id: personal_law_3a_part2
+name: 'Persönlichkeitsrechte 3A - Teil 2: Strafrecht Ehre'
+description: Prüfung auf strafrechtliche Ehrverletzungen
+dimension: personal_law_3a_criminal_honor
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 3A-06
+  description: Üble Nachrede (nicht erweislich wahre ehrverletzende Tatsachen)
+  legal_basis: § 186 StGB
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 3A-07
+  description: Verleumdung (wider besseres Wissen falsche ehrverletzende Tatsachen)
+  legal_basis: § 187 StGB
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 3A-08
+  description: Ehrverletzung gegen Personen des politischen Lebens mit Reichweiten-/Kampagnenbezug
+  legal_basis: § 188 StGB
+  action: Prüfen und bei Verstoß entfernen
+  scope: content
+- id: 3A-09
+  description: Verunglimpfung des Andenkens Verstorbener
+  legal_basis: § 189 StGB
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 3A-10
+  description: Verletzung der Vertraulichkeit des Wortes (Aufnahme/Weitergabe nichtöffentlicher
+    Gespräche)
+  legal_basis: § 201 StGB
+  action: Prüfen und bei Verstoß entfernen
+  scope: content
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: personal_rights_violation
+labels:
+  '0': FAIL - Strafrechtliche Ehrverletzung
+  '1': PASS - Keine Ehrverletzung

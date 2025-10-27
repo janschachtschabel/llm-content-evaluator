@@ -1,0 +1,46 @@
+id: personal_law_3a_part4
+name: 'Persönlichkeitsrechte 3A - Teil 4: Sphären & Deepfakes'
+description: Prüfung auf Sphärenverletzungen und Deepfake-Problematik
+dimension: personal_law_3a_spheres_deepfakes
+type: binary_gate
+version: '1.0'
+output_range:
+  min: 0
+  max: 1
+  type: int
+gate_rules:
+- id: 3A-16
+  description: Eingriff in Privatsphäre (Wohn-/Familien-/Gesundheitsdaten)
+  legal_basis: APR i.V.m. § 823 Abs. 1 BGB
+  action: Sphärenabwägung; in der Regel Takedown/Redaktion
+  scope: both
+- id: 3A-17
+  description: Eingriff in Intimsphäre (Sexual-/Gesundheitsgeheimnisse, intime Kommunikation)
+  legal_basis: APR i.V.m. § 823 Abs. 1 BGB
+  action: Nahezu stets Takedown; Begründung dokumentieren
+  scope: both
+- id: 3A-18
+  description: Recht am eigenen Wort – Veröffentlichung/Weitergabe vertraulicher Äußerungen
+    (zivilrechtlich)
+  legal_basis: APR i.V.m. § 823 Abs. 1 BGB
+  action: Prüfen und bei Verstoß entfernen
+  scope: both
+- id: 3A-19
+  description: Namensrecht/Impersonation (Zuordnungsverwirrung, Fake-Profile/Handle-Grabbing)
+  legal_basis: APR i.V.m. § 12 BGB
+  action: Prüfen und bei Verstoß entfernen, Account sperren, Identitätsnachweis einholen
+  scope: both
+- id: 3A-20
+  description: Deepfake/Face-Swap ohne Kennzeichnung oder entstellender Kontext (Verfälschung
+    der Selbstdarstellung)
+  legal_basis: APR i.V.m. § 823 Abs. 1 BGB
+  action: Prüfen und bei Verstoß entfernen, Kennzeichnungspflicht
+  scope: both
+default_action:
+  value: 1
+  label: PASS
+severity: high
+compliance_type: personal_rights_violation
+labels:
+  '0': FAIL - Sphären-/Deepfake-Verletzung
+  '1': PASS - Keine Sphären-/Deepfake-Verletzung
