@@ -1,0 +1,8 @@
+{
+  "installCommand": "pip3 install --disable-pip-version-check --no-cache-dir -r requirements.txt",
+  "functions": {
+    "api/**/*": {
+      "runtime": "python3.12"
+    }
+  }
+}
