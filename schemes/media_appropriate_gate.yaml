@@ -1,0 +1,48 @@
+id: media_appropriate_gate
+name: Mediale Passung – Gesamtgate
+description: Abgeleitete Gesamtbewertung der medialen Passung digitaler Bildungsinhalte auf Basis der Teilkataloge
+dimension: media_appropriateness
+type: derived
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+dependencies:
+  - media_appropriate_part1
+  - media_appropriate_part2
+  - media_appropriate_part3
+  - media_appropriate_part4
+  - media_appropriate_part5
+
+rules:
+  - conditions:
+      - dimension: media_appropriate_technical
+        operator: ">="
+        value: 0
+    value: "weighted_average"
+    label: "Gewichtete mediale Passung"
+    reasoning: "Aggregation der Teilbereiche Technik, Pädagogik, Gestaltung, Barrierefreiheit und Betrieb/Weiterentwicklung"
+    confidence: 0.9
+    weights:
+      media_appropriate_technical: 2.0
+      media_appropriate_pedagogy: 2.0
+      media_appropriate_design: 1.5
+      media_appropriate_accessibility: 2.0
+      media_appropriate_operations: 1.5
+
+default:
+  value: 0.0
+  label: "Unbewertet"
+  reasoning: "Keine ausreichenden Daten aus den Teilbereichen"
+  confidence: 0.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

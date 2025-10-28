@@ -1,0 +1,76 @@
+id: factual_accuracy_part4
+name: Sachrichtigkeit – Quellen & Transparenz (Teil 4)
+description: Bewertung der Dokumentation, Offenlegung und Überprüfbarkeit verwendeter Informationsquellen
+dimension: factual_accuracy_sources
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: quellenvollstaendigkeit
+    prompt: "Sind alle Quellen vollständig angegeben (Autor, Titel, Jahr, Zugriff)?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Quellenangaben fehlen weitgehend"}
+      2: {score: 0.5, description: "Mehrere unvollständige Angaben"}
+      3: {score: 0.75, description: "Weitgehend vollständig"}
+      4: {score: 1.0, description: "Alle Quellen vollständig dokumentiert"}
+      na: null
+
+  - id: quellenzugriff
+    prompt: "Sind Quellen auffindbar und für Lernende zugänglich (Links, DOI, Bibliothek)?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Quellen nicht nachvollziehbar"}
+      2: {score: 0.5, description: "Teilweise eingeschränkter Zugriff"}
+      3: {score: 0.75, description: "Meistens zugänglich"}
+      4: {score: 1.0, description: "Vollständig leicht auffindbar"}
+      na: null
+
+  - id: zitation_standard
+    prompt: "Entspricht die Zitierweise etablierten Standards (APA, MLA, Chicago etc.)?"
+    weight: 1.0
+    values:
+      1: {score: 0.25, description: "Kaum standardisierte Zitierweise"}
+      2: {score: 0.5, description: "Uneinheitliche oder fehlerhafte Zitate"}
+      3: {score: 0.75, description: "Weitgehend standardkonform"}
+      4: {score: 1.0, description: "Konsequent standardkonform"}
+      na: null
+
+  - id: quellenevidenz
+    prompt: "Sind Quellen verschiedener Typen (Studien, Datenbanken, Primärdokumente) ausgewogen vertreten?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Nur ein Quellentyp dominiert"}
+      2: {score: 0.5, description: "Etwas Vielfalt, aber Schwerpunkte"}
+      3: {score: 0.75, description: "Weitgehend ausgewogen"}
+      4: {score: 1.0, description: "Breites Spektrum ausgewogener Quellen"}
+      na: null
+
+  - id: urheber_transparenz
+    prompt: "Wird transparent gemacht, wer Inhalte erstellt hat und welche Expertise vorliegt?"
+    weight: 1.0
+    values:
+      1: {score: 0.25, description: "Urheberschaft unklar"}
+      2: {score: 0.5, description: "Teilweise unklare Urheberschaft"}
+      3: {score: 0.75, description: "Weitgehend klar"}
+      4: {score: 1.0, description: "Vollständig transparent"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

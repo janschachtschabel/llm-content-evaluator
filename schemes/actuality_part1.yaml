@@ -1,0 +1,76 @@
+id: actuality_part1
+name: Aktualität – Forschung & Wissenschaft (Teil 1)
+description: Bewertung der Aktualität wissenschaftlicher Bezüge, Studien und Erkenntnisse
+dimension: actuality_research
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: aktuelle_forschung
+    prompt: "Werden Forschungsergebnisse der letzten 3 Jahre systematisch eingebunden?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Keine aktuellen Forschungsergebnisse erwähnt"}
+      2: {score: 0.5, description: "Vereinzelte, aber veraltete Studien"}
+      3: {score: 0.75, description: "Überwiegend aktuelle Studien"}
+      4: {score: 1.0, description: "Durchgehend neueste Studien und Reviews"}
+      na: null
+
+  - id: wissenschaftliche_reviews
+    prompt: "Werden systematische Reviews oder Metaanalysen referenziert?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine Reviews oder Metaanalysen"}
+      2: {score: 0.5, description: "Vereinzelte veraltete Reviews"}
+      3: {score: 0.75, description: "Mehrheitlich aktuelle Reviews"}
+      4: {score: 1.0, description: "Aktuelle Metaanalysen zentral eingebunden"}
+      na: null
+
+  - id: forschungsluecken
+    prompt: "Werden aktuelle Forschungslücken oder kontroverse Debatten thematisiert?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Forschungslücken ignoriert"}
+      2: {score: 0.5, description: "Forschungslücken nur erwähnt"}
+      3: {score: 0.75, description: "Forschungslücken teilweise diskutiert"}
+      4: {score: 1.0, description: "Ausführliche Analyse aktueller Forschungslücken"}
+      na: null
+
+  - id: vorveroeffentlichungen
+    prompt: "Werden Preprints oder Early-Access-Publikationen berücksichtigt, sofern relevant?"
+    weight: 1.0
+    values:
+      1: {score: 0.25, description: "Keine Hinweise auf neueste Veröffentlichungen"}
+      2: {score: 0.5, description: "Einige Preprints, aber unsystematisch"}
+      3: {score: 0.75, description: "Mehrheitlich aktuelle Preprints"}
+      4: {score: 1.0, description: "Aktiv genutzte Preprints zur Aktualitätssicherung"}
+      na: null
+
+  - id: forschungstransfer
+    prompt: "Werden aktuelle wissenschaftliche Erkenntnisse in pädagogische Praxis übertragen?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Keine Übertragung erkennbar"}
+      2: {score: 0.5, description: "Teilweise Übertragung"}
+      3: {score: 0.75, description: "Weitgehend nachvollziehbare Übertragung"}
+      4: {score: 1.0, description: "Durchgehend fundierte Praxisübertragung"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

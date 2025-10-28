@@ -1,0 +1,76 @@
+id: neutrality_part3
+name: Neutralität – Reflexion & Lernendenautonomie (Teil 3)
+description: Bewertung, inwiefern Lernende zur eigenständigen Analyse, Reflexion und Meinungsbildung befähigt werden
+dimension: neutrality_autonomy
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: kritisches_fragen
+    prompt: "Stellt das Material offene Fragen, die kritisches Hinterfragen fördern?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine kritischen Fragen"}
+      2: {score: 0.5, description: "Wenige kritische Fragen"}
+      3: {score: 0.75, description: "Mehrheitlich kritische Fragen vorhanden"}
+      4: {score: 1.0, description: "Vielfältige, anspruchsvolle Reflexionsfragen"}
+      na: null
+
+  - id: analyse_methoden
+    prompt: "Werden Methoden vermittelt, um Informationen unabhängig zu analysieren?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Keine Methoden"}
+      2: {score: 0.5, description: "Nur rudimentäre Methoden"}
+      3: {score: 0.75, description: "Umfassende, aber vereinzelte Methoden"}
+      4: {score: 1.0, description: "Vielfältige, gut erklärte Analysemethoden"}
+      na: null
+
+  - id: diskurskompetenz
+    prompt: "Regt das Material zu respektvollem Austausch unterschiedlicher Standpunkte an?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Kein Austausch vorgesehen"}
+      2: {score: 0.5, description: "Austausch optional, kaum Anleitung"}
+      3: {score: 0.75, description: "Moderater Austausch mit etwas Anleitung"}
+      4: {score: 1.0, description: "Strukturiert, respektvoll und moderiert"}
+      na: null
+
+  - id: bias_erkennung
+    prompt: "Schult das Material den Umgang mit Bias und Desinformation?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Bias wird ignoriert"}
+      2: {score: 0.5, description: "Bias wird erwähnt, aber nicht vertieft"}
+      3: {score: 0.75, description: "Bias wird analysiert, wenige Übungen"}
+      4: {score: 1.0, description: "Umfassende Strategien inkl. Übungen"}
+      na: null
+
+  - id: selbstreflexion
+    prompt: "Ermutigt das Material zur Reflexion eigener Werte ohne Vorgaben?"
+    weight: 1.0
+    values:
+      1: {score: 0.25, description: "Keine Selbstreflexion"}
+      2: {score: 0.5, description: "Oberflächliche Reflexion"}
+      3: {score: 0.75, description: "Reflexion vorhanden, teilweise lenkend"}
+      4: {score: 1.0, description: "Selbstbestimmte, offene Reflexionsimpulse"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

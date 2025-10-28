@@ -1,0 +1,76 @@
+id: linguistic_appropriateness_part3
+name: Sprachliche Angemessenheit – Wortwahl & Terminologie (Teil 3)
+description: Bewertung der Präzision, Verständlichkeit und Konsistenz der verwendeten Fachsprache
+dimension: linguistic_vocabulary
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: fachbegriffe_erklaerung
+    prompt: "Werden Fachbegriffe korrekt eingeführt und verständlich erklärt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Fachbegriffe ohne Erklärung"}
+      2: {score: 0.5, description: "Einige Begriffe erklärt, teilweise unverständlich"}
+      3: {score: 0.75, description: "Weitestgehend klar eingeführt"}
+      4: {score: 1.0, description: "Alle Fachbegriffe sehr klar und verständlich erklärt"}
+      na: null
+
+  - id: terminologie_konsistenz
+    prompt: "Ist die verwendete Terminologie konsistent und widerspruchsfrei?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Widersprüchliche Terminologie"}
+      2: {score: 0.5, description: "Mehrere Inkonsistenzen"}
+      3: {score: 0.75, description: "Weitestgehend konsistent"}
+      4: {score: 1.0, description: "Streng konsistente Terminologie"}
+      na: null
+
+  - id: wortwahl_praezision
+    prompt: "Sind Begriffe präzise, differenziert und kontextgerecht gewählt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Unpräzise oder irreführende Wortwahl"}
+      2: {score: 0.5, description: "Teilweise unpräzise"}
+      3: {score: 0.75, description: "Überwiegend präzise"}
+      4: {score: 1.0, description: "Sehr präzise, differenzierte Wortwahl"}
+      na: null
+
+  - id: idiome_metaphern
+    prompt: "Werden idiomatische Ausdrücke oder Metaphern verständlich eingesetzt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Unpassende oder unverständliche Metaphern"}
+      2: {score: 0.5, description: "Teilweise missverständliche Metaphern"}
+      3: {score: 0.75, description: "Weitestgehend passende Metaphern"}
+      4: {score: 1.0, description: "Sehr wirkungsvolle, verständliche Metaphern"}
+      na: null
+
+  - id: redundanz
+    prompt: "Wird unnötige Wiederholung vermieden und inhaltliche Prägnanz gewahrt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Hohe Redundanz"}
+      2: {score: 0.5, description: "Teilweise redundante Passagen"}
+      3: {score: 0.75, description: "Weitestgehend prägnant"}
+      4: {score: 1.0, description: "Sehr prägnant und auf den Punkt"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

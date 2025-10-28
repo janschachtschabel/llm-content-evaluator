@@ -1,0 +1,76 @@
+id: factual_accuracy_part5
+name: Sachrichtigkeit – Aktualität & Qualitätsprozesse (Teil 5)
+description: Bewertung von Aktualität, Revision, Peer-Review und Qualitätsmanagement
+dimension: factual_accuracy_quality
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: aktualitaet
+    prompt: "Sind Inhalte und Beispiele auf dem neuesten Stand wissenschaftlicher Erkenntnisse?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Deutlich veraltete Informationen"}
+      2: {score: 0.5, description: "Mehrere veraltete Beispiele"}
+      3: {score: 0.75, description: "Weitestgehend aktuell"}
+      4: {score: 1.0, description: "Vollständig aktuell"}
+      na: null
+
+  - id: revisionsprozess
+    prompt: "Existieren dokumentierte Prozesse zur regelmäßigen Überprüfung und Aktualisierung?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine Revision"}
+      2: {score: 0.5, description: "Revisionen sporadisch"}
+      3: {score: 0.75, description: "Regelmäßige Revision mit Lücken"}
+      4: {score: 1.0, description: "Strukturierte, dokumentierte Revision"}
+      na: null
+
+  - id: peer_review
+    prompt: "Wurde das Material durch Fachexperten oder Peer-Review validiert?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine externe Validierung"}
+      2: {score: 0.5, description: "Gelegentliche Expert*innenprüfung"}
+      3: {score: 0.75, description: "Regelmäßige Peer-Reviews"}
+      4: {score: 1.0, description: "Formales Peer-Review-Verfahren"}
+      na: null
+
+  - id: fehlinformation_management
+    prompt: "Gibt es Mechanismen zur Meldung, Prüfung und Korrektur von Fehlinformationen?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine Mechanismen"}
+      2: {score: 0.5, description: "Teilweise Mechanismen"}
+      3: {score: 0.75, description: "Strukturierte Mechanismen"}
+      4: {score: 1.0, description: "Umfassende Systeme inkl. Feedback"}
+      na: null
+
+  - id: dokumentation_aenderungen
+    prompt: "Werden Änderungen und Aktualisierungen transparent dokumentiert?"
+    weight: 1.0
+    values:
+      1: {score: 0.25, description: "Keine Änderungsdokumentation"}
+      2: {score: 0.5, description: "Teils dokumentiert"}
+      3: {score: 0.75, description: "Weitgehend dokumentiert"}
+      4: {score: 1.0, description: "Vollständig nachvollziehbare Änderungsdokumentation"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

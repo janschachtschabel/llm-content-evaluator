@@ -1,0 +1,76 @@
+id: neutrality_part4
+name: Neutralität – Evidenz & Transparenz (Teil 4)
+description: Bewertung der faktenbasierten Fundierung, Aktualität und Nachvollziehbarkeit
+dimension: neutrality_evidence
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: quellenglaubwuerdigkeit
+    prompt: "Sind alle Kernaussagen durch überprüfbare, glaubwürdige Quellen belegt?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Quellen fehlen oder sind nicht vertrauenswürdig"}
+      2: {score: 0.5, description: "Quellenlage lückenhaft oder teilweise fragwürdig"}
+      3: {score: 0.75, description: "Überwiegend solide Quellen"}
+      4: {score: 1.0, description: "Lückenlose, glaubwürdige Quellenbasis"}
+      na: null
+
+  - id: quellentransparenz
+    prompt: "Werden Quellen vollständig, korrekt und nachvollziehbar ausgewiesen?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Quellenangaben fehlen oder sind unvollständig"}
+      2: {score: 0.5, description: "Mehrere Quellenangaben sind unklar"}
+      3: {score: 0.75, description: "Die meisten Quellen sind korrekt ausgewiesen"}
+      4: {score: 1.0, description: "Alle Quellen sind transparent und prüfbar"}
+      na: null
+
+  - id: theorienvielfalt
+    prompt: "Werden alternative wissenschaftliche Positionen sachlich einbezogen?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Alternative Positionen werden ignoriert"}
+      2: {score: 0.5, description: "Einige Alternativen genannt, aber verzerrt"}
+      3: {score: 0.75, description: "Mehrheitlich faire Darstellung"}
+      4: {score: 1.0, description: "Umfassend, sachlich und fair"}
+      na: null
+
+  - id: aktualitaet
+    prompt: "Sind Daten, Beispiele und Fakten aktuell und auf dem neuesten Stand?"
+    weight: 1.0
+    values:
+      1: {score: 0.25, description: "Veraltete oder falsche Daten"}
+      2: {score: 0.5, description: "Mehrere veraltete Beispiele"}
+      3: {score: 0.75, description: "Weitestgehend aktuelle Informationen"}
+      4: {score: 1.0, description: "Vollständig aktuelle Informationen"}
+      na: null
+
+  - id: datenoffenheit
+    prompt: "Werden Datenquellen, Methodik und Unsicherheiten transparent erläutert?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Keine Offenlegung"}
+      2: {score: 0.5, description: "Begrenzte Offenlegung, wesentliche Lücken"}
+      3: {score: 0.75, description: "Transparenz weitgehend gegeben"}
+      4: {score: 1.0, description: "Gründliche Offenlegung inkl. Unsicherheiten"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

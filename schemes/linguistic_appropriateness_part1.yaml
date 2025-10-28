@@ -1,0 +1,76 @@
+id: linguistic_appropriateness_part1
+name: Sprachliche Angemessenheit – Zielgruppenfit (Teil 1)
+description: Bewertung der Passung von Sprache, Stil und Tonalität zur intendierten Zielgruppe
+dimension: linguistic_fit
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: zielgruppenanpassung
+    prompt: "Ist der Sprachgebrauch exakt auf Alter, Vorwissen und Lerntyp abgestimmt?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Sprache völlig an der Zielgruppe vorbei"}
+      2: {score: 0.5, description: "Mehrere deutliche Zielgruppenmismatches"}
+      3: {score: 0.75, description: "Weitestgehend passender Sprachgebrauch"}
+      4: {score: 1.0, description: "Perfekte Zielgruppenpassung"}
+      na: null
+
+  - id: kontextsensitivitaet
+    prompt: "Berücksichtigt der Text kulturelle, regionale oder situative Besonderheiten?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Kontext wird ignoriert"}
+      2: {score: 0.5, description: "Teilweise kontextsensitiv"}
+      3: {score: 0.75, description: "Weitestgehend kontextsensitiv"}
+      4: {score: 1.0, description: "Hochsensibler Umgang mit Kontext"}
+      na: null
+
+  - id: inklusionssprache
+    prompt: "Ist die Sprache inklusiv, wertschätzend und frei von Bias?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Stigmatisierende oder exclusive Formulierungen"}
+      2: {score: 0.5, description: "Einige stereotype Formulierungen"}
+      3: {score: 0.75, description: "Überwiegend inklusive Sprache"}
+      4: {score: 1.0, description: "Konsequent inklusive, wertschätzende Sprache"}
+      na: null
+
+  - id: adressatenfokus
+    prompt: "Spricht der Text Lernende direkt und adressatengerecht an?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Kein erkennbarer Adressatenfokus"}
+      2: {score: 0.5, description: "Teilweise adressatengerecht"}
+      3: {score: 0.75, description: "Weitestgehend adressatengerecht"}
+      4: {score: 1.0, description: "Sehr klar adressierter, lernendenzentrierter Stil"}
+      na: null
+
+  - id: sprachregister
+    prompt: "Ist das Sprachregister konsistent (formell/informell) und situationsangemessen?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Unpassendes Register"}
+      2: {score: 0.5, description: "Register wechselt oder ist uneinheitlich"}
+      3: {score: 0.75, description: "Register meist passend"}
+      4: {score: 1.0, description: "Konsequent situationsangemessenes Register"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

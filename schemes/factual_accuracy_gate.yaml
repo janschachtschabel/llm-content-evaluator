@@ -1,0 +1,48 @@
+id: factual_accuracy_gate
+name: Sachrichtigkeit – Gesamtgate
+description: Abgeleitete Gesamtbewertung der Sachrichtigkeit digitaler Bildungsinhalte auf Basis der Teilkataloge
+dimension: factual_accuracy
+type: derived
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+dependencies:
+  - factual_accuracy_part1
+  - factual_accuracy_part2
+  - factual_accuracy_part3
+  - factual_accuracy_part4
+  - factual_accuracy_part5
+
+rules:
+  - conditions:
+      - dimension: factual_accuracy_facts
+        operator: ">="
+        value: 0
+    value: "weighted_average"
+    label: "Gewichtete Sachrichtigkeitsbewertung"
+    reasoning: "Aggregation der Teilbereiche Fakten, Begriffsklarheit, Argumentationslogik, Quellentransparenz und Qualitätsprozesse"
+    confidence: 0.9
+    weights:
+      factual_accuracy_facts: 2.5
+      factual_accuracy_concepts: 2.0
+      factual_accuracy_reasoning: 2.0
+      factual_accuracy_sources: 1.5
+      factual_accuracy_quality: 2.0
+
+default:
+  value: 0.0
+  label: "Unbewertet"
+  reasoning: "Keine ausreichenden Daten aus den Teilbereichen"
+  confidence: 0.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

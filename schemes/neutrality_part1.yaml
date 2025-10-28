@@ -1,0 +1,76 @@
+id: neutrality_part1
+name: Neutralität – Perspektivenvielfalt (Teil 1)
+description: Bewertung der Vielfalt, Ausgewogenheit und Fairness unterschiedlicher Perspektiven
+dimension: neutrality_perspectives
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: perspektiven_abdeckung
+    prompt: "Werden alle relevanten Perspektiven zum Thema identifiziert und benannt?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Nur eine Perspektive wird erwähnt"}
+      2: {score: 0.5, description: "Einige zentrale Perspektiven fehlen"}
+      3: {score: 0.75, description: "Mehrheit der Perspektiven vorhanden, jedoch leicht unausgewogen"}
+      4: {score: 1.0, description: "Alle wesentlichen Perspektiven umfassend benannt"}
+      na: null
+
+  - id: perspektiven_symmetrie
+    prompt: "Werden unterschiedliche Positionen gleichwertig in Umfang und Tiefe erläutert?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Eine Position dominiert klar"}
+      2: {score: 0.5, description: "Teilweise unausgewogene Darstellung"}
+      3: {score: 0.75, description: "Überwiegend gleichwertig, kleine Unterschiede"}
+      4: {score: 1.0, description: "Vollständige Symmetrie in Darstellung und Tiefe"}
+      na: null
+
+  - id: perspektiven_quellenvielfalt
+    prompt: "Stützen sich die Perspektiven auf vielfältige und nachvollziehbare Quellen?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Quellenbasis stark einseitig"}
+      2: {score: 0.5, description: "Einige zusätzliche Quellen, aber noch Lücken"}
+      3: {score: 0.75, description: "Mehrheitlich vielfältige Quellen"}
+      4: {score: 1.0, description: "Breit gefächerte, nachvollziehbare Quellenlage"}
+      na: null
+
+  - id: perspektiven_kontextualisierung
+    prompt: "Werden Perspektiven im historischen und gesellschaftlichen Kontext eingeordnet?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine Kontextualisierung erkennbar"}
+      2: {score: 0.5, description: "Kontext wird punktuell erwähnt"}
+      3: {score: 0.75, description: "Kontext meist vorhanden, einige Lücken"}
+      4: {score: 1.0, description: "Umfassende und neutrale Kontextualisierung"}
+      na: null
+
+  - id: perspektiven_weltanschauung
+    prompt: "Werden weltanschauliche oder kulturelle Perspektiven respektvoll eingebunden?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Andere Weltanschauungen werden abgewertet"}
+      2: {score: 0.5, description: "Anerkennung vorhanden, jedoch stereotyp"}
+      3: {score: 0.75, description: "Weitestgehend respektvolle Darstellung"}
+      4: {score: 1.0, description: "Vollständig respektvolle, wertfreie Einbindung"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

@@ -1,0 +1,76 @@
+id: linguistic_appropriateness_part5
+name: Sprachliche Angemessenheit – Unterstützende Elemente (Teil 5)
+description: Bewertung ergänzender sprachlicher Hilfen, Beispiele und multimodaler Unterstützung
+dimension: linguistic_support
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: beispiele_veranschaulichung
+    prompt: "Werden komplexe Inhalte durch geeignete Beispiele und Analogien erklärt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine oder ungeeignete Beispiele"}
+      2: {score: 0.5, description: "Einige Beispiele, aber teilweise unpassend"}
+      3: {score: 0.75, description: "Überwiegend hilfreiche Beispiele"}
+      4: {score: 1.0, description: "Sehr gut gewählte, lernförderliche Beispiele"}
+      na: null
+
+  - id: gliederungshilfen
+    prompt: "Werden Glossare, Zusammenfassungen oder Checklisten bereitgestellt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine Hilfen"}
+      2: {score: 0.5, description: "Wenig strukturierende Hilfen"}
+      3: {score: 0.75, description: "Mehrheitlich hilfreiche Hilfen"}
+      4: {score: 1.0, description: "Umfassende, sehr hilfreiche Hilfen"}
+      na: null
+
+  - id: multimodale_stuetzen
+    prompt: "Werden sprachliche Inhalte durch Visualisierungen, Audio oder Interaktivität unterstützt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine multimodalen Unterstützungen"}
+      2: {score: 0.5, description: "Vereinzelte Unterstützungen"}
+      3: {score: 0.75, description: "Weitestgehend hilfreiche multimodale Elemente"}
+      4: {score: 1.0, description: "Sehr gezielte, lernförderliche multimodale Unterstützung"}
+      na: null
+
+  - id: sprachliche_feedbackmechanismen
+    prompt: "Erhalten Lernende sprachliches Feedback (z.B. Hinweise auf Missverständnisse)?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Kein Feedback"}
+      2: {score: 0.5, description: "Seltenes oder generisches Feedback"}
+      3: {score: 0.75, description: "Regelmäßiges, hilfreiches Feedback"}
+      4: {score: 1.0, description: "Sehr zielgerichtetes, adaptives Feedback"}
+      na: null
+
+  - id: sprachliche_motivation
+    prompt: "Bietet der Text motivierende sprachliche Elemente (Leitfragen, Reflexionsimpulse)?"
+    weight: 1.0
+    values:
+      1: {score: 0.25, description: "Keine motivierenden Impulse"}
+      2: {score: 0.5, description: "Wenige Impulse"}
+      3: {score: 0.75, description: "Mehrheitlich motivierende Impulse"}
+      4: {score: 1.0, description: "Sehr motivierende Impulse"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

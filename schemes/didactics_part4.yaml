@@ -1,0 +1,76 @@
+id: didactics_part4
+name: Didaktik – Lernfortschritt & Feedback (Teil 4)
+description: Bewertung von Diagnostik, Feedbackprozessen und Leistungsüberprüfung
+dimension: didactics_feedback
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: lernfortschrittskontrolle
+    prompt: "Gibt es klare Mechanismen zur Überprüfung des Lernfortschritts?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine Überprüfung"}
+      2: {score: 0.5, description: "Unregelmäßige oder unklare Überprüfung"}
+      3: {score: 0.75, description: "Regelmäßige Überprüfung"}
+      4: {score: 1.0, description: "Systematische, vielfältige Überprüfung"}
+      na: null
+
+  - id: feedbackqualitaet
+    prompt: "Ist Feedback zeitnah, konstruktiv und individualisiert?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Kein oder generisches Feedback"}
+      2: {score: 0.5, description: "Teilweise hilfreiches Feedback"}
+      3: {score: 0.75, description: "Meist konstruktives Feedback"}
+      4: {score: 1.0, description: "Sehr zielgerichtetes, individualisiertes Feedback"}
+      na: null
+
+  - id: selbstevaluation
+    prompt: "Werden Lernende zur Selbst- und Peer-Einschätzung angeleitet?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine Selbst-/Peer-Evaluation"}
+      2: {score: 0.5, description: "Gelegentliche Selbst-/Peer-Evaluation"}
+      3: {score: 0.75, description: "Regelmäßige Selbst-/Peer-Evaluation"}
+      4: {score: 1.0, description: "Strukturiert verankerte Selbst-/Peer-Evaluation"}
+      na: null
+
+  - id: datenbasierte_anpassung
+    prompt: "Werden Ergebnisse genutzt, um Lernangebote adaptiv anzupassen?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine Anpassung"}
+      2: {score: 0.5, description: "Seltene Anpassung"}
+      3: {score: 0.75, description: "Regelmäßige Anpassung"}
+      4: {score: 1.0, description: "Systematische, datenbasierte Anpassung"}
+      na: null
+
+  - id: transfer_sicherung
+    prompt: "Unterstützen Aufgaben den Transfer in neue Kontexte und nachhaltige Verankerung?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Kein Transfer"}
+      2: {score: 0.5, description: "Begrenzter Transfer"}
+      3: {score: 0.75, description: "Guter Transfer"}
+      4: {score: 1.0, description: "Sehr effektive Transfersicherung"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

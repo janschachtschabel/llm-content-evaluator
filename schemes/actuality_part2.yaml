@@ -1,0 +1,76 @@
+id: actuality_part2
+name: Aktualität – Recht & Bildungspolitik (Teil 2)
+description: Bewertung aktueller gesetzlicher Rahmenbedingungen, Richtlinien und Bildungspolitiken
+dimension: actuality_policy
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: gesetzgebung
+    prompt: "Werden kürzlich geänderte oder neue Gesetze korrekt benannt und erklärt?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Veraltete oder falsche Gesetzeslage"}
+      2: {score: 0.5, description: "Teilweise aktualisierte Gesetzeslage"}
+      3: {score: 0.75, description: "Weitestgehend aktuelle Gesetze"}
+      4: {score: 1.0, description: "Vollständig aktuelle und korrekt erläuterte Gesetze"}
+      na: null
+
+  - id: bildungspolitik
+    prompt: "Spiegelt das Material aktuelle Bildungspolitiken und Curricula wider?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Veraltete Richtlinien"}
+      2: {score: 0.5, description: "Mehrere veraltete Verweise"}
+      3: {score: 0.75, description: "Überwiegend aktuelle Richtlinien"}
+      4: {score: 1.0, description: "Durchgehend aktuelle Curricula und Strategien"}
+      na: null
+
+  - id: compliance_frists
+    prompt: "Werden Fristen oder Übergangsregelungen aktueller Reformen korrekt angegeben?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Fehlende oder falsche Fristen"}
+      2: {score: 0.5, description: "Teilweise falsche Fristen"}
+      3: {score: 0.75, description: "Größtenteils korrekte Fristen"}
+      4: {score: 1.0, description: "Vollständig korrekte und dokumentierte Fristen"}
+      na: null
+
+  - id: organisationsempfehlungen
+    prompt: "Werden aktuelle Empfehlungen von Ministerien, UNESCO o.ä. berücksichtigt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine aktuellen Empfehlungen"}
+      2: {score: 0.5, description: "Einige veraltete Empfehlungen"}
+      3: {score: 0.75, description: "Weitgehend aktuelle Empfehlungen"}
+      4: {score: 1.0, description: "Alle Empfehlungen hochaktuell"}
+      na: null
+
+  - id: datenschutz_standards
+    prompt: "Bezieht sich das Material auf aktuelle Datenschutz- und Compliance-Standards (z.B. DSGVO, KI-VO)?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Veraltete Datenschutzstandards"}
+      2: {score: 0.5, description: "Teilweise veraltete Standards"}
+      3: {score: 0.75, description: "Weitestgehend aktuelle Standards"}
+      4: {score: 1.0, description: "Durchgehend neueste Standards"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

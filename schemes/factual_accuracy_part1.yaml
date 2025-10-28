@@ -1,0 +1,76 @@
+id: factual_accuracy_part1
+name: Sachrichtigkeit – Faktentreue & Zahlen (Teil 1)
+description: Bewertung der korrekten Darstellung von Fakten, Kennzahlen und deren Belegen
+dimension: factual_accuracy_facts
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: datenvalidierung
+    prompt: "Sind alle statistischen Angaben und Zahlenwerte korrekt und gegenprüfbar?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Mehrere Zahlenfehler oder ungeprüfte Werte"}
+      2: {score: 0.5, description: "Einige Ungenauigkeiten bei Zahlen"}
+      3: {score: 0.75, description: "Weitgehend korrekte Zahlen mit kleinen Abweichungen"}
+      4: {score: 1.0, description: "Alle Zahlen korrekt und nachvollziehbar"}
+      na: null
+
+  - id: faktenkonsistenz
+    prompt: "Stimmen Fakten im gesamten Material überein, ohne widersprüchliche Angaben?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Deutliche Widersprüche"}
+      2: {score: 0.5, description: "Einige widersprüchliche Fakten"}
+      3: {score: 0.75, description: "Weitestgehend konsistent"}
+      4: {score: 1.0, description: "Vollständig konsistente Faktenlage"}
+      na: null
+
+  - id: kontext_schaetzung
+    prompt: "Sind Daten im richtigen Kontext eingeordnet (Zeiträume, Regionen, Einheiten)?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Kontextfehler führen zu Fehlinterpretationen"}
+      2: {score: 0.5, description: "Teilweise unklarer Kontext"}
+      3: {score: 0.75, description: "Kontext meist korrekt angegeben"}
+      4: {score: 1.0, description: "Kontext klar und präzise erläutert"}
+      na: null
+
+  - id: verifizierte_quellen
+    prompt: "Sind Fakten durch unabhängige Primärquellen oder wissenschaftliche Publikationen belegt?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Keine verlässlichen Primärquellen"}
+      2: {score: 0.5, description: "Quellenlage teilweise schwach"}
+      3: {score: 0.75, description: "Größtenteils hochwertige Quellen"}
+      4: {score: 1.0, description: "Ausschließlich verifizierte Primärquellen"}
+      na: null
+
+  - id: fehlerkorrektur
+    prompt: "Werden potenzielle frühere Fehler offen gelegt und korrigiert?"
+    weight: 1.0
+    values:
+      1: {score: 0.25, description: "Fehler bleiben unadressiert"}
+      2: {score: 0.5, description: "Fehlerkorrekturen selten"}
+      3: {score: 0.75, description: "Transparente Korrekturen in den meisten Fällen"}
+      4: {score: 1.0, description: "Konsequent transparente Fehlerkorrekturen"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

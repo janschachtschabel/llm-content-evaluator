@@ -209,6 +209,8 @@ class EvaluationResponse(BaseModel):
             }
         ],
         "gates_passed": true,
+        "overall_score": 3.45,
+        "overall_label": "Befriedigend",
         "metadata": {...},
         "provenance": {...}
     }
@@ -220,6 +222,14 @@ class EvaluationResponse(BaseModel):
     gates_passed: bool = Field(
         ..., 
         description="Whether all binary gate evaluations passed. If false, content failed critical compliance checks."
+    )
+    overall_score: Optional[float] = Field(
+        None,
+        description="Aggregated overall score across all evaluated schemes (0.0-5.0). Only calculated for quality scales, not for binary gates."
+    )
+    overall_label: Optional[str] = Field(
+        None,
+        description="Human-readable label for the overall score (e.g., 'Gut', 'Befriedigend')"
     )
     metadata: Dict[str, Any] = Field(
         ..., 

@@ -1,0 +1,76 @@
+id: actuality_part4
+name: Aktualität – Quellen & Medienformate (Teil 4)
+description: Bewertung der Aktualität und Vielfalt der verwendeten Quellen, Medien und Datenformate
+dimension: actuality_sources
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: quellenalter
+    prompt: "Wie alt sind die verwendeten Quellen im Median?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Median >5 Jahre"}
+      2: {score: 0.5, description: "Median 3-5 Jahre"}
+      3: {score: 0.75, description: "Median 1-3 Jahre"}
+      4: {score: 1.0, description: "Median <1 Jahr"}
+      na: null
+
+  - id: quellenvielfalt
+    prompt: "Werden verschiedene aktuelle Medientypen (Artikel, Podcasts, Videos, Datenbanken) genutzt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Nur ein Medientyp"}
+      2: {score: 0.5, description: "Begrenzt vielfältige Medientypen"}
+      3: {score: 0.75, description: "Weitgehend vielfältig"}
+      4: {score: 1.0, description: "Sehr hohe Vielfalt aktueller Formate"}
+      na: null
+
+  - id: aktualisierte_grafiken
+    prompt: "Werden Infografiken oder Datenvisualisierungen regelmäßig aktualisiert?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Stark veraltete Visualisierungen"}
+      2: {score: 0.5, description: "Teilweise aktualisierte Visualisierungen"}
+      3: {score: 0.75, description: "Weitestgehend aktuelle Visualisierungen"}
+      4: {score: 1.0, description: "Durchgehend aktuelle Visualisierungen"}
+      na: null
+
+  - id: datenquellen
+    prompt: "Nutzen die Inhalte aktuelle Datensätze und offene Datenplattformen?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine aktuellen Datensätze"}
+      2: {score: 0.5, description: "Einige ältere Datensätze"}
+      3: {score: 0.75, description: "Mehrheitlich aktuelle Datensätze"}
+      4: {score: 1.0, description: "Durchgehend aktuelle und offene Daten"}
+      na: null
+
+  - id: informationskanäle
+    prompt: "Werden aktuelle Informationskanäle (Newsletter, Social Media Feeds, Alerts) zum Aktualhalten genutzt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine aktuellen Informationskanäle"}
+      2: {score: 0.5, description: "Vereinzelt aktuelle Kanäle"}
+      3: {score: 0.75, description: "Weitestgehend aktuelle Kanäle"}
+      4: {score: 1.0, description: "Umfassende Nutzung aktueller Kanäle"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

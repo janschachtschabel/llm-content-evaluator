@@ -1,0 +1,76 @@
+id: didactics_part2
+name: Didaktik – Lernaktivierung & Methoden (Teil 2)
+description: Bewertung der methodischen Vielfalt, Aktivierung und kooperativen Lernformen
+dimension: didactics_methods
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: methodische_vielfalt
+    prompt: "Werden unterschiedliche Methoden für verschiedene Lerntypen integriert?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Nur eine Lehrmethode"}
+      2: {score: 0.5, description: "Begrenzte Methodenvielfalt"}
+      3: {score: 0.75, description: "Mehrere Methoden, teilweise passend"}
+      4: {score: 1.0, description: "Breites Methodenspektrum, zielgerichtet eingesetzt"}
+      na: null
+
+  - id: interaktivitaet
+    prompt: "Werden Lernende aktiv eingebunden und zu Interaktion motiviert?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Rein passive Rezeption"}
+      2: {score: 0.5, description: "Wenig Interaktion"}
+      3: {score: 0.75, description: "Regelmäßige Interaktionsimpulse"}
+      4: {score: 1.0, description: "Hohe Interaktivität und Aktivierung"}
+      na: null
+
+  - id: kooperatives_lernen
+    prompt: "Gibt es strukturierte Gelegenheiten für kollaboratives oder kooperatives Lernen?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine Kooperation vorgesehen"}
+      2: {score: 0.5, description: "Unstrukturierte Kooperation"}
+      3: {score: 0.75, description: "Weitestgehend strukturierte Kooperation"}
+      4: {score: 1.0, description: "Hervorragend moderierte Kooperation"}
+      na: null
+
+  - id: reflexion
+    prompt: "Werden Phasen zur Reflexion und Metakognition gezielt eingeplant?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine Reflexionsphasen"}
+      2: {score: 0.5, description: "Vereinzelte Reflexionsanlässe"}
+      3: {score: 0.75, description: "Mehrheitlich integrierte Reflexion"}
+      4: {score: 1.0, description: "Systematisch verankerte Reflexion"}
+      na: null
+
+  - id: eigenstaendiges_lernen
+    prompt: "Fördern Aufgabenstellungen eigenständiges und problemlösendes Arbeiten?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Kein eigenständiges Lernen"}
+      2: {score: 0.5, description: "Wenig Förderung"}
+      3: {score: 0.75, description: "Gute Förderung"}
+      4: {score: 1.0, description: "Umfassende Förderung eigenständigen Lernens"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

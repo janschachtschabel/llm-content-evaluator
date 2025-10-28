@@ -1,0 +1,76 @@
+id: neutrality_part2
+name: Neutralität – Sprachliche Objektivität (Teil 2)
+description: Bewertung sachlicher Sprache, rhetorischer Fairness und Emotionalitätskontrolle
+dimension: neutrality_language
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: rhetorische_neutralitaet
+    prompt: "Ist die Sprache wertfrei und frei von emotionalen Triggern?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Stark emotional oder suggestiv"}
+      2: {score: 0.5, description: "Teilweise emotional eingefärbt"}
+      3: {score: 0.75, description: "Überwiegend sachlich"}
+      4: {score: 1.0, description: "Vollständig sachlich und unaufgeregt"}
+      na: null
+
+  - id: framings
+    prompt: "Werden Frames und Metaphern vermieden, die eine Bewertung vorgeben?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Dominante Frames führen stark"}
+      2: {score: 0.5, description: "Einige suggestive Frames vorhanden"}
+      3: {score: 0.75, description: "Selten suggestive Frames"}
+      4: {score: 1.0, description: "Keine wertenden Frames erkennbar"}
+      na: null
+
+  - id: argumentationsfairness
+    prompt: "Werden Argumente unterschiedlicher Seiten mit gleicher Sorgfalt präsentiert?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Klare Ungleichbehandlung von Argumenten"}
+      2: {score: 0.5, description: "Teilweise ungleiche Behandlung"}
+      3: {score: 0.75, description: "Größtenteils gleichwertig"}
+      4: {score: 1.0, description: "Vollständig gleichwertig behandelt"}
+      na: null
+
+  - id: bias_marker
+    prompt: "Werden sprachliche Bias-Indikatoren (z.B. Kampfbegriffe) vermieden?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Viele Bias-Indikatoren"}
+      2: {score: 0.5, description: "Mehrere Bias-Indikatoren"}
+      3: {score: 0.75, description: "Vereinzelt Bias-Indikatoren"}
+      4: {score: 1.0, description: "Keine erkennbaren Bias-Indikatoren"}
+      na: null
+
+  - id: nachvollziehbarkeit
+    prompt: "Ist die Sprache klar, präzise und ermöglicht sie eigenständiges Verständnis?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Unklare oder suggestive Sprache"}
+      2: {score: 0.5, description: "Teils unklar oder lenkend"}
+      3: {score: 0.75, description: "Weitestgehend klar und nachvollziehbar"}
+      4: {score: 1.0, description: "Sehr klar und eigenständiges Verständnis fördernd"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

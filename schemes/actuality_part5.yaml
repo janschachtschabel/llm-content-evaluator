@@ -1,0 +1,76 @@
+id: actuality_part5
+name: Aktualität – Pflege & Qualitätsprozesse (Teil 5)
+description: Bewertung der Prozesse zur laufenden Aktualisierung, Qualitätssicherung und Feedback-Nutzung
+dimension: actuality_quality
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: aktualisierungszyklen
+    prompt: "Gibt es dokumentierte, regelmäßige Aktualisierungszyklen (z.B. halbjährlich)?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine festen Aktualisierungszyklen"}
+      2: {score: 0.5, description: "Unregelmäßige Aktualisierungen"}
+      3: {score: 0.75, description: "Regelmäßige, aber nicht dokumentierte Zyklen"}
+      4: {score: 1.0, description: "Strukturierte, dokumentierte Aktualisierungszyklen"}
+      na: null
+
+  - id: monitoring_systeme
+    prompt: "Werden Monitoring-Systeme genutzt, um neue Entwicklungen automatisch zu erfassen?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Kein Monitoring"}
+      2: {score: 0.5, description: "Manuelles Monitoring"}
+      3: {score: 0.75, description: "Teilautomatisches Monitoring"}
+      4: {score: 1.0, description: "Vollautomatisches Monitoring aktueller Entwicklungen"}
+      na: null
+
+  - id: feedbackintegration
+    prompt: "Werden Rückmeldungen von Lernenden oder Expert*innen zeitnah für Aktualisierungen genutzt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Feedback wird ignoriert"}
+      2: {score: 0.5, description: "Feedback wird selten genutzt"}
+      3: {score: 0.75, description: "Feedback wird regelmäßig genutzt"}
+      4: {score: 1.0, description: "Systematische Feedback-Nutzung"}
+      na: null
+
+  - id: versionskontrolle
+    prompt: "Gibt es eine transparente Versionshistorie mit Änderungsnotizen?"
+    weight: 1.0
+    values:
+      1: {score: 0.25, description: "Keine Versionshistorie"}
+      2: {score: 0.5, description: "Teilweise Versionshistorie"}
+      3: {score: 0.75, description: "Weitestgehend dokumentierte Versionshistorie"}
+      4: {score: 1.0, description: "Vollständig dokumentierte Versionshistorie"}
+      na: null
+
+  - id: qualitaetsaudit
+    prompt: "Werden externe Audits oder Qualitätschecks zur Aktualität durchgeführt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine externen Audits"}
+      2: {score: 0.5, description: "Seltene Audits"}
+      3: {score: 0.75, description: "Regelmäßige Audits"}
+      4: {score: 1.0, description: "Institutionalisierte externe Audits"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

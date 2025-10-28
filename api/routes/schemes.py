@@ -2,9 +2,11 @@
 
 from fastapi import APIRouter, HTTPException, Query
 from typing import List, Dict, Any
-from core.evaluation import EvaluationEngine
-from models.schemas import SchemesResponse
+from loguru import logger
 import traceback
+
+from core.dependencies import get_engine_instance
+from models.schemas import SchemesResponse
 
 router = APIRouter(prefix="/schemes", tags=["schemes"])
 
@@ -82,7 +84,8 @@ async def list_schemes(
     Use this endpoint to discover available schemes before making evaluation requests.
     """
     try:
-        engine = EvaluationEngine("schemes")
+        # Use singleton engine instance (initialized at app startup)
+        engine = get_engine_instance()
         schemes_data = engine.get_schemes()
         
         # Filter out part schemas unless explicitly requested
@@ -102,14 +105,13 @@ async def list_schemes(
         return response
         
     except Exception as e:
-        # Detailed error logging
-        error_details = {
-            "error": str(e),
-            "type": type(e).__name__,
-            "traceback": traceback.format_exc()
-        }
+        # Log detailed error internally
+        logger.error(f"Failed to load schemes: {str(e)}")
+        logger.error(f"Error type: {type(e).__name__}")
+        logger.error(f"Stacktrace: {traceback.format_exc()}")
         
+        # Return generic error to client (avoid info leakage)
         raise HTTPException(
             status_code=500, 
-            detail=f"Failed to load schemes: {str(e)}"
+            detail="Failed to load evaluation schemes. Please contact support if this persists."
         )

@@ -1,0 +1,76 @@
+id: factual_accuracy_part3
+name: Sachrichtigkeit – Argumentation & Schlussfolgerungen (Teil 3)
+description: Bewertung der logischen Ableitungen, Kausalitätsdarstellungen und Interpretationen
+dimension: factual_accuracy_reasoning
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: kausalitaet
+    prompt: "Werden Kausalzusammenhänge korrekt dargestellt und von Korrelationen abgegrenzt?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Kausalität wird fehlerhaft behauptet"}
+      2: {score: 0.5, description: "Mehrere unpräzise Kausalbehauptungen"}
+      3: {score: 0.75, description: "Weitgehend korrekte Kausalinterpretationen"}
+      4: {score: 1.0, description: "Strikte Trennung von Korrelation und Kausalität"}
+      na: null
+
+  - id: argument_logik
+    prompt: "Sind Argumentationsketten logisch vollständig und widerspruchsfrei aufgebaut?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Logische Fehler und Widersprüche"}
+      2: {score: 0.5, description: "Einige logische Lücken"}
+      3: {score: 0.75, description: "Überwiegend logische Argumentation"}
+      4: {score: 1.0, description: "Vollständig schlüssige Argumentation"}
+      na: null
+
+  - id: interpretation_validitaet
+    prompt: "Sind Interpretationen der Daten angemessen und ohne Übertreibungen?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Deutliche Überinterpretationen"}
+      2: {score: 0.5, description: "Einige Interpretationen zu weitreichend"}
+      3: {score: 0.75, description: "Meist angemessene Interpretation"}
+      4: {score: 1.0, description: "Streng datengestützte Interpretation"}
+      na: null
+
+  - id: gegenevidenz
+    prompt: "Wird vorhandene Gegenevidenz fair berücksichtigt und eingeordnet?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Gegenevidenz ignoriert"}
+      2: {score: 0.5, description: "Gegenevidenz nur oberflächlich behandelt"}
+      3: {score: 0.75, description: "Weitgehend faire Einordnung"}
+      4: {score: 1.0, description: "Umfassende und faire Auseinandersetzung"}
+      na: null
+
+  - id: unsicherheiten_darstellung
+    prompt: "Werden Unsicherheiten, Fehlermargen oder offene Fragen transparent gemacht?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Unsicherheiten verschwiegen"}
+      2: {score: 0.5, description: "Teilweise Hinweise auf Unsicherheiten"}
+      3: {score: 0.75, description: "Unsicherheiten weitgehend benannt"}
+      4: {score: 1.0, description: "Umfassend transparente Unsicherheitsanalyse"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

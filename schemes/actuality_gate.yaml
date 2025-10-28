@@ -1,0 +1,48 @@
+id: actuality_gate
+name: Aktualität – Gesamtgate
+description: Abgeleitete Gesamtbewertung der Aktualität digitaler Bildungsinhalte auf Basis der Teilkataloge
+dimension: actuality
+type: derived
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+dependencies:
+  - actuality_part1
+  - actuality_part2
+  - actuality_part3
+  - actuality_part4
+  - actuality_part5
+
+rules:
+  - conditions:
+      - dimension: actuality_research
+        operator: ">="
+        value: 0
+    value: "weighted_average"
+    label: "Gewichtete Aktualitätsbewertung"
+    reasoning: "Aggregation der Teilbereiche Forschung, Politik, gesellschaftliche Trends, Quellen und Pflegeprozesse"
+    confidence: 0.9
+    weights:
+      actuality_research: 2.0
+      actuality_policy: 2.0
+      actuality_society: 2.0
+      actuality_sources: 1.5
+      actuality_quality: 1.5
+
+default:
+  value: 0.0
+  label: "Unbewertet"
+  reasoning: "Keine ausreichenden Daten aus den Teilbereichen"
+  confidence: 0.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

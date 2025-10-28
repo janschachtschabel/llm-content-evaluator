@@ -1,0 +1,48 @@
+id: didactics_gate
+name: Didaktik – Gesamtgate
+description: Abgeleitete Gesamtbewertung der didaktischen Qualität und methodischen Gestaltung
+dimension: pedagogy
+type: derived
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+dependencies:
+  - didactics_part1
+  - didactics_part2
+  - didactics_part3
+  - didactics_part4
+  - didactics_part5
+
+rules:
+  - conditions:
+      - dimension: didactics_planning
+        operator: ">="
+        value: 0
+    value: "weighted_average"
+    label: "Gewichtete didaktische Gesamtbewertung"
+    reasoning: "Aggregation der Teilbereiche Planung, Methoden, Differenzierung, Feedback und Lernumgebung"
+    confidence: 0.9
+    weights:
+      didactics_planning: 2.0
+      didactics_methods: 2.0
+      didactics_differentiation: 1.5
+      didactics_feedback: 1.5
+      didactics_environment: 1.5
+
+default:
+  value: 0.0
+  label: "Unbewertet"
+  reasoning: "Keine ausreichenden Daten aus den Teilbereichen"
+  confidence: 0.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

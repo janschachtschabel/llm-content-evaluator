@@ -1,0 +1,76 @@
+id: media_appropriate_part3
+name: Mediale Passung – Gestaltung & Storytelling (Teil 3)
+description: Bewertung der visuellen Gestaltung, Narration und Gesamtästhetik der Medien
+dimension: media_appropriate_design
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: visuelle_koharenz
+    prompt: "Sind Layout, Farbgebung und Typografie konsistent und professionell?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Unruhiges oder inkonsistentes Design"}
+      2: {score: 0.5, description: "Teilweise inkonsistent"}
+      3: {score: 0.75, description: "Weitestgehend konsistent"}
+      4: {score: 1.0, description: "Hochprofessionelles, konsistentes Design"}
+      na: null
+
+  - id: storytelling
+    prompt: "Nutzen die Medien eine klare Dramaturgie oder narrative Struktur zur Wissensvermittlung?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine Struktur, fragmentarisch"}
+      2: {score: 0.5, description: "Einfache Struktur"}
+      3: {score: 0.75, description: "Gute narrative Struktur"}
+      4: {score: 1.0, description: "Hervorragendes, fesselndes Storytelling"}
+      na: null
+
+  - id: medienvielfalt_inszenierung
+    prompt: "Werden Medien dramaturgisch geschickt kombiniert (Audio, Video, Text)?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Medien wirken beliebig"}
+      2: {score: 0.5, description: "Teilweise stimmige Kombination"}
+      3: {score: 0.75, description: "Gute Inszenierung mehrerer Formate"}
+      4: {score: 1.0, description: "Perfekt orchestrierte Medienkombination"}
+      na: null
+
+  - id: design_fokus
+    prompt: "Lenkt das Design die Aufmerksamkeit zielgerichtet auf Kerninformationen?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Ablenkendes Design"}
+      2: {score: 0.5, description: "Teilweise ablenkend"}
+      3: {score: 0.75, description: "Weitestgehend fokussiert"}
+      4: {score: 1.0, description: "Sehr zielgerichtetes Design"}
+      na: null
+
+  - id: emotionaler_appeal
+    prompt: "Erzeugen Medien eine positive emotionale Ansprache ohne Kitsch oder Überladung?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Emotionen unpassend oder manipulativ"}
+      2: {score: 0.5, description: "Geringe emotionale Ansprache"}
+      3: {score: 0.75, description: "Gute emotionale Resonanz"}
+      4: {score: 1.0, description: "Sehr ausgewogene emotionale Ansprache"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

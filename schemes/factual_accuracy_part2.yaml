@@ -1,0 +1,76 @@
+id: factual_accuracy_part2
+name: Sachrichtigkeit – Begriffe & Konzepte (Teil 2)
+description: Bewertung der korrekten Verwendung und Erklärung von Fachbegriffen, Theorien und Modellen
+dimension: factual_accuracy_concepts
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: begriffspraezision
+    prompt: "Werden alle Fachbegriffe korrekt definiert und verwendet?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Mehrere fehlerhafte Begriffsverwendungen"}
+      2: {score: 0.5, description: "Einige Ungenauigkeiten"}
+      3: {score: 0.75, description: "Weitgehend präzise Begriffsverwendung"}
+      4: {score: 1.0, description: "Vollständig präzise und kontextgerechte Begriffe"}
+      na: null
+
+  - id: theorie_erklaerung
+    prompt: "Werden Theorien und Modelle vollständig und korrekt erläutert?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Theorien falsch oder verkürzt"}
+      2: {score: 0.5, description: "Teilweise ungenaue Erläuterungen"}
+      3: {score: 0.75, description: "Gute, aber nicht immer vollständige Erläuterungen"}
+      4: {score: 1.0, description: "Umfassende, korrekte Erläuterungen"}
+      na: null
+
+  - id: modell_anwendung
+    prompt: "Werden Modelle korrekt angewendet und ihre Grenzen kenntlich gemacht?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Fehlerhafte Anwendung"}
+      2: {score: 0.5, description: "Teilweise unpassende Anwendung"}
+      3: {score: 0.75, description: "Weitestgehend passende Anwendung"}
+      4: {score: 1.0, description: "Korrekte Anwendung inkl. Grenzfallanalyse"}
+      na: null
+
+  - id: begriffs_koharenz
+    prompt: "Sind Begriffsdefinitionen innerhalb des Materials konsistent?"
+    weight: 1.0
+    values:
+      1: {score: 0.25, description: "Widersprüchliche Definitionen"}
+      2: {score: 0.5, description: "Einige Inkonsistenzen"}
+      3: {score: 0.75, description: "Meist konsistent"}
+      4: {score: 1.0, description: "Vollständig konsistent"}
+      na: null
+
+  - id: herleitung_nachvollziehbarkeit
+    prompt: "Sind Herleitungen, Beweise oder Ableitungen logisch schlüssig und nachvollziehbar?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Logische Fehler oder fehlende Schritte"}
+      2: {score: 0.5, description: "Mehrere Sprünge in der Argumentation"}
+      3: {score: 0.75, description: "Weitestgehend nachvollziehbar"}
+      4: {score: 1.0, description: "Vollständig logisch und nachvollziehbar"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

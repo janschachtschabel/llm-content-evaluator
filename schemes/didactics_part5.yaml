@@ -1,0 +1,76 @@
+id: didactics_part5
+name: Didaktik – Materialien & Lernumgebung (Teil 5)
+description: Bewertung der Qualität von Lernmaterialien, digitalen Ressourcen und organisatorischen Rahmenbedingungen
+dimension: didactics_environment
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: materialqualitaet
+    prompt: "Sind alle eingesetzten Materialien aktuell, korrekt und lernförderlich gestaltet?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Veraltete oder fehlerhafte Materialien"}
+      2: {score: 0.5, description: "Teilweise angemessene Materialien"}
+      3: {score: 0.75, description: "Überwiegend hochwertige Materialien"}
+      4: {score: 1.0, description: "Sehr hochwertige, lernförderliche Materialien"}
+      na: null
+
+  - id: medienintegration
+    prompt: "Werden analoge und digitale Medien sinnvoll kombiniert und didaktisch eingebettet?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine mediale Integration"}
+      2: {score: 0.5, description: "Begrenzte Integration"}
+      3: {score: 0.75, description: "Weitestgehend stimmige Integration"}
+      4: {score: 1.0, description: "Sehr gut abgestimmte Medienintegration"}
+      na: null
+
+  - id: lernumgebung
+    prompt: "Sind räumliche, digitale und organisatorische Rahmenbedingungen lernförderlich gestaltet?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Ungeeignete Rahmenbedingungen"}
+      2: {score: 0.5, description: "Teilweise förderlich"}
+      3: {score: 0.75, description: "Überwiegend förderlich"}
+      4: {score: 1.0, description: "Sehr lernförderliche Rahmenbedingungen"}
+      na: null
+
+  - id: zugang_gerechtigkeit
+    prompt: "Ist der Zugang zu Materialien, Geräten und Unterstützung für alle Lernenden gesichert?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Ungleicher Zugang"}
+      2: {score: 0.5, description: "Teilweise eingeschränkter Zugang"}
+      3: {score: 0.75, description: "Weitestgehend gerechter Zugang"}
+      4: {score: 1.0, description: "Vollständig chancengleicher Zugang"}
+      na: null
+
+  - id: ressourcenmanagement
+    prompt: "Werden Materialien und Zeit ressourcenschonend geplant und flexibel angepasst?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine Ressourcenplanung"}
+      2: {score: 0.5, description: "Begrenzte Ressourcensteuerung"}
+      3: {score: 0.75, description: "Weitestgehend effizientes Ressourcenmanagement"}
+      4: {score: 1.0, description: "Sehr effiziente, adaptive Ressourcensteuerung"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

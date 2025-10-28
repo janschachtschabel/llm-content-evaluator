@@ -1,0 +1,76 @@
+id: didactics_part1
+name: Didaktik – Planung & Struktur (Teil 1)
+description: Bewertung der didaktischen Planung, Zielorientierung und Gesamtstruktur des Materials
+dimension: didactics_planning
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: lernzielklarheit
+    prompt: "Sind die Lernziele klar, präzise und verständlich formuliert?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Keine oder sehr unklare Lernziele"}
+      2: {score: 0.5, description: "Lernziele vorhanden, aber schwer verständlich"}
+      3: {score: 0.75, description: "Überwiegend klare Lernziele"}
+      4: {score: 1.0, description: "Vollständig klare, präzise Lernziele"}
+      na: null
+
+  - id: didaktisches_konzept
+    prompt: "Ist ein schlüssiges didaktisches Gesamtkonzept erkennbar und konsequent umgesetzt?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Kein erkennbares Konzept"}
+      2: {score: 0.5, description: "Ansätze vorhanden, aber Lücken"}
+      3: {score: 0.75, description: "Weitestgehend stimmiges Konzept"}
+      4: {score: 1.0, description: "Vollständig durchdachtes, konsequent umgesetztes Konzept"}
+      na: null
+
+  - id: struktureller_aufbau
+    prompt: "Ist der Aufbau des Materials logisch, kohärent und lernzielorientiert gestaltet?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Unlogischer Aufbau"}
+      2: {score: 0.5, description: "Teilweise kohärent"}
+      3: {score: 0.75, description: "Überwiegend kohärent"}
+      4: {score: 1.0, description: "Sehr klar strukturierter Aufbau"}
+      na: null
+
+  - id: lernphasen_design
+    prompt: "Sind Ein- und Ausstiege, Übungs- und Vertiefungsphasen didaktisch abgestimmt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Lernphasen unstrukturiert"}
+      2: {score: 0.5, description: "Einige stimmige Phasen"}
+      3: {score: 0.75, description: "Weitestgehend abgestimmte Phasen"}
+      4: {score: 1.0, description: "Sehr sorgfältig geplante Lernphasen"}
+      na: null
+
+  - id: curriculum_alignment
+    prompt: "Sind Inhalte und Aktivitäten auf Lehrpläne oder Kompetenzrahmen abgestimmt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine curricularen Bezüge"}
+      2: {score: 0.5, description: "Teilweise Bezug vorhanden"}
+      3: {score: 0.75, description: "Großteils curricular anschlussfähig"}
+      4: {score: 1.0, description: "Vollständig auf relevante Curricula abgestimmt"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

@@ -4,14 +4,17 @@
 
 ## 🚀 Features
 
-- ✅ **500+ Bewertungsindikatoren** in 59 Teilschemas für umfassende Compliance-Prüfung
+- ✅ **500+ Bewertungsindikatoren** in 70+ Teilschemas für umfassende Compliance-Prüfung
 - ✅ **4 Master-Gates**: Strafrecht, Jugendschutz, Persönlichkeitsrechte, Datenschutz (kombinieren jeweils a/b Kataloge)
 - ✅ **4 Schema-Typen**: Ordinal, Checklist, Binary Gates, Derived (mit rekursiver Unterstützung)
 - ✅ **LLM as Judge Methodologie** mit OpenAI GPT-4 Integration
 - ✅ **Context-Awareness**: Unterscheidung zwischen UGC (content-only) und kommerziellen Plattformen (full compliance)
 - ✅ **Parallele Evaluierung**: Mehrere Schemas werden gleichzeitig verarbeitet (max. 20 parallele LLM-Calls, konfigurierbar)
+- ✅ **Request-Caching**: Wiederverwendung bereits berechneter Schemas – spart LLM-Kosten und reduziert Latenz
+- ✅ **Singleton-Engine**: YAML-Schemas werden einmalig beim API-Start geladen
 - ✅ **Deutsche Rechtskonformität**: StGB, DSGVO, JuSchG, JMStV, DSA, AVMD-RL, EU-KI-VO
 - ✅ **Pädagogische Qualität**: Didaktik, Neutralität, Sachrichtigkeit, Aktualität
+- ✅ **Modulare Qualitäts-Gates**: `neutrality_gate`, `factual_accuracy_gate`, `actuality_gate`, `media_appropriate_gate`, `linguistic_appropriateness_gate`, `didactics_gate`
 - ✅ **Jugendschutz**: 278 Indikatoren für Altersfreigaben (FSK 0/6/12/16/18 + AVS)
 - ✅ **RESTful API** mit vollständiger OpenAPI/Swagger Dokumentation
 - ✅ **Produktionsbereit** mit Error Handling und Validation
@@ -93,6 +96,29 @@ python main.py
 📚 **API Dokumentation: http://localhost:8001/docs**  
 🔍 **Alternative Docs: http://localhost:8001/redoc**
 
+### 🔄 Startup Lifecycle
+
+FastAPI initialisiert im `main.py` eine Singleton-Instanz der `EvaluationEngine` während des Lifespan-Events:
+
+```python
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    initialize_engine("schemes")  # lädt alle YAMLs einmalig
+    yield
+    shutdown_engine()
+```
+
+So werden die ~59 YAML-Dateien nur einmal beim Start geladen – alle Endpoints greifen auf dieselbe Instanz zu.
+
+### 📉 Logging & Monitoring
+
+`loguru` unterscheidet nun zwischen:
+- `INFO`: High-Level Ereignisse (Startup, Gesamtsumme Schemas)
+- `DEBUG`: Detail-Informationen (Cache_hits, Rule-Auswertung, Dependency-Resultate)
+- `ERROR`: Fehlgeschlagene Bewertungen
+
+Setze `LOG_LEVEL=DEBUG` in der `.env`, um detaillierte Cache-Hits und Regelprüfungen mitzuschreiben.
+
 ### ⚙️ Umgebungsvariablen
 
 Erstelle eine `.env` Datei im Projektverzeichnis:
@@ -146,6 +172,7 @@ GET /schemes?include_parts=false
 - `include_parts` (default: `false`): 
   - `false`: Nur Master-Gates und Sub-Gates (empfohlen für Endnutzer)
   - `true`: Alle Schemas inkl. interner Teilschemas (*_part1, *_part2, etc.)
+- `context_type` (optional): Filtert serverseitig nach Scope ("content", "platform", "both") und spiegelt damit die Evaluationslogik.
 
 ### 🎯 Text-Bewertung
 ```http
@@ -177,9 +204,16 @@ POST /evaluate
                 "ausgewogenheit": {"value": 4, "reasoning": "Mehrere Standpunkte berücksichtigt"},
                 "objektivitaet": {"value": 4, "reasoning": "Sachliche Darstellung ohne Wertungen"}
             }
+        },
+        {
+            "scheme_id": "sachrichtigkeit_old",
+            "value": 3,
+            "label": "Inhaltlich überwiegend korrekt"
         }
     ],
     "gates_passed": true,
+    "overall_score": 3.6,
+    "overall_label": "Gut",
     "metadata": {
         "processing_time_ms": 1250,
         "model_used": "gpt-4"

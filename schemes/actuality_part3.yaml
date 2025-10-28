@@ -1,0 +1,76 @@
+id: actuality_part3
+name: Aktualität – Gesellschaft & Trends (Teil 3)
+description: Bewertung der Einbindung aktueller gesellschaftlicher, technologischer und kultureller Entwicklungen
+dimension: actuality_society
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: gesellschaftliche_entwicklungen
+    prompt: "Werden relevante gesellschaftliche Entwicklungen der letzten 2-3 Jahre berücksichtigt?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Keine aktuellen Entwicklungen"}
+      2: {score: 0.5, description: "Vereinzelte, oberflächliche Erwähnungen"}
+      3: {score: 0.75, description: "Weitgehend aktuelle Entwicklungen"}
+      4: {score: 1.0, description: "Umfassende und kontextualisierte Entwicklungen"}
+      na: null
+
+  - id: technologische_trends
+    prompt: "Spiegelt das Material aktuelle Technologien und digitale Innovationen wider?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Technologien deutlich veraltet"}
+      2: {score: 0.5, description: "Teilweise aktuelle Technologien"}
+      3: {score: 0.75, description: "Überwiegend aktuelle Technologien"}
+      4: {score: 1.0, description: "Durchgehend aktuelle Technologien und Innovationen"}
+      na: null
+
+  - id: kulturelle_relevanz
+    prompt: "Berücksichtigt das Material aktuelle kulturelle Diskurse oder Bewegungen?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine kulturelle Aktualität"}
+      2: {score: 0.5, description: "Nur sporadische Bezüge"}
+      3: {score: 0.75, description: "Weitestgehend aktuelle kulturelle Bezüge"}
+      4: {score: 1.0, description: "Fundierte Auseinandersetzung mit aktuellen Diskursen"}
+      na: null
+
+  - id: internationale_perspektive
+    prompt: "Werden globale Ereignisse und internationale Perspektiven aktuell eingebunden?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine aktuellen globalen Perspektiven"}
+      2: {score: 0.5, description: "Einige veraltete globale Beispiele"}
+      3: {score: 0.75, description: "Weitestgehend aktuelle internationale Beispiele"}
+      4: {score: 1.0, description: "Durchgehend aktuelle globale Perspektiven"}
+      na: null
+
+  - id: zukunftsrelevanz
+    prompt: "Bezieht sich das Material auf absehbare Zukunftstrends und deren Bedeutung?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Trendthemen fehlen"}
+      2: {score: 0.5, description: "Trendthemen angedeutet"}
+      3: {score: 0.75, description: "Gute Integration relevanter Trends"}
+      4: {score: 1.0, description: "Strategische Einbettung kommender Trends"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

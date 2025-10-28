@@ -4,17 +4,14 @@ from fastapi import APIRouter, Body, Depends, HTTPException
 from openai import AsyncOpenAI
 from datetime import datetime
 from typing import Dict, Any
+from loguru import logger
+import traceback
 
 from models.schemas import EvaluationRequest, EvaluationResponse, EvaluationResult
-from core.evaluation import EvaluationEngine
+from core.dependencies import get_engine_instance
 from core.config import settings
 
 router = APIRouter(prefix="/evaluate", tags=["evaluation"])
-
-
-def get_evaluation_engine() -> EvaluationEngine:
-    """Get evaluation engine instance."""
-    return EvaluationEngine()
 
 
 def get_openai_client() -> AsyncOpenAI:
@@ -35,6 +32,16 @@ async def evaluate_text(payload: EvaluationRequest = Body(...)) -> EvaluationRes
     - **Quality Dimensions**: neutralitaet_new, sachrichtigkeit_old, didaktik_methodik_new, etc.
     - **Legal Gates**: jugendschutz_gate, strafrecht_gate, persoenlichkeitsrechte_gate
     - **Derived Evaluations**: rechtliche_compliance, overall_quality
+
+    **Request Parameters:**
+
+    - ``text`` *(string, required)*: Vollständiger Inhalt (10–50.000 Zeichen), der bewertet werden soll.
+    - ``schemes`` *(array[str], required)*: Liste der zu prüfenden Schemas (max. 10).
+    - ``include_reasoning`` *(bool, optional, default ``true``)*: Steuert, ob ausführliche Begründungen
+      und Kriterien-Breakdowns zurückgegeben werden.
+    - ``context_type`` (``"content"`` | ``"platform"`` | ``"both"``): Steuert, welche Gate-Regeln
+      angewendet werden. ``content`` blendet Plattform-spezifische Regeln aus, ``platform`` berücksichtigt
+      nur Plattform-Metadaten, ``both`` führt eine vollständige Prüfung durch.
     
     **Usage Examples:**
     
@@ -79,8 +86,8 @@ async def evaluate_text(payload: EvaluationRequest = Body(...)) -> EvaluationRes
     - Derived compliance: 0 (non-compliant) or 1 (compliant)
     """
     try:
-        # Initialize engine and client directly (no dependency injection for Swagger compatibility)
-        engine = EvaluationEngine()
+        # Use singleton engine instance (initialized at app startup)
+        engine = get_engine_instance()
         openai_client = AsyncOpenAI(api_key=settings.openai_api_key, base_url=settings.openai_base_url)
         # Validate schemes exist
         available_schemes = {s["id"] for s in engine.get_schemes()}
@@ -135,9 +142,22 @@ async def evaluate_text(payload: EvaluationRequest = Body(...)) -> EvaluationRes
         return EvaluationResponse(
             results=results,
             gates_passed=evaluation_data.get("gates_passed", True),
+            overall_score=evaluation_data.get("overall_score"),
+            overall_label=evaluation_data.get("overall_label"),
             metadata=metadata,
             provenance=provenance
         )
         
+    except HTTPException:
+        # Re-raise HTTP exceptions (like 400 for invalid schemes)
+        raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Evaluation failed: {str(e)}")
+        # Log detailed error internally
+        logger.error(f"Evaluation failed with exception: {str(e)}")
+        logger.error(f"Stacktrace: {traceback.format_exc()}")
+        
+        # Return generic error to client (avoid info leakage)
+        raise HTTPException(
+            status_code=500, 
+            detail="Evaluation failed due to an internal error. Please check your request or contact support."
+        )

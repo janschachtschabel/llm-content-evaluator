@@ -1,0 +1,76 @@
+id: linguistic_appropriateness_part2
+name: Sprachliche Angemessenheit – Verständlichkeit & Struktur (Teil 2)
+description: Bewertung von Klarheit, Satzbau, Textstruktur und Lesefluss
+dimension: linguistic_clarity
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: verstaendlichkeit
+    prompt: "Sind Aussagen klar, eindeutig und frei von unnötiger Komplexität formuliert?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Sehr schwer verständlich"}
+      2: {score: 0.5, description: "Teilweise unklare Formulierungen"}
+      3: {score: 0.75, description: "Weitgehend klare Formulierungen"}
+      4: {score: 1.0, description: "Durchgängig sehr klare und eindeutige Sprache"}
+      na: null
+
+  - id: satzstruktur
+    prompt: "Sind Satzlängen und -strukturen abwechslungsreich sowie zielgruppengerecht?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Unpassende, verworrene Satzstrukturen"}
+      2: {score: 0.5, description: "Mehrfach unangemessene Strukturen"}
+      3: {score: 0.75, description: "Überwiegend passende Satzstrukturen"}
+      4: {score: 1.0, description: "Optimal abwechslungsreiche, angemessene Strukturen"}
+      na: null
+
+  - id: textkoharenz
+    prompt: "Sind Absätze logisch verknüpft, mit klaren Übergängen und rotem Faden?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Unzusammenhängende Abschnitte"}
+      2: {score: 0.5, description: "Teilweise brüchige Übergänge"}
+      3: {score: 0.75, description: "Weitestgehend kohärenter Textfluss"}
+      4: {score: 1.0, description: "Sehr klar strukturierter, kohärenter Aufbau"}
+      na: null
+
+  - id: signpostings
+    prompt: "Werden Signalelemente (Überschriften, Zwischenfragen, Zusammenfassungen) genutzt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine Orientierungshilfen"}
+      2: {score: 0.5, description: "Wenige Orientierungshilfen"}
+      3: {score: 0.75, description: "Mehrheitlich hilfreiche Signpostings"}
+      4: {score: 1.0, description: "Sehr gut platzierte und hilfreiche Signpostings"}
+      na: null
+
+  - id: lesbarkeit
+    prompt: "Erlaubt der Text flüssiges Lesen (Lesbarkeitsscores, Rhythmus, Pausen)?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Holpriger Lesefluss"}
+      2: {score: 0.5, description: "Teilweise stockender Lesefluss"}
+      3: {score: 0.75, description: "Weitestgehend flüssiger Lesefluss"}
+      4: {score: 1.0, description: "Sehr flüssig und angenehm zu lesen"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

@@ -1,6 +1,9 @@
 """Health check endpoint."""
 
 from fastapi import APIRouter
+from loguru import logger
+import traceback
+
 from models.schemas import HealthResponse
 
 router = APIRouter(prefix="/health", tags=["health"])
@@ -28,10 +31,11 @@ async def health_check() -> HealthResponse:
     }
     ```
     """
-    from core.evaluation import EvaluationEngine
+    from core.dependencies import get_engine_instance
     
     try:
-        engine = EvaluationEngine()
+        # Use singleton engine instance (initialized at app startup)
+        engine = get_engine_instance()
         schemes = engine.get_schemes()
         schemes_count = len(schemes)
         
@@ -40,7 +44,11 @@ async def health_check() -> HealthResponse:
             version="0.1.0",
             schemes_loaded=schemes_count
         )
-    except Exception:
+    except Exception as e:
+        # Log error internally
+        logger.error(f"Health check failed: {str(e)}")
+        logger.error(f"Stacktrace: {traceback.format_exc()}")
+        
         return HealthResponse(
             status="degraded",
             version="0.1.0",

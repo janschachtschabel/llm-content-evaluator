@@ -1,0 +1,76 @@
+id: media_appropriate_part5
+name: Mediale Passung – Betrieb & Weiterentwicklung (Teil 5)
+description: Bewertung der Pflegeprozesse, Wartung und kontinuierlichen Weiterentwicklung der Medien
+dimension: media_appropriate_operations
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: wartung_updates
+    prompt: "Werden Medien regelmäßig gewartet und technische Updates eingespielt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine Wartung"}
+      2: {score: 0.5, description: "Unregelmäßige Wartung"}
+      3: {score: 0.75, description: "Regelmäßige Wartung"}
+      4: {score: 1.0, description: "Strukturiertes Wartungs- und Updateprogramm"}
+      na: null
+
+  - id: feedbackprozesse
+    prompt: "Werden Nutzer*innen-Rückmeldungen systematisch gesammelt und integriert?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Kein Feedbackprozess"}
+      2: {score: 0.5, description: "Feedback wird sporadisch genutzt"}
+      3: {score: 0.75, description: "Regelmäßige Feedbackintegration"}
+      4: {score: 1.0, description: "Systematisches Feedbackmanagement"}
+      na: null
+
+  - id: roadmap
+    prompt: "Existiert eine dokumentierte Weiterentwicklungs-Roadmap für die Medien?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine Roadmap"}
+      2: {score: 0.5, description: "Unklare Roadmap"}
+      3: {score: 0.75, description: "Grober Weiterentwicklungsplan"}
+      4: {score: 1.0, description: "Klare, priorisierte Roadmap"}
+      na: null
+
+  - id: innovationsgrad
+    prompt: "Werden innovative Funktionen oder Formate kontinuierlich erprobt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine Innovation"}
+      2: {score: 0.5, description: "Seltene Innovation"}
+      3: {score: 0.75, description: "Regelmäßige Innovationsmaßnahmen"}
+      4: {score: 1.0, description: "Strategische, kontinuierliche Innovation"}
+      na: null
+
+  - id: dokumentation_support
+    prompt: "Sind technische Dokumentation, Supportkanäle und Schulungsunterlagen aktuell?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine aktuelle Dokumentation"}
+      2: {score: 0.5, description: "Teilweise veraltete Dokumentation"}
+      3: {score: 0.75, description: "Weitestgehend aktuelle Dokumentation"}
+      4: {score: 1.0, description: "Vollständig aktuelle Dokumentation & Support"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

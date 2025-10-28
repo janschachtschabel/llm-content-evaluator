@@ -1,0 +1,76 @@
+id: media_appropriate_part1
+name: Mediale Passung – Technische Qualität (Teil 1)
+description: Bewertung der technischen Umsetzung, Stabilität und Usability der eingesetzten Medien
+dimension: media_appropriate_technical
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: technische_qualitaet
+    prompt: "Ist die audiovisuelle und grafische Qualität der Medien hochwertig und störungsfrei?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Erhebliche technische Probleme"}
+      2: {score: 0.5, description: "Regelmäßige Qualitätsprobleme"}
+      3: {score: 0.75, description: "Gute technische Qualität mit wenigen Störungen"}
+      4: {score: 1.0, description: "Hervorragende, störungsfreie technische Qualität"}
+      na: null
+
+  - id: kompatibilitaet
+    prompt: "Funktionieren die Medien auf relevanten Betriebssystemen, Browsern und Endgeräten?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Kompatibilität stark eingeschränkt"}
+      2: {score: 0.5, description: "Mehrere Kompatibilitätsprobleme"}
+      3: {score: 0.75, description: "Weitestgehend kompatibel"}
+      4: {score: 1.0, description: "Vollständig kompatibel auf allen Zielgeräten"}
+      na: null
+
+  - id: benutzeroberflaeche
+    prompt: "Ist die Benutzeroberfläche intuitiv bedienbar und konsistent gestaltet?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Unübersichtliche, verwirrende Oberfläche"}
+      2: {score: 0.5, description: "Teilweise unklare Bedienung"}
+      3: {score: 0.75, description: "Gut nachvollziehbare Oberfläche"}
+      4: {score: 1.0, description: "Sehr intuitive, konsistente Benutzerführung"}
+      na: null
+
+  - id: performance
+    prompt: "Sind Ladezeiten, Streamingqualität und Reaktionszeiten optimiert?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Sehr lange Ladezeiten"}
+      2: {score: 0.5, description: "Mittelmäßige Performance"}
+      3: {score: 0.75, description: "Gute Performance mit seltenen Verzögerungen"}
+      4: {score: 1.0, description: "Hervorragende Performance, keine Verzögerungen"}
+      na: null
+
+  - id: technische_stabilitaet
+    prompt: "Bleiben die Medien über die gesamte Nutzung hinweg stabil und fehlerfrei?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Häufige Abstürze oder Fehlermeldungen"}
+      2: {score: 0.5, description: "Regelmäßige Störungen"}
+      3: {score: 0.75, description: "Nur vereinzelte Störungen"}
+      4: {score: 1.0, description: "Stets stabil, keine Fehler"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

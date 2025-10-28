@@ -36,9 +36,12 @@ class EvaluationEngine:
                 with open(yaml_file, 'r', encoding='utf-8') as f:
                     scheme = yaml.safe_load(f)
                     self.schemes[scheme['id']] = scheme
-                    logger.info(f"Loaded scheme: {scheme['id']}")
+                    logger.debug(f"Loaded scheme: {scheme['id']}")
             except Exception as e:
                 logger.error(f"Failed to load scheme {yaml_file}: {e}")
+        logger.info(
+            f"Loaded {len(self.schemes)} schemes from {self.schemes_dir.resolve()}"
+        )
     
     def get_schemes(self) -> List[Dict[str, Any]]:
         """Get list of available schemes."""
@@ -92,18 +95,39 @@ class EvaluationEngine:
         gates_passed: bool = True,
         context_type: str = "content"
     ) -> Dict[str, Any]:
-        """Evaluate text using specified schemes."""
+        """Evaluate text using specified schemes.
+        
+        Uses request-scoped caching to avoid duplicate evaluations when:
+        - A scheme appears both directly and as a dependency
+        - Multiple derived schemas share the same dependency
+        """
         results = []
         gates_passed = True
+        
+        # Request-scoped cache: scheme_id -> evaluation result
+        # This prevents duplicate LLM calls for the same schema
+        results_cache: Dict[str, Dict[str, Any]] = {}
         
         # Process binary gates first
         for scheme_id in scheme_ids:
             scheme = self.schemes.get(scheme_id)
             if not scheme:
                 continue
-                
-            if scheme["type"] == ScaleType.BINARY_GATE:
-                result = await self._evaluate_binary_gate(text, scheme, llm_client, model, context_type)
+
+            try:
+                scheme_type = ScaleType(scheme["type"])
+            except (KeyError, ValueError):
+                logger.warning(f"Unknown scheme type for {scheme_id}: {scheme.get('type')}")
+                continue
+
+            if scheme_type is ScaleType.BINARY_GATE:
+                # Check cache first
+                if scheme_id in results_cache:
+                    result = results_cache[scheme_id]
+                    logger.debug(f"Using cached result for {scheme_id}")
+                else:
+                    result = await self._evaluate_binary_gate(text, scheme, llm_client, model, context_type)
+                    results_cache[scheme_id] = result
                 results.append(result)
                 if result["value"] is False:
                     gates_passed = False
@@ -124,16 +148,32 @@ class EvaluationEngine:
         
         for scheme_id in scheme_ids:
             scheme = self.schemes.get(scheme_id)
-            if not scheme or scheme["type"] == ScaleType.BINARY_GATE:
+            if not scheme:
+                continue
+
+            try:
+                scheme_type = ScaleType(scheme["type"])
+            except (KeyError, ValueError):
+                logger.warning(f"Unknown scheme type for {scheme_id}: {scheme.get('type')}")
+                continue
+
+            if scheme_type is ScaleType.BINARY_GATE:
                 continue
             
             scheme_order.append(scheme_id)
-            if scheme["type"] == ScaleType.ORDINAL_RUBRIC:
+            
+            # Check cache first - avoid duplicate evaluation
+            if scheme_id in results_cache:
+                logger.debug(f"Using cached result for {scheme_id}")
+                results.append(results_cache[scheme_id])
+                continue
+            
+            if scheme_type is ScaleType.ORDINAL_RUBRIC:
                 eval_tasks.append(self._evaluate_ordinal_rubric(text, scheme, llm_client, model))
-            elif scheme["type"] == ScaleType.CHECKLIST_ADDITIVE:
+            elif scheme_type is ScaleType.CHECKLIST_ADDITIVE:
                 eval_tasks.append(self._evaluate_checklist_additive(text, scheme, llm_client, model))
-            elif scheme["type"] == ScaleType.DERIVED:
-                eval_tasks.append(self._evaluate_derived(text, scheme, llm_client, model))
+            elif scheme_type is ScaleType.DERIVED:
+                eval_tasks.append(self._evaluate_derived(text, scheme, llm_client, model, context_type, results_cache))
         
         # Execute all evaluations in parallel (with concurrency limit)
         if eval_tasks:
@@ -141,23 +181,33 @@ class EvaluationEngine:
             
             # Handle results and potential exceptions
             for i, result in enumerate(parallel_results):
+                scheme_id = scheme_order[i]
+                # Skip if already added from cache
+                if scheme_id in results_cache:
+                    continue
+                    
                 if isinstance(result, Exception):
-                    logger.error(f"Evaluation failed for {scheme_order[i]}: {result}")
-                    results.append({
-                        "scheme_id": scheme_order[i],
+                    logger.error(f"Evaluation failed for {scheme_id}: {result}")
+                    result_dict = {
+                        "scheme_id": scheme_id,
                         "dimension": "unknown",
                         "value": None,
                         "na_reason": f"Evaluation error: {str(result)}"
-                    })
+                    }
+                    results.append(result_dict)
+                    results_cache[scheme_id] = result_dict
                 else:
                     results.append(result)
+                    results_cache[scheme_id] = result
         
         # Calculate overall metrics
         overall_score, overall_label = self._calculate_overall(results)
         
         return {
             "results": results,
-            "gates_passed": gates_passed
+            "gates_passed": gates_passed,
+            "overall_score": overall_score,
+            "overall_label": overall_label
         }
     
     async def _evaluate_binary_gate(
@@ -256,7 +306,7 @@ class EvaluationEngine:
                     main_reasoning = reasoning_parts[1].split("\n")[0].strip()
             
             if not main_reasoning:
-                # Fallback: use first few sentences of content
+                # Fallback to simple reasoning
                 sentences = reasoning.replace("\n", " ").split(". ")
                 main_reasoning = ". ".join(sentences[:2]) + "." if sentences else "Bewertung durchgeführt."
             
@@ -470,8 +520,20 @@ Erstellen Sie eine zusammenhängende, ausführliche Bewertung (2-3 Sätze), die 
         llm_client: Any,
         model: str,
         context_type: str = "content",
+        results_cache: Optional[Dict[str, Dict[str, Any]]] = None
     ) -> Dict[str, Any]:
-        """Evaluate derived metric based on dependency schemas."""
+        """Evaluate a derived scheme by aggregating dependency results.
+
+        Reuses cached dependency results within the same request to minimise
+        LLM calls. The derivation rules align with the README section
+        "Derived Schemes & Aggregation".
+
+        Args:
+            results_cache: Request-scoped cache of already evaluated schemas.
+        """
+        if results_cache is None:
+            results_cache = {}
+            
         try:
             # Get dependencies and evaluate them first
             dependencies = scheme.get("dependencies", [])
@@ -483,57 +545,89 @@ Erstellen Sie eine zusammenhängende, ausführliche Bewertung (2-3 Sätze), die 
                     "na_reason": "No dependencies defined"
                 }
             
-            # Evaluate all dependency schemas in parallel
+            # Evaluate all dependency schemas
             dependency_tasks = []
             dependency_order = []
+            dependency_results = []
             
             for dep_scheme_id in dependencies:
                 dep_scheme = self.schemes.get(dep_scheme_id)
                 if not dep_scheme:
                     continue
                 
+                # Check cache first - avoid duplicate evaluation!
+                if dep_scheme_id in results_cache:
+                    logger.debug(f"Reusing cached dependency: {dep_scheme_id}")
+                    dependency_results.append(results_cache[dep_scheme_id])
+                    continue
+                
                 dependency_order.append(dep_scheme_id)
-                if dep_scheme["type"] == ScaleType.CHECKLIST_ADDITIVE:
-                    dependency_tasks.append(self._evaluate_checklist_additive(text, dep_scheme, llm_client, model))
-                elif dep_scheme["type"] == ScaleType.ORDINAL_RUBRIC:
-                    dependency_tasks.append(self._evaluate_ordinal_rubric(text, dep_scheme, llm_client, model))
-                elif dep_scheme["type"] == ScaleType.BINARY_GATE:
-                    dependency_tasks.append(self._evaluate_binary_gate(text, dep_scheme, llm_client, model, context_type))
-                elif dep_scheme["type"] == ScaleType.DERIVED:
-                    # Recursively evaluate nested derived schemas
-                    dependency_tasks.append(self._evaluate_derived(text, dep_scheme, llm_client, model, context_type))
-            
+                try:
+                    dep_type = ScaleType(dep_scheme["type"])
+                except (KeyError, ValueError):
+                    logger.warning(
+                        f"Unknown dependency scheme type for {dep_scheme_id}: {dep_scheme.get('type')}"
+                    )
+                    continue
+
+                if dep_type is ScaleType.CHECKLIST_ADDITIVE:
+                    dependency_tasks.append(
+                        self._evaluate_checklist_additive(text, dep_scheme, llm_client, model)
+                    )
+                elif dep_type is ScaleType.ORDINAL_RUBRIC:
+                    dependency_tasks.append(
+                        self._evaluate_ordinal_rubric(text, dep_scheme, llm_client, model)
+                    )
+                elif dep_type is ScaleType.BINARY_GATE:
+                    dependency_tasks.append(
+                        self._evaluate_binary_gate(text, dep_scheme, llm_client, model, context_type)
+                    )
+                elif dep_type is ScaleType.DERIVED:
+                    # Recursively evaluate nested derived schemas with cache
+                    dependency_tasks.append(
+                        self._evaluate_derived(text, dep_scheme, llm_client, model, context_type, results_cache)
+                    )
+
             # Execute all dependency evaluations in parallel (with concurrency limit)
-            dependency_results = []
             if dependency_tasks:
                 parallel_dep_results = await self._run_with_concurrency_limit(dependency_tasks)
                 
                 for i, result in enumerate(parallel_dep_results):
+                    dep_scheme_id = dependency_order[i]
                     if isinstance(result, Exception):
-                        logger.error(f"Dependency evaluation failed for {dependency_order[i]}: {result}")
-                        dependency_results.append({
-                            "scheme_id": dependency_order[i],
+                        logger.error(f"Dependency evaluation failed for {dep_scheme_id}: {result}")
+                        result_dict = {
+                            "scheme_id": dep_scheme_id,
                             "dimension": "unknown",
                             "value": None,
                             "na_reason": f"Dependency error: {str(result)}"
-                        })
+                        }
+                        dependency_results.append(result_dict)
+                        results_cache[dep_scheme_id] = result_dict
                     else:
                         dependency_results.append(result)
+                        # Cache the result for potential reuse
+                        results_cache[dep_scheme_id] = result
             
             # Apply derivation rules
             rules = scheme.get("rules", [])
-            logger.info(f"Checking {len(rules)} rules for scheme {scheme['id']}")
-            logger.info(f"Dependency results: {[(dep.get('scheme_id'), dep.get('dimension'), dep.get('value')) for dep in dependency_results]}")
-            
+            logger.debug(f"Checking {len(rules)} rules for scheme {scheme['id']}")
+            logger.debug(
+                "Dependency results: {}",
+                [
+                    (dep.get('scheme_id'), dep.get('dimension'), dep.get('value'))
+                    for dep in dependency_results
+                ],
+            )
             for rule in rules:
                 conditions = rule.get("conditions", [])
-                logger.info(f"Checking rule conditions: {conditions}")
+                logger.debug(f"Checking rule conditions: {conditions}")
                 
                 conditions_met = self._check_rule_conditions(dependency_results, conditions)
-                logger.info(f"Rule conditions met: {conditions_met}")
+                logger.debug(f"Rule conditions met: {conditions_met}")
                 
                 if conditions_met:
-                    logger.info(f"Applying rule with value: {rule['value']}")
+                    logger.debug(f"Applying rule with value: {rule['value']}")
                     if rule["value"] == "weighted_average":
                         # Calculate weighted average
                         weights = rule.get("weights", {})
@@ -707,20 +801,42 @@ Erstellen Sie eine zusammenhängende, ausführliche Bewertung (2-3 Sätze), die 
             }
     
     def _build_derived_reasoning(self, dependency_results, final_score, weights, rule):
-        """Build detailed reasoning for weighted average derived schemas."""
-        reasoning_parts = [f"**Gewichteter Durchschnitt:** {final_score:.2f}/5.0\n"]
-        
-        reasoning_parts.append("**Einzelbewertungen:**")
+        """Build concise reasoning for weighted average derived schemas."""
+        summary_lines = []
+
         for dep in dependency_results:
-            if dep.get("value") is not None:
-                dimension = dep.get("dimension", "unknown")
-                value = dep.get("value")
-                label = dep.get("label", "")
-                weight = weights.get(dimension, 1.0)
-                reasoning_parts.append(f"- {dimension}: {value} ({label}) × Gewicht {weight}")
-        
-        reasoning_parts.append(f"\n**Gesamtbewertung:** {rule.get('reasoning', 'Berechnung abgeschlossen')}")
-        return "\n".join(reasoning_parts)
+            if dep.get("value") is None:
+                continue
+
+            dimension = dep.get("dimension", "unknown")
+            label = dep.get("label", "")
+            weight = weights.get(dimension, 1.0)
+            sub_reasoning = dep.get("reasoning", "").strip()
+
+            # Extract the most informative fragment from the sub-reasoning
+            if sub_reasoning:
+                reasoning_lines = [line.strip() for line in sub_reasoning.split("\n") if line.strip()]
+                excerpt = reasoning_lines[0]
+                if len(reasoning_lines) > 1:
+                    excerpt = f"{excerpt} {reasoning_lines[1]}".strip()
+            else:
+                excerpt = f"Bewertung {label}."
+
+            summary_lines.append(
+                f"- **{dimension}** ({label}, Gewicht {weight}): {excerpt}"
+            )
+
+        headline = rule.get(
+            "reasoning",
+            "Aggregation der Teilbereiche basierend auf gewichteten Qualitätsdimensionen"
+        )
+
+        return "\n".join([
+            f"**Gesamtbewertung:** {final_score:.2f}/5.0 — {headline}",
+            "",
+            "**Schlüsselbefunde aus den Teilbereichen:**",
+            *summary_lines
+        ])
     
     def _build_compliance_reasoning(self, dependency_results, rule):
         """Build detailed reasoning for compliance-based derived schemas."""
@@ -1237,20 +1353,35 @@ neutrale_beschreibung: 2 - Weitgehend neutral, jedoch mit vereinzelten wertenden
         return True
     
     def _calculate_overall(self, results: List[Dict[str, Any]]) -> tuple[Optional[float], Optional[str]]:
-        """Calculate overall score and label using YAML labels from first scheme."""
-        valid_results = [r for r in results if r.get('value') is not None and isinstance(r['value'], (int, float))]
-        
+        """Calculate overall score and label from non-binary evaluation results."""
+        valid_results: List[tuple[Dict[str, Any], Dict[str, Any]]] = []
+        for result in results:
+            value = result.get('value')
+            if value is None or not isinstance(value, (int, float)):
+                continue
+
+            scheme = self.schemes.get(result.get('scheme_id'))
+            if not scheme:
+                continue
+
+            try:
+                scheme_type = ScaleType(scheme['type'])
+            except (KeyError, ValueError):
+                continue
+
+            if scheme_type is ScaleType.BINARY_GATE:
+                # Binary gate outcomes are not averaged into overall scores
+                continue
+
+            valid_results.append((result, scheme))
+
         if not valid_results:
             return None, None
-        
-        overall_score = sum(r['value'] for r in valid_results) / len(valid_results)
-        
+
+        overall_score = sum(result['value'] for result, _ in valid_results) / len(valid_results)
+
         # Use label from first scheme's YAML labels
-        first_result = valid_results[0]
-        if 'label' in first_result:
-            # Use the same label mapping logic as individual results
-            overall_label = first_result['label']  # This uses YAML labels
-        else:
-            overall_label = "Unknown"
-        
+        _, reference_scheme = valid_results[0]
+        overall_label = self._score_to_label(overall_score, reference_scheme)
+
         return overall_score, overall_label

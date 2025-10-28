@@ -1,0 +1,76 @@
+id: linguistic_appropriateness_part4
+name: Sprachliche Angemessenheit – Grammatik & Stil (Teil 4)
+description: Bewertung von Grammatik, Rechtschreibung, Stilistik und sprachlicher Korrektheit
+dimension: linguistic_accuracy
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: grammatische_korrektheit
+    prompt: "Ist der Text grammatikalisch korrekt und frei von Syntaxfehlern?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Viele Grammatikfehler"}
+      2: {score: 0.5, description: "Mehrere Grammatikfehler"}
+      3: {score: 0.75, description: "Weitestgehend korrekt"}
+      4: {score: 1.0, description: "Vollständig korrekt"}
+      na: null
+
+  - id: rechtschreibung
+    prompt: "Sind Rechtschreibung und Zeichensetzung fehlerfrei?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Viele Fehler"}
+      2: {score: 0.5, description: "Einige Fehler"}
+      3: {score: 0.75, description: "Weitestgehend fehlerfrei"}
+      4: {score: 1.0, description: "Fehlerfreie Orthografie und Interpunktion"}
+      na: null
+
+  - id: stilistische_koharenz
+    prompt: "Ist der Stil konsistent und dem Kontext angemessen?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Inkonsistenter Stil"}
+      2: {score: 0.5, description: "Teilweise inkonsistent"}
+      3: {score: 0.75, description: "Weitestgehend konsistent"}
+      4: {score: 1.0, description: "Sehr konsistenter, kontextbezogener Stil"}
+      na: null
+
+  - id: tonmodulation
+    prompt: "Wird der Ton passend variiert (z.B. für Erklär- vs. Reflexionsphasen)?"
+    weight: 1.0
+    values:
+      1: {score: 0.25, description: "Unpassende Tonalität"}
+      2: {score: 0.5, description: "Geringe Tonvariation"}
+      3: {score: 0.75, description: "Angemessene Tonvariation"}
+      4: {score: 1.0, description: "Sehr gezielte Tonmodulation"}
+      na: null
+
+  - id: sprachliche_rituale
+    prompt: "Werden sprachliche Routinen (Zusammenfassungen, Aufforderungen) konsistent eingesetzt?"
+    weight: 1.0
+    values:
+      1: {score: 0.25, description: "Keine Rituale, unklarer Abschluss"}
+      2: {score: 0.5, description: "Unregelmäßige Rituale"}
+      3: {score: 0.75, description: "Weitestgehend konsistent"}
+      4: {score: 1.0, description: "Sehr konsequente Nutzung sprachlicher Rituale"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

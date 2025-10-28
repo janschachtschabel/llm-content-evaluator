@@ -1,0 +1,76 @@
+id: didactics_part3
+name: Didaktik – Differenzierung & Zielgruppenbezug (Teil 3)
+description: Bewertung der Passung zu unterschiedlichen Lernvoraussetzungen und Interessen
+dimension: didactics_differentiation
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: zielgruppenanpassung
+    prompt: "Sind Inhalte und Materialien konsequent auf Vorwissen und Lebenswelt abgestimmt?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Keine Zielgruppenanpassung"}
+      2: {score: 0.5, description: "Teilweise angepasst"}
+      3: {score: 0.75, description: "Überwiegend angepasst"}
+      4: {score: 1.0, description: "Sehr umfassend zielgruppengerecht"}
+      na: null
+
+  - id: differenzierung
+    prompt: "Werden Leistungsniveaus, Interessen und Lernwege differenziert adressiert?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine Differenzierung"}
+      2: {score: 0.5, description: "Vereinzelte Ansätze"}
+      3: {score: 0.75, description: "Weitestgehend differenziert"}
+      4: {score: 1.0, description: "Sehr umfassende Differenzierung"}
+      na: null
+
+  - id: lernstandsdiagnostik
+    prompt: "Werden diagnostische Elemente zur Einschätzung individueller Lernstände genutzt?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine Diagnostik"}
+      2: {score: 0.5, description: "Gelegentliche Diagnostik"}
+      3: {score: 0.75, description: "Regelmäßige Diagnostik"}
+      4: {score: 1.0, description: "Systematische, adaptive Diagnostik"}
+      na: null
+
+  - id: unterstützungsangebote
+    prompt: "Gibt es Unterstützungsmaterialien (Hilfekarten, Tutorials, Tutorien) für unterschiedliche Bedürfnisse?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine Unterstützungsangebote"}
+      2: {score: 0.5, description: "Begrenzte Angebote"}
+      3: {score: 0.75, description: "Mehrheitlich passende Angebote"}
+      4: {score: 1.0, description: "Sehr umfangreiche, zielgerichtete Angebote"}
+      na: null
+
+  - id: lernpfad_personalisierung
+    prompt: "Besteht die Möglichkeit, Lernpfade individuell zu gestalten oder auszuwählen?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Starres Lernangebot"}
+      2: {score: 0.5, description: "Begrenzte Anpassung"}
+      3: {score: 0.75, description: "Weitestgehend personalisierbar"}
+      4: {score: 1.0, description: "Hochgradig adaptive Lernpfade"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

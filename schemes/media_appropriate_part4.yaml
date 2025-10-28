@@ -1,0 +1,76 @@
+id: media_appropriate_part4
+name: Mediale Passung – Barrierefreiheit & Inklusion (Teil 4)
+description: Bewertung der Zugänglichkeit, inklusiven Gestaltung und diversitätssensiblen Umsetzung
+dimension: media_appropriate_accessibility
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: barrierefreiheit_technisch
+    prompt: "Sind Alternativtexte, Untertitel und Screenreader-Unterstützung vorhanden?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Keine Barrierefreiheitsfunktionen"}
+      2: {score: 0.5, description: "Teilweise implementiert"}
+      3: {score: 0.75, description: "Weitestgehend vorhanden"}
+      4: {score: 1.0, description: "Vollständig umgesetzt"}
+      na: null
+
+  - id: sprachliche_zugaenglichkeit
+    prompt: "Ist die Sprache klar, inklusiv und frei von unnötiger Fachterminologie?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Komplexe, exkludierende Sprache"}
+      2: {score: 0.5, description: "Teilweise verständlich"}
+      3: {score: 0.75, description: "Gut verständliche Sprache"}
+      4: {score: 1.0, description: "Sehr klare, inklusive Sprache"}
+      na: null
+
+  - id: diversitaetsrepraesentation
+    prompt: "Spiegeln Medien diverse Perspektiven, Lebensrealitäten und Rollenbilder wider?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Stereotype, eindimensionale Darstellung"}
+      2: {score: 0.5, description: "Teilweise divers, aber unausgewogen"}
+      3: {score: 0.75, description: "Weitestgehend divers"}
+      4: {score: 1.0, description: "Sehr divers und sensibel gestaltet"}
+      na: null
+
+  - id: adaptive_funktionen
+    prompt: "Gibt es personalisierbare Funktionen (z.B. Schriftgrößen, Geschwindigkeit, Kontraste)?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Keine Anpassungsmöglichkeiten"}
+      2: {score: 0.5, description: "Begrenzte Anpassungsoptionen"}
+      3: {score: 0.75, description: "Mehrere Anpassungsoptionen"}
+      4: {score: 1.0, description: "Umfassend adaptive Einstellungen"}
+      na: null
+
+  - id: zugang_ohne_huerden
+    prompt: "Sind Medien auch bei niedriger Bandbreite oder ohne Spezialgeräte nutzbar?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Hohe Zugangshürden"}
+      2: {score: 0.5, description: "Teilweise Zugangshürden"}
+      3: {score: 0.75, description: "Weitgehend barrierearm"}
+      4: {score: 1.0, description: "Sehr niederschwellige Nutzung"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

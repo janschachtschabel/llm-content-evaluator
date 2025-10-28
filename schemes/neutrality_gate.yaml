@@ -1,0 +1,48 @@
+id: neutrality_gate
+name: Neutralität – Gesamtgate
+description: Abgeleitete Gesamtbewertung der Neutralität digitaler Bildungsinhalte auf Basis der Teilbereiche
+dimension: neutrality
+type: derived
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+dependencies:
+  - neutrality_part1
+  - neutrality_part2
+  - neutrality_part3
+  - neutrality_part4
+  - neutrality_part5
+
+rules:
+  - conditions:
+      - dimension: neutrality_perspectives
+        operator: ">="
+        value: 0
+    value: "weighted_average"
+    label: "Gewichtete Neutralitätsbewertung"
+    reasoning: "Aggregation der Teilbereiche Perspektivenvielfalt, Sprache, Lernendenautonomie, Evidenzbasis und strukturelle Fairness"
+    confidence: 0.9
+    weights:
+      neutrality_perspectives: 2.5
+      neutrality_language: 2.0
+      neutrality_autonomy: 2.0
+      neutrality_evidence: 1.5
+      neutrality_structure: 2.0
+
+default:
+  value: 0.0
+  label: "Unbewertet"
+  reasoning: "Keine ausreichenden Daten aus den Teilbereichen"
+  confidence: 0.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

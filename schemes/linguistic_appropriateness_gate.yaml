@@ -1,0 +1,48 @@
+id: linguistic_appropriateness_gate
+name: Sprachliche Angemessenheit – Gesamtgate
+description: Abgeleitete Gesamtbewertung der sprachlichen Angemessenheit digitaler Bildungsinhalte
+dimension: language_appropriateness
+type: derived
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+dependencies:
+  - linguistic_appropriateness_part1
+  - linguistic_appropriateness_part2
+  - linguistic_appropriateness_part3
+  - linguistic_appropriateness_part4
+  - linguistic_appropriateness_part5
+
+rules:
+  - conditions:
+      - dimension: linguistic_fit
+        operator: ">="
+        value: 0
+    value: "weighted_average"
+    label: "Gewichtete sprachliche Angemessenheit"
+    reasoning: "Aggregation der Teilbereiche Zielgruppenfit, Verständlichkeit, Terminologie, sprachliche Korrektheit und unterstützende Elemente"
+    confidence: 0.9
+    weights:
+      linguistic_fit: 2.0
+      linguistic_clarity: 2.0
+      linguistic_vocabulary: 1.5
+      linguistic_accuracy: 1.5
+      linguistic_support: 1.0
+
+default:
+  value: 0.0
+  label: "Unbewertet"
+  reasoning: "Keine ausreichenden Daten aus den Teilbereichen"
+  confidence: 0.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

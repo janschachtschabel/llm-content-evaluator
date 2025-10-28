@@ -1,0 +1,76 @@
+id: media_appropriate_part2
+name: Mediale Passung – Pädagogische Eignung (Teil 2)
+description: Bewertung der didaktischen Passung, Lernwirksamkeit und Zielgruppenorientierung der Medien
+dimension: media_appropriate_pedagogy
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: zielgruppen_fit
+    prompt: "Sind Medienformat und Tonalität auf Alter, Vorwissen und Lernbedürfnisse abgestimmt?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Medien verfehlen die Zielgruppe deutlich"}
+      2: {score: 0.5, description: "Teilweise Zielgruppenabweichungen"}
+      3: {score: 0.75, description: "Weitgehend zielgruppengerecht"}
+      4: {score: 1.0, description: "Perfekt auf Zielgruppe zugeschnitten"}
+      na: null
+
+  - id: lernunterstuetzung
+    prompt: "Unterstützen Medien aktiv das Verständnis und den Wissenstransfer?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Medien behindern das Lernen"}
+      2: {score: 0.5, description: "Geringer Lernnutzen"}
+      3: {score: 0.75, description: "Guter Lernnutzen"}
+      4: {score: 1.0, description: "Hervorragende Lernunterstützung"}
+      na: null
+
+  - id: kognitive_entlastung
+    prompt: "Vermeiden Medien kognitive Überlastung (Redundanz, Split-Attention)?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Starke kognitive Überlastung"}
+      2: {score: 0.5, description: "Einige Überlastungsfaktoren"}
+      3: {score: 0.75, description: "Gut ausbalanciert"}
+      4: {score: 1.0, description: "Optimal kognitiv entlastend"}
+      na: null
+
+  - id: motivationale_ansprache
+    prompt: "Fördern Medien Motivation, Engagement und Lernbereitschaft?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Demotivierende Darstellungen"}
+      2: {score: 0.5, description: "Geringe Motivation"}
+      3: {score: 0.75, description: "Gute Motivationselemente"}
+      4: {score: 1.0, description: "Hochmotivierende Gestaltung"}
+      na: null
+
+  - id: differenzierung
+    prompt: "Erlauben Medien adaptive Nutzung, Differenzierung oder individuelle Pfade?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Keine Differenzierung möglich"}
+      2: {score: 0.5, description: "Geringe Anpassungsmöglichkeiten"}
+      3: {score: 0.75, description: "Mehrere Differenzierungsoptionen"}
+      4: {score: 1.0, description: "Umfassend adaptive Mediennutzung"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"

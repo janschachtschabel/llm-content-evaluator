@@ -1,0 +1,76 @@
+id: neutrality_part5
+name: Neutralität – Strukturelle Fairness (Teil 5)
+description: Bewertung struktureller Ausgewogenheit, Zielgruppenfairness und institutioneller Neutralität
+dimension: neutrality_structure
+type: checklist_additive
+version: "1.0"
+
+output_range:
+  min: 0.0
+  max: 5.0
+  type: float
+
+items:
+  - id: institutionelle_unabhaengigkeit
+    prompt: "Ist das Material frei von institutionellen oder parteilichen Einflussnahmen?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Starke institutionelle Einflussnahme"}
+      2: {score: 0.5, description: "Einige Hinweise auf Einflussnahme"}
+      3: {score: 0.75, description: "Weitestgehend unabhängig"}
+      4: {score: 1.0, description: "Vollständig unabhängig"}
+      na: null
+
+  - id: parteiliche_unabhaengigkeit
+    prompt: "Bevorzugt das Material keine bestimmte Partei oder politische Ideologie?"
+    weight: 2.0
+    values:
+      1: {score: 0.25, description: "Eindeutige Präferenz"}
+      2: {score: 0.5, description: "Mehrere Indizien für Präferenzen"}
+      3: {score: 0.75, description: "Überwiegend neutral"}
+      4: {score: 1.0, description: "Keinerlei Präferenz erkennbar"}
+      na: null
+
+  - id: zielgruppenangemessenheit
+    prompt: "Berücksichtigt das Material Alter, Lernniveau und Diversität der Zielgruppe?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Nicht zielgruppenangemessen"}
+      2: {score: 0.5, description: "Teilweise angemessen"}
+      3: {score: 0.75, description: "Meist angemessen"}
+      4: {score: 1.0, description: "Vollständig zielgruppengerecht"}
+      na: null
+
+  - id: perspektiven_integration
+    prompt: "Werden Minderheiten- und Randperspektiven fair integriert, sofern relevant?"
+    weight: 1.5
+    values:
+      1: {score: 0.25, description: "Randperspektiven fehlen"}
+      2: {score: 0.5, description: "Randperspektiven werden nur erwähnt"}
+      3: {score: 0.75, description: "Mehrheitlich fair integriert"}
+      4: {score: 1.0, description: "Umfassend und respektvoll integriert"}
+      na: null
+
+  - id: lernenden_schutz
+    prompt: "Schützt das Material vor manipulativen Lern- oder Bewertungssituationen?"
+    weight: 1.0
+    values:
+      1: {score: 0.25, description: "Manipulative Strukturen vorhanden"}
+      2: {score: 0.5, description: "Einige manipulative Elemente"}
+      3: {score: 0.75, description: "Weitestgehend frei von Manipulation"}
+      4: {score: 1.0, description: "Vollständig lernendenzentriert und fair"}
+      na: null
+
+aggregator:
+  strategy: weighted_mean
+  params:
+    missing: ignore
+    scale_factor: 5.0
+
+labels:
+  "0.0": "Ungeeignet"
+  "1.0": "Mangelhaft"
+  "2.0": "Ausreichend"
+  "3.0": "Befriedigend"
+  "4.0": "Gut"
+  "5.0": "Sehr gut"
