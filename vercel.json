@@ -2,7 +2,7 @@
   "installCommand": "pip3 install --disable-pip-version-check --no-cache-dir -r requirements.txt",
   "functions": {
     "api/**/*.py": {
-      "runtime": "@vercel/python@3.12"
+      "runtime": "@vercel/python@0.5.3"
     }
   }
 }
